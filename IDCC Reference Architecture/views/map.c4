@@ -1,0 +1,13 @@
+// The map (ADR 0007): the one view defined from scratch. Every lens extends it;
+// clicking a system opens that system's zoom view (defined in its own file).
+
+views {
+
+  view index {
+    title 'Landscape'
+    description 'Every system and organisation role, with who operates what. Click a system to zoom into its datasets; click a flow to see the dataset-level flows behind it.'
+    include * where kind is role or kind is system
+    global style idccConventions
+    autoLayout LeftRight
+  }
+}

@@ -1,0 +1,45 @@
+model {
+
+  housingManagementSystem = system 'Housing management system' {
+    #housing-handover #housing-portfolio
+    summary "A registered provider's core system for its homes, tenancies and repairs."
+    metadata { source 'Claude draft 2026-11-03' }
+
+    propertyRecords = dataset 'Property records' {
+      #info-property-record #authoritative #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+
+    repairs = dataset 'Repairs' {
+      #info-repair #authoritative #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+  }
+
+  registeredProvider -[operates]-> housingManagementSystem
+  housingManagementSystem -[supports]-> manageHomes
+
+  housingManagementSystem.propertyRecords -[api]-> assetManagementSystem.propertyRecords 'property records' {
+    #state-current
+    metadata { frequency 'daily'; source 'Claude draft 2026-11-03' }
+  }
+
+  housingManagementSystem.repairs -[api]-> productFeedbackSystem.productPerformanceFeedback 'repairs to installed products' {
+    #state-planned #idcc-scope
+    metadata { frequency 'weekly'; standards ['idccDataStandards']; source 'Claude draft 2026-11-03' }
+  }
+}
+
+views {
+
+  // Zoom view: opens when this system is clicked on the map (ADR 0007)
+  view housingManagementSystemZoom of housingManagementSystem {
+    title 'Housing management system'
+    description 'Zoom into this system: the information it holds, who operates it, the capabilities it supports and the systems it exchanges information with.'
+    include *
+    include * -> housingManagementSystem where kind is operates
+    include housingManagementSystem -> * where kind is supports
+    global style idccConventions
+    autoLayout LeftRight
+  }
+}

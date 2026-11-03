@@ -1,0 +1,11 @@
+{
+  "$schema": "https://likec4.dev/schemas/config.json",
+  "name": "idcc",
+  "title": "IDCC Reference Architecture",
+  "exclude": ["**/node_modules/**", "dist/**"],
+  "webapp": {
+    "relationshipsBrowser": {
+      "defaultScope": "global"
+    }
+  }
+}

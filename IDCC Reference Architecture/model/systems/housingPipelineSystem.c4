@@ -1,0 +1,53 @@
+model {
+
+  housingPipelineSystem = system 'Housing pipeline system' {
+    #housing-need #housing-pipeline
+    summary 'Records housing need and the pipeline of proposed and active schemes for an area.'
+    metadata { source 'Claude draft 2026-11-03' }
+
+    housingNeed = dataset 'Housing need' {
+      #info-housing-need #authoritative #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+
+    schemeProposals = dataset 'Scheme proposals' {
+      #info-scheme-proposal #copy #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+
+    liverpoolHousingPipeline = softwareProduct 'Liverpool housing pipeline' {
+      #lcr #state-current #prov-bespoke
+      description 'Where housing need is currently captured in Liverpool City Region. Operator and provenance unconfirmed.'
+      link ../../backlog/questions/01-who-operates-liverpool-housing-pipeline.md 'Open question 01'
+      metadata { source 'Tomás Novais, grilling session 2026-11-03' }
+    }
+  }
+
+  combinedAuthority -[operates]-> housingPipelineSystem
+  housingPipelineSystem -[supports]-> assessHousingNeed
+  housingPipelineSystem -[supports]-> prioritisePipeline
+
+  housingPipelineSystem.housingNeed -[api]-> demandAggregationSystem.housingNeed 'housing need for demand aggregation' {
+    #state-planned #idcc-scope
+    metadata { frequency 'monthly'; standards ['idccDataStandards']; source 'Claude draft 2026-11-03' }
+  }
+
+  housingPipelineSystem.schemeProposals -[api]-> demandAggregationSystem.schemeProposals 'pipeline for demand aggregation' {
+    #state-planned #idcc-scope
+    metadata { frequency 'monthly'; standards ['idccDataStandards']; source 'Claude draft 2026-11-03' }
+  }
+}
+
+views {
+
+  // Zoom view: opens when this system is clicked on the map (ADR 0007)
+  view housingPipelineSystemZoom of housingPipelineSystem {
+    title 'Housing pipeline system'
+    description 'Zoom into this system: the information it holds, who operates it, the capabilities it supports and the systems it exchanges information with.'
+    include *
+    include * -> housingPipelineSystem where kind is operates
+    include housingPipelineSystem -> * where kind is supports
+    global style idccConventions
+    autoLayout LeftRight
+  }
+}

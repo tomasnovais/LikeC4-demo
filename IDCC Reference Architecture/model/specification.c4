@@ -1,0 +1,206 @@
+// IDCC reference architecture: element kinds, relationship kinds and tags.
+// Terms are defined in GLOSSARY.md; decisions behind them are in docs/adr/.
+// Rules LikeC4 cannot enforce (e.g. "exactly one roadmap state tag") are
+// listed in backlog/model-checks/issues/01-tag-rule-check-script.md.
+
+specification {
+
+  // ---------------------------------------------------------------------------
+  // Element kinds
+  // Shape says what something is; border says its roadmap state (model/styles.c4);
+  // the only strong colour (primary) is reserved for IDCC scope.
+  // ---------------------------------------------------------------------------
+
+  element role {
+    notation "Organisation role"
+    style {
+      shape person
+      color slate
+    }
+  }
+
+  // Supplier-neutral kind of software, defined by its role (ADR 0006)
+  element system {
+    notation "System"
+    style {
+      shape rectangle
+      color gray
+    }
+  }
+
+  element subsystem {
+    notation "Subsystem"
+    style {
+      shape rectangle
+      color gray
+    }
+  }
+
+  // Notable example filling a system's role; nested in that system
+  element softwareProduct {
+    notation "Software product"
+    style {
+      shape component
+      color slate
+    }
+  }
+
+  // Information of one information type held in one system (ADR 0002)
+  element dataset {
+    notation "Dataset"
+    style {
+      shape storage
+      color slate
+    }
+  }
+
+  // Verb + noun, e.g. "Assess housing need"
+  element capability {
+    notation "Capability"
+    style {
+      shape rectangle
+      color muted
+      icon bootstrap:bullseye
+    }
+  }
+
+  element standard {
+    notation "Standard"
+    style {
+      shape document
+      color muted
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Relationship kinds (legend: docs/legend.md)
+  // Structural relationships are plain solid grey lines, labelled with what the
+  // relationship is. Information flows between datasets are always dotted, and
+  // coloured by mechanism, so each flow has exactly one mechanism and manual
+  // re-keying stands out in every view. The standards a flow follows go in its
+  // `standards` metadata key (a list of standard ids).
+  // ---------------------------------------------------------------------------
+
+  // role -> system
+  relationship operates {
+    title 'operates'
+    notation 'An organisation role runs a system'
+    color gray
+    line solid
+  }
+
+  // system -> capability
+  relationship supports {
+    title 'supports'
+    notation 'A system supports a capability'
+    color gray
+    line solid
+  }
+
+  // dataset -> standard
+  relationship conformsTo {
+    title 'conforms to'
+    notation 'Information follows a standard'
+    color gray
+    line solid
+  }
+
+  // dataset -> dataset
+  relationship api {
+    technology "API"
+    notation 'Information passes automatically'
+    color green
+    line dotted
+  }
+
+  relationship fileTransfer {
+    technology "File transfer"
+    notation 'Information passes as a file'
+    color blue
+    line dotted
+  }
+
+  relationship rekeying {
+    technology "Manual re-keying"
+    notation 'Information typed in again by hand'
+    color red
+    line dotted
+  }
+
+  // ---------------------------------------------------------------------------
+  // Tags: closed vocabularies used for filtering and colouring (Q5 rule).
+  // Anything not used for filtering belongs in metadata instead.
+  // ---------------------------------------------------------------------------
+
+  // Roadmap state (exactly one on software products, datasets, flows, standards;
+  // on systems only when the role itself is new or going away)
+  tag state-current
+  tag state-planned
+  tag state-retiring
+  tag state-retired
+
+  // Geographic scope (optional; untagged means national)
+  tag lcr
+
+  // Provenance (exactly one on software products)
+  tag prov-off-the-shelf
+  tag prov-configured
+  tag prov-bespoke
+  tag prov-idcc-built
+
+  // Housing delivery lifecycle stages (one or more on roles, systems, datasets, capabilities;
+  // a role carries the stages of the systems it operates)
+  tag housing-need
+  tag housing-pipeline
+  tag housing-scheme-design
+  tag housing-approval
+  tag housing-construction
+  tag housing-handover
+  tag housing-portfolio
+
+  // Product lifecycle stages (one or more on roles, systems, datasets, capabilities)
+  tag product-development
+  tag product-certification
+  tag product-cataloguing
+  tag product-manufacture
+  tag product-improvement
+
+  // Information types: housing (exactly one on each dataset)
+  tag info-housing-need
+  tag info-scheme-proposal
+  tag info-site-information
+  tag info-scheme-brief
+  tag info-home-design
+  tag info-cost-plan
+  tag info-planning-application
+  tag info-planning-decision
+  tag info-funding-approval
+  tag info-contract
+  tag info-construction-progress
+  tag info-inspection-record
+  tag info-handover-information
+  tag info-property-record
+  tag info-repair
+  tag info-stock-condition
+  tag info-energy-performance
+
+  // Information types: products (exactly one on each dataset)
+  tag info-product-specification
+  tag info-test-evidence
+  tag info-product-certificate
+  tag info-product-data
+  tag info-product-order
+  tag info-supply-record
+  tag info-product-performance-feedback
+
+  // Authority (exactly one on each dataset)
+  tag authoritative
+  tag copy
+
+  // IDCC builds, configures, integrates, standardises or directly influences this.
+  // An IDCC intervention = idcc-scope + state-planned.
+  tag idcc-scope
+
+  // Software product chosen for a pilot
+  tag pilot
+}

@@ -1,0 +1,30 @@
+model {
+
+  grantFundingSystem = system 'Grant funding system' {
+    #housing-approval
+    summary "A funder's system for bids, grant allocations and claims."
+    metadata { source 'Claude draft 2026-11-03' }
+
+    fundingApprovals = dataset 'Grant approvals' {
+      #info-funding-approval #authoritative #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+  }
+
+  funder -[operates]-> grantFundingSystem
+  grantFundingSystem -[supports]-> approveFunding
+}
+
+views {
+
+  // Zoom view: opens when this system is clicked on the map (ADR 0007)
+  view grantFundingSystemZoom of grantFundingSystem {
+    title 'Grant funding system'
+    description 'Zoom into this system: the information it holds, who operates it, the capabilities it supports and the systems it exchanges information with.'
+    include *
+    include * -> grantFundingSystem where kind is operates
+    include grantFundingSystem -> * where kind is supports
+    global style idccConventions
+    autoLayout LeftRight
+  }
+}

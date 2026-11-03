@@ -1,0 +1,46 @@
+model {
+
+  configurator = system 'Configurator' {
+    #housing-scheme-design #idcc-scope
+    summary 'Composes products from a kit of parts into a home design. Many exist; IDCC does not mandate one (ADR 0005).'
+    metadata { source 'Claude draft 2026-11-03' }
+
+    schemeBriefs = dataset 'Scheme briefs' {
+      #info-scheme-brief #copy #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+
+    productData = dataset 'Product data' {
+      #info-product-data #copy #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+
+    homeDesigns = dataset 'Home designs' {
+      #info-home-design #authoritative #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+  }
+
+  architect -[operates]-> configurator
+  configurator -[supports]-> configureHomeDesign
+  configurator.homeDesigns -[conformsTo]-> ifc
+
+  configurator.homeDesigns -[fileTransfer]-> commonDataEnvironment.homeDesigns 'design model export' {
+    #state-current
+    metadata { frequency 'ad hoc'; standards ['ifc']; source 'Claude draft 2026-11-03' }
+  }
+}
+
+views {
+
+  // Zoom view: opens when this system is clicked on the map (ADR 0007)
+  view configuratorZoom of configurator {
+    title 'Configurator'
+    description 'Zoom into this system: the information it holds, who operates it, the capabilities it supports and the systems it exchanges information with.'
+    include *
+    include * -> configurator where kind is operates
+    include configurator -> * where kind is supports
+    global style idccConventions
+    autoLayout LeftRight
+  }
+}
