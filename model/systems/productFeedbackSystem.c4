@@ -12,6 +12,7 @@ model {
   }
 
   productFeedbackSystem -[supports]-> learnFromProductPerformance
+  productFeedbackSystem.productPerformanceFeedback -[conformsTo]-> idccDataStandards
 
   productFeedbackSystem.productPerformanceFeedback -[api]-> productInformationManagementSystem.productSpecifications 'feedback for the next product version' {
     #state-planned #idcc-scope
@@ -24,6 +25,7 @@ views {
   // Zoom view: opens when this system is clicked on the map (ADR 0007)
   view productFeedbackSystemZoom of productFeedbackSystem {
     title 'Product feedback system'
+    description 'Zoom into this system: the information it holds, who operates it, the capabilities it supports and the systems it exchanges information with.'
     include *
     include * -> productFeedbackSystem where kind is operates
     include productFeedbackSystem -> * where kind is supports

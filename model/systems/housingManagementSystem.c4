@@ -35,6 +35,7 @@ views {
   // Zoom view: opens when this system is clicked on the map (ADR 0007)
   view housingManagementSystemZoom of housingManagementSystem {
     title 'Housing management system'
+    description 'Zoom into this system: the information it holds, who operates it, the capabilities it supports and the systems it exchanges information with.'
     include *
     include * -> housingManagementSystem where kind is operates
     include housingManagementSystem -> * where kind is supports

@@ -1,8 +1,9 @@
 model {
 
   demandAggregationSystem = system 'Demand aggregation system' {
-    #housing-pipeline #product-manufacture #state-planned #idcc-scope
-    summary 'Combines the pipelines of many registered providers into demand that manufacturers can plan for.'
+    // #product-manufacture returns with its flow to manufacturers (aggregated demand, open)
+    #housing-pipeline #state-planned #idcc-scope
+    summary 'Combines the pipelines of many registered providers into demand that manufacturers can plan for. Operator not yet decided.'
     metadata { source 'Claude draft 2026-11-03' }
 
     housingNeed = dataset 'Housing need' {
@@ -16,8 +17,9 @@ model {
     }
   }
 
-  deliveryPartner -[operates]-> demandAggregationSystem
   demandAggregationSystem -[supports]-> aggregateDemand
+  demandAggregationSystem.housingNeed -[conformsTo]-> idccDataStandards
+  demandAggregationSystem.schemeProposals -[conformsTo]-> idccDataStandards
 }
 
 views {
@@ -25,6 +27,7 @@ views {
   // Zoom view: opens when this system is clicked on the map (ADR 0007)
   view demandAggregationSystemZoom of demandAggregationSystem {
     title 'Demand aggregation system'
+    description 'Zoom into this system: the information it holds, who operates it, the capabilities it supports and the systems it exchanges information with.'
     include *
     include * -> demandAggregationSystem where kind is operates
     include demandAggregationSystem -> * where kind is supports

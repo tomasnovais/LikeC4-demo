@@ -4,9 +4,9 @@
 //
 // Usage: node scripts/build-playground.mjs   ->   dist/idcc-playground.c4
 //
-// Not carried over: settings in likec4.config.json (implicit zoom views for
-// roles and capabilities, relationship browser scope), and relative `link`s
-// to ADRs and backlog files, which won't resolve in the playground.
+// Not carried over: settings in likec4.config.json (relationship browser
+// scope), and relative `link`s to ADRs and backlog files, which won't resolve
+// in the playground.
 
 import { readdirSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { join, relative, dirname } from 'node:path'

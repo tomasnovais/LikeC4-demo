@@ -43,6 +43,7 @@ views {
   // Zoom view: opens when this system is clicked on the map (ADR 0007)
   view housingPipelineSystemZoom of housingPipelineSystem {
     title 'Housing pipeline system'
+    description 'Zoom into this system: the information it holds, who operates it, the capabilities it supports and the systems it exchanges information with.'
     include *
     include * -> housingPipelineSystem where kind is operates
     include housingPipelineSystem -> * where kind is supports

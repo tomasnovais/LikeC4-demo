@@ -62,6 +62,7 @@ views {
   // Zoom view: opens when this system is clicked on the map (ADR 0007)
   view schemeManagementSystemZoom of schemeManagementSystem {
     title 'Scheme management system'
+    description 'Zoom into this system: the information it holds, who operates it, the capabilities it supports and the systems it exchanges information with.'
     include *
     include * -> schemeManagementSystem where kind is operates
     include schemeManagementSystem -> * where kind is supports

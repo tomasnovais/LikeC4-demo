@@ -148,7 +148,8 @@ specification {
   tag prov-bespoke
   tag prov-idcc-built
 
-  // Housing delivery lifecycle stages (one or more on systems, datasets, capabilities)
+  // Housing delivery lifecycle stages (one or more on roles, systems, datasets, capabilities;
+  // a role carries the stages of the systems it operates)
   tag housing-need
   tag housing-pipeline
   tag housing-scheme-design
@@ -157,7 +158,7 @@ specification {
   tag housing-handover
   tag housing-portfolio
 
-  // Product lifecycle stages (one or more on systems, datasets, capabilities)
+  // Product lifecycle stages (one or more on roles, systems, datasets, capabilities)
   tag product-development
   tag product-certification
   tag product-cataloguing

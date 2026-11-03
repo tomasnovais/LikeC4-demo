@@ -56,6 +56,7 @@ views {
   // Zoom view: opens when this system is clicked on the map (ADR 0007)
   view commonDataEnvironmentZoom of commonDataEnvironment {
     title 'Common data environment'
+    description 'Zoom into this system: the information it holds, who operates it, the capabilities it supports and the systems it exchanges information with.'
     include *
     include * -> commonDataEnvironment where kind is operates
     include commonDataEnvironment -> * where kind is supports

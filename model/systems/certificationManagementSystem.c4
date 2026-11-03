@@ -35,6 +35,7 @@ views {
   // Zoom view: opens when this system is clicked on the map (ADR 0007)
   view certificationManagementSystemZoom of certificationManagementSystem {
     title 'Certification management system'
+    description 'Zoom into this system: the information it holds, who operates it, the capabilities it supports and the systems it exchanges information with.'
     include *
     include * -> certificationManagementSystem where kind is operates
     include certificationManagementSystem -> * where kind is supports

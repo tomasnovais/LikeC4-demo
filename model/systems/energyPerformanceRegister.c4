@@ -24,6 +24,7 @@ views {
   // Zoom view: opens when this system is clicked on the map (ADR 0007)
   view energyPerformanceRegisterZoom of energyPerformanceRegister {
     title 'Energy performance register'
+    description 'Zoom into this system: the information it holds, who operates it, the capabilities it supports and the systems it exchanges information with.'
     include *
     include * -> energyPerformanceRegister where kind is operates
     include energyPerformanceRegister -> * where kind is supports

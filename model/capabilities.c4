@@ -1,5 +1,6 @@
 // Capabilities: flat list, verb + noun, tagged with the stages they belong to.
-// A capability with no system supporting it is a gap.
+// A capability with no system supporting it is a gap; capabilities are only seen
+// in system zoom views, so add one together with the system that supports it.
 
 model {
 
@@ -58,12 +59,6 @@ model {
 
   planMaintenance = capability 'Plan maintenance' {
     #housing-portfolio
-    metadata { source 'Claude draft 2026-11-03' }
-  }
-
-  traceInstalledProducts = capability 'Trace installed products' {
-    #housing-handover #housing-portfolio #product-improvement
-    summary 'Know which products are in which home, from supply through handover to repair.'
     metadata { source 'Claude draft 2026-11-03' }
   }
 

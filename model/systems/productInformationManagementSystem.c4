@@ -47,6 +47,7 @@ views {
   // Zoom view: opens when this system is clicked on the map (ADR 0007)
   view productInformationManagementSystemZoom of productInformationManagementSystem {
     title 'Product information management system'
+    description 'Zoom into this system: the information it holds, who operates it, the capabilities it supports and the systems it exchanges information with.'
     include *
     include * -> productInformationManagementSystem where kind is operates
     include productInformationManagementSystem -> * where kind is supports

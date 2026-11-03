@@ -24,6 +24,10 @@ views {
     description 'Only the flows IDCC builds, integrates or standardises; dashed items are planned, i.e. IDCC interventions.'
     exclude * where kind is role
     exclude * -> * where tag is not #idcc-scope
+    // Systems with no IDCC flow would be left unconnected. LikeC4 can't filter on
+    // "has no relationships", so they are listed by hand; the model check script
+    // reports any element left unconnected in a view.
+    exclude energyPerformanceRegister, grantFundingSystem, planningCaseManagementSystem
     include idccDataStandards
   }
 
@@ -31,9 +35,9 @@ views {
 
   view housingLifecycle extends index {
     title 'Landscape: housing delivery lifecycle'
-    description 'Systems serving at least one housing delivery stage.'
+    description 'Systems serving at least one housing delivery stage, and the roles that operate them.'
     exclude *
-      where kind is system and not (
+      where (kind is system or kind is role) and not (
         tag is #housing-need or tag is #housing-pipeline or tag is #housing-scheme-design or
         tag is #housing-approval or tag is #housing-construction or tag is #housing-handover or
         tag is #housing-portfolio
@@ -42,9 +46,9 @@ views {
 
   view productLifecycle extends index {
     title 'Landscape: product lifecycle'
-    description 'Systems serving at least one product lifecycle stage.'
+    description 'Systems serving at least one product lifecycle stage, and the roles that operate them.'
     exclude *
-      where kind is system and not (
+      where (kind is system or kind is role) and not (
         tag is #product-development or tag is #product-certification or tag is #product-cataloguing or
         tag is #product-manufacture or tag is #product-improvement
       )

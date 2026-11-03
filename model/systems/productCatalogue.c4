@@ -24,6 +24,7 @@ model {
   }
 
   productCatalogue -[supports]-> publishProductData
+  productCatalogue.productData -[conformsTo]-> uniclass
 
   productCatalogue.productData -[fileTransfer]-> configurator.productData 'product library import' {
     #state-retiring
@@ -41,6 +42,7 @@ views {
   // Zoom view: opens when this system is clicked on the map (ADR 0007)
   view productCatalogueZoom of productCatalogue {
     title 'Product catalogue'
+    description 'Zoom into this system: the information it holds, who operates it, the capabilities it supports and the systems it exchanges information with.'
     include *
     include * -> productCatalogue where kind is operates
     include productCatalogue -> * where kind is supports

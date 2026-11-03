@@ -30,6 +30,7 @@ views {
   // Zoom view: opens when this system is clicked on the map (ADR 0007)
   view planningCaseManagementSystemZoom of planningCaseManagementSystem {
     title 'Planning case management system'
+    description 'Zoom into this system: the information it holds, who operates it, the capabilities it supports and the systems it exchanges information with.'
     include *
     include * -> planningCaseManagementSystem where kind is operates
     include planningCaseManagementSystem -> * where kind is supports
