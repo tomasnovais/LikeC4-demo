@@ -1,0 +1,60 @@
+// Lenses (ADR 0007): each one extends the map and only filters it, or opens one
+// information type's datasets inside their systems (an information thread).
+
+views {
+
+  // Roadmap lenses
+
+  view currentState extends index {
+    title 'Landscape: current state'
+    description 'As it exists today: current and retiring systems and flows.'
+    exclude * where tag is #state-planned or tag is #state-retired
+    exclude * -> * where tag is #state-planned or tag is #state-retired
+  }
+
+  view targetState extends index {
+    title 'Landscape: target state'
+    description 'Once planned systems and flows are delivered and retiring ones are gone.'
+    exclude * where tag is #state-retiring or tag is #state-retired
+    exclude * -> * where tag is #state-retiring or tag is #state-retired
+  }
+
+  view idccScope extends index {
+    title 'Landscape: IDCC scope'
+    description 'Only the flows IDCC builds, integrates or standardises; dashed items are planned, i.e. IDCC interventions.'
+    exclude * where kind is role
+    exclude * -> * where tag is not #idcc-scope
+    include idccDataStandards
+  }
+
+  // Lifecycle lenses
+
+  view housingLifecycle extends index {
+    title 'Landscape: housing delivery lifecycle'
+    description 'Systems serving at least one housing delivery stage.'
+    exclude *
+      where kind is system and not (
+        tag is #housing-need or tag is #housing-pipeline or tag is #housing-scheme-design or
+        tag is #housing-approval or tag is #housing-construction or tag is #housing-handover or
+        tag is #housing-portfolio
+      )
+  }
+
+  view productLifecycle extends index {
+    title 'Landscape: product lifecycle'
+    description 'Systems serving at least one product lifecycle stage.'
+    exclude *
+      where kind is system and not (
+        tag is #product-development or tag is #product-certification or tag is #product-cataloguing or
+        tag is #product-manufacture or tag is #product-improvement
+      )
+  }
+
+  // Information threads (added on request)
+
+  view productDataThread extends index {
+    title 'Landscape: product data'
+    description 'Where product data is authoritative, where it is copied, and how it moves today and in the target state.'
+    include * where tag is #info-product-data
+  }
+}

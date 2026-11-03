@@ -1,5 +1,11 @@
 {
   "$schema": "https://likec4.dev/schemas/config.json",
   "name": "idcc",
-  "title": "IDCC Reference Architecture"
+  "title": "IDCC Reference Architecture",
+  "implicitViews": true,
+  "webapp": {
+    "relationshipsBrowser": {
+      "defaultScope": "global"
+    }
+  }
 }

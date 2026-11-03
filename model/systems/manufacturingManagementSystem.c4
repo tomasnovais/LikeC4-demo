@@ -1,0 +1,44 @@
+model {
+
+  manufacturingManagementSystem = system 'Manufacturing management system' {
+    #product-manufacture #housing-construction
+    summary "A manufacturer's system for product orders, production and supply to site."
+    metadata { source 'Claude draft 2026-11-03' }
+
+    productOrders = dataset 'Product orders' {
+      #info-product-order #authoritative #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+
+    supplyRecords = dataset 'Supply records' {
+      #info-supply-record #authoritative #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+  }
+
+  manufacturer -[operates]-> manufacturingManagementSystem
+  manufacturingManagementSystem -[supports]-> manufactureAndSupplyProducts
+
+  manufacturingManagementSystem.supplyRecords -[rekeying]-> commonDataEnvironment.constructionProgress 'delivery notes' {
+    #state-retiring
+    metadata { frequency 'per delivery'; source 'Claude draft 2026-11-03' }
+  }
+
+  manufacturingManagementSystem.supplyRecords -[api]-> commonDataEnvironment.constructionProgress 'products supplied to site' {
+    #state-planned #idcc-scope
+    metadata { frequency 'per delivery'; standards ['idccDataStandards']; source 'Claude draft 2026-11-03' }
+  }
+}
+
+views {
+
+  // Zoom view: opens when this system is clicked on the map (ADR 0007)
+  view manufacturingManagementSystemZoom of manufacturingManagementSystem {
+    title 'Manufacturing management system'
+    include *
+    include * -> manufacturingManagementSystem where kind is operates
+    include manufacturingManagementSystem -> * where kind is supports
+    global style idccConventions
+    autoLayout LeftRight
+  }
+}

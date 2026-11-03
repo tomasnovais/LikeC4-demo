@@ -1,0 +1,71 @@
+model {
+
+  schemeManagementSystem = system 'Scheme management system' {
+    #housing-pipeline #housing-scheme-design #housing-approval #housing-construction
+    summary "A registered provider's record of its schemes from proposal to completion: brief, costs, approvals and progress."
+    metadata { source 'Claude draft 2026-11-03' }
+
+    schemeProposals = dataset 'Scheme proposals' {
+      #info-scheme-proposal #authoritative #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+
+    schemeBriefs = dataset 'Scheme briefs' {
+      #info-scheme-brief #authoritative #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+
+    costPlans = dataset 'Cost plans' {
+      #info-cost-plan #authoritative #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+
+    fundingApprovals = dataset 'Investment board approvals' {
+      #info-funding-approval #authoritative #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+
+    planningDecisions = dataset 'Planning decisions' {
+      #info-planning-decision #copy #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+
+    constructionProgress = dataset 'Construction progress' {
+      #info-construction-progress #copy #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+  }
+
+  registeredProvider -[operates]-> schemeManagementSystem
+  schemeManagementSystem -[supports]-> prioritisePipeline
+  schemeManagementSystem -[supports]-> appraiseScheme
+  schemeManagementSystem -[supports]-> approveFunding
+
+  schemeManagementSystem.schemeProposals -[rekeying]-> housingPipelineSystem.schemeProposals 'pipeline returns' {
+    #state-current
+    metadata { frequency 'quarterly'; source 'Claude draft 2026-11-03' }
+  }
+
+  schemeManagementSystem.schemeBriefs -[rekeying]-> configurator.schemeBriefs 'brief entered into configurator' {
+    #state-retiring
+    metadata { frequency 'ad hoc'; source 'Claude draft 2026-11-03' }
+  }
+
+  schemeManagementSystem.schemeBriefs -[api]-> configurator.schemeBriefs 'brief sent to configurator' {
+    #state-planned #idcc-scope
+    metadata { frequency 'ad hoc'; standards ['idccDataStandards']; source 'Claude draft 2026-11-03' }
+  }
+}
+
+views {
+
+  // Zoom view: opens when this system is clicked on the map (ADR 0007)
+  view schemeManagementSystemZoom of schemeManagementSystem {
+    title 'Scheme management system'
+    include *
+    include * -> schemeManagementSystem where kind is operates
+    include schemeManagementSystem -> * where kind is supports
+    global style idccConventions
+    autoLayout LeftRight
+  }
+}

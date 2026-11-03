@@ -1,0 +1,50 @@
+model {
+
+  productCatalogue = system 'Product catalogue' {
+    #product-cataloguing #housing-scheme-design #idcc-scope
+    summary 'Lists certified products and their data, available for configuring home designs.'
+    metadata { source 'Claude draft 2026-11-03' }
+
+    productData = dataset 'Product data' {
+      #info-product-data #copy #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+
+    productCertificates = dataset 'Product certificates' {
+      #info-product-certificate #copy #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+
+    manufacturersInformationHub = softwareProduct "Manufacturers' Information Hub" {
+      #state-planned #prov-bespoke
+      description 'Proof of concept mapping manufacturer product data to Uniclass, ETIM, IFC and the digital product passport dataset. Relationship to IDCC unconfirmed.'
+      link ../../backlog/assumptions/02-mih-relationship-to-idcc.md 'Assumption 02'
+      metadata { source 'Trade press (Construction Management, Digital Construction Plus), 2026' }
+    }
+  }
+
+  productCatalogue -[supports]-> publishProductData
+
+  productCatalogue.productData -[fileTransfer]-> configurator.productData 'product library import' {
+    #state-retiring
+    metadata { frequency 'ad hoc'; source 'Claude draft 2026-11-03' }
+  }
+
+  productCatalogue.productData -[api]-> configurator.productData 'certified products for configuration' {
+    #state-planned #idcc-scope
+    metadata { frequency 'on change'; standards ['ifc', 'uniclass', 'idccDataStandards']; source 'Claude draft 2026-11-03' }
+  }
+}
+
+views {
+
+  // Zoom view: opens when this system is clicked on the map (ADR 0007)
+  view productCatalogueZoom of productCatalogue {
+    title 'Product catalogue'
+    include *
+    include * -> productCatalogue where kind is operates
+    include productCatalogue -> * where kind is supports
+    global style idccConventions
+    autoLayout LeftRight
+  }
+}

@@ -1,0 +1,28 @@
+// Standards that datasets conform to (conformsTo) and flows use (`standards` metadata).
+
+model {
+
+  ifc = standard 'IFC' {
+    #state-current
+    summary 'Industry Foundation Classes: open data model for building information (ISO 16739).'
+    metadata { publisher 'buildingSMART International'; source 'Claude draft 2026-11-03' }
+  }
+
+  uniclass = standard 'Uniclass' {
+    #state-current
+    summary 'UK classification system for the built environment.'
+    metadata { publisher 'NBS'; source 'Claude draft 2026-11-03' }
+  }
+
+  etim = standard 'ETIM' {
+    #state-current
+    summary 'Classification model for technical product information.'
+    metadata { publisher 'ETIM International'; source 'Claude draft 2026-11-03' }
+  }
+
+  idccDataStandards = standard 'IDCC information standards' {
+    #state-planned #idcc-scope
+    summary 'Placeholder for the information standards IDCC will define or influence; to be split as they take shape.'
+    metadata { publisher 'IDCC'; source 'Claude draft 2026-11-03' }
+  }
+}

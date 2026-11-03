@@ -1,0 +1,34 @@
+model {
+
+  demandAggregationSystem = system 'Demand aggregation system' {
+    #housing-pipeline #product-manufacture #state-planned #idcc-scope
+    summary 'Combines the pipelines of many registered providers into demand that manufacturers can plan for.'
+    metadata { source 'Claude draft 2026-11-03' }
+
+    housingNeed = dataset 'Housing need' {
+      #info-housing-need #copy #state-planned #idcc-scope
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+
+    schemeProposals = dataset 'Scheme proposals' {
+      #info-scheme-proposal #copy #state-planned #idcc-scope
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+  }
+
+  deliveryPartner -[operates]-> demandAggregationSystem
+  demandAggregationSystem -[supports]-> aggregateDemand
+}
+
+views {
+
+  // Zoom view: opens when this system is clicked on the map (ADR 0007)
+  view demandAggregationSystemZoom of demandAggregationSystem {
+    title 'Demand aggregation system'
+    include *
+    include * -> demandAggregationSystem where kind is operates
+    include demandAggregationSystem -> * where kind is supports
+    global style idccConventions
+    autoLayout LeftRight
+  }
+}

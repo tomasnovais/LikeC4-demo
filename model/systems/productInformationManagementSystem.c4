@@ -1,0 +1,56 @@
+model {
+
+  productInformationManagementSystem = system 'Product information management system' {
+    #product-development #product-cataloguing #product-improvement
+    summary "A manufacturer's system for product specifications, test evidence and the product data it publishes."
+    metadata { source 'Claude draft 2026-11-03' }
+
+    productSpecifications = dataset 'Product specifications' {
+      #info-product-specification #authoritative #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+
+    testEvidence = dataset 'Test evidence' {
+      #info-test-evidence #authoritative #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+
+    productData = dataset 'Product data' {
+      #info-product-data #authoritative #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+  }
+
+  manufacturer -[operates]-> productInformationManagementSystem
+  productInformationManagementSystem -[supports]-> developProduct
+  productInformationManagementSystem -[supports]-> publishProductData
+  productInformationManagementSystem.productData -[conformsTo]-> etim
+
+  productInformationManagementSystem.testEvidence -[fileTransfer]-> certificationManagementSystem.testEvidence 'evidence for certification' {
+    #state-current
+    metadata { frequency 'per product'; source 'Claude draft 2026-11-03' }
+  }
+
+  productInformationManagementSystem.productData -[fileTransfer]-> productCatalogue.productData 'product data upload' {
+    #state-retiring
+    metadata { frequency 'ad hoc'; standards ['etim']; source 'Claude draft 2026-11-03' }
+  }
+
+  productInformationManagementSystem.productData -[api]-> productCatalogue.productData 'product data publication' {
+    #state-planned #idcc-scope
+    metadata { frequency 'on change'; standards ['etim', 'uniclass', 'idccDataStandards']; source 'Claude draft 2026-11-03' }
+  }
+}
+
+views {
+
+  // Zoom view: opens when this system is clicked on the map (ADR 0007)
+  view productInformationManagementSystemZoom of productInformationManagementSystem {
+    title 'Product information management system'
+    include *
+    include * -> productInformationManagementSystem where kind is operates
+    include productInformationManagementSystem -> * where kind is supports
+    global style idccConventions
+    autoLayout LeftRight
+  }
+}

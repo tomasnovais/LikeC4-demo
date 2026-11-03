@@ -1,0 +1,65 @@
+model {
+
+  commonDataEnvironment = system 'Common data environment' {
+    #housing-scheme-design #housing-construction #housing-handover
+    summary "Shared repository for a scheme's design, construction and handover information."
+    metadata { source 'Claude draft 2026-11-03' }
+
+    homeDesigns = dataset 'Home designs' {
+      #info-home-design #copy #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+
+    constructionProgress = dataset 'Construction progress' {
+      #info-construction-progress #authoritative #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+
+    inspectionRecords = dataset 'Inspection records' {
+      #info-inspection-record #authoritative #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+
+    handoverInformation = dataset 'Handover information' {
+      #info-handover-information #authoritative #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+  }
+
+  contractor -[operates]-> commonDataEnvironment
+  commonDataEnvironment -[supports]-> manageConstructionInformation
+  commonDataEnvironment -[supports]-> trackConstructionProgress
+
+  commonDataEnvironment.homeDesigns -[fileTransfer]-> planningCaseManagementSystem.planningApplications 'drawings for planning submission' {
+    #state-current
+    metadata { frequency 'ad hoc'; source 'Claude draft 2026-11-03' }
+  }
+
+  commonDataEnvironment.constructionProgress -[rekeying]-> schemeManagementSystem.constructionProgress 'progress reports' {
+    #state-current
+    metadata { frequency 'monthly'; source 'Claude draft 2026-11-03' }
+  }
+
+  commonDataEnvironment.handoverInformation -[rekeying]-> housingManagementSystem.propertyRecords 'new homes set up from handover pack' {
+    #state-retiring
+    metadata { frequency 'per scheme'; source 'Claude draft 2026-11-03' }
+  }
+
+  commonDataEnvironment.handoverInformation -[api]-> housingManagementSystem.propertyRecords 'new homes created from handover information' {
+    #state-planned #idcc-scope
+    metadata { frequency 'per scheme'; standards ['idccDataStandards']; source 'Claude draft 2026-11-03' }
+  }
+}
+
+views {
+
+  // Zoom view: opens when this system is clicked on the map (ADR 0007)
+  view commonDataEnvironmentZoom of commonDataEnvironment {
+    title 'Common data environment'
+    include *
+    include * -> commonDataEnvironment where kind is operates
+    include commonDataEnvironment -> * where kind is supports
+    global style idccConventions
+    autoLayout LeftRight
+  }
+}

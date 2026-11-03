@@ -1,0 +1,96 @@
+// Capabilities: flat list, verb + noun, tagged with the stages they belong to.
+// A capability with no system supporting it is a gap.
+
+model {
+
+  // Housing delivery lifecycle
+
+  assessHousingNeed = capability 'Assess housing need' {
+    #housing-need
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  prioritisePipeline = capability 'Prioritise pipeline' {
+    #housing-pipeline
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  aggregateDemand = capability 'Aggregate demand' {
+    #housing-pipeline #product-manufacture
+    summary 'Combine the pipelines of many registered providers into demand manufacturers can plan for.'
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  configureHomeDesign = capability 'Configure home design' {
+    #housing-scheme-design
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  appraiseScheme = capability 'Appraise scheme viability' {
+    #housing-scheme-design #housing-approval
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  determinePlanningApplication = capability 'Determine planning application' {
+    #housing-approval
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  approveFunding = capability 'Approve funding' {
+    #housing-approval
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  manageConstructionInformation = capability 'Manage construction information' {
+    #housing-construction #housing-handover
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  trackConstructionProgress = capability 'Track construction progress' {
+    #housing-construction
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  manageHomes = capability 'Manage homes' {
+    #housing-portfolio
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  planMaintenance = capability 'Plan maintenance' {
+    #housing-portfolio
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  traceInstalledProducts = capability 'Trace installed products' {
+    #housing-handover #housing-portfolio #product-improvement
+    summary 'Know which products are in which home, from supply through handover to repair.'
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  // Product lifecycle
+
+  developProduct = capability 'Develop product' {
+    #product-development
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  certifyProduct = capability 'Certify product' {
+    #product-certification
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  publishProductData = capability 'Publish product data' {
+    #product-cataloguing
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  manufactureAndSupplyProducts = capability 'Manufacture and supply products' {
+    #product-manufacture
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  learnFromProductPerformance = capability 'Learn from product performance' {
+    #product-improvement
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+}

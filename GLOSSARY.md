@@ -199,7 +199,7 @@ Whether something applies only within Liverpool City Region or nationally.
 _Avoid_: region, coverage, locality
 
 **Organisation role**:
-A kind of organisation that takes part in social housing delivery or the IDCC programme: combined authority, local authority, registered provider, manufacturer, certification body, architect, regulator, central government, funder or delivery partner.
+A kind of organisation that takes part in social housing delivery or the IDCC programme: combined authority, local authority, registered provider, contractor, manufacturer, certification body, architect, regulator, central government, funder or delivery partner.
 _Avoid_: stakeholder, organisation type, sector
 
 **Operator**:
@@ -209,6 +209,10 @@ _Avoid_: owner, user, tenant
 **Registered provider**:
 A social housing landlord registered with the regulator, such as Onward Homes or Torus.
 _Avoid_: housing association, landlord, RP, housing provider
+
+**Contractor**:
+An organisation that builds or assembles a scheme on site, including a registered provider's in-house contractor.
+_Avoid_: builder, developer, main contractor
 
 **Delivery partner**:
 An organisation contracted to deliver part of the IDCC programme, such as HVM Catapult.

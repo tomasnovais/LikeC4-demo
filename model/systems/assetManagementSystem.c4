@@ -1,0 +1,44 @@
+model {
+
+  assetManagementSystem = system 'Asset management system' {
+    #housing-portfolio
+    summary "A registered provider's system for stock condition, investment planning and compliance."
+    metadata { source 'Claude draft 2026-11-03' }
+
+    propertyRecords = dataset 'Property records' {
+      #info-property-record #copy #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+
+    stockCondition = dataset 'Stock condition' {
+      #info-stock-condition #authoritative #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+
+    energyPerformance = dataset 'Energy performance' {
+      #info-energy-performance #copy #state-current
+      metadata { source 'Claude draft 2026-11-03' }
+    }
+  }
+
+  registeredProvider -[operates]-> assetManagementSystem
+  assetManagementSystem -[supports]-> planMaintenance
+
+  assetManagementSystem.stockCondition -[api]-> productFeedbackSystem.productPerformanceFeedback 'condition of installed products' {
+    #state-planned #idcc-scope
+    metadata { frequency 'monthly'; standards ['idccDataStandards']; source 'Claude draft 2026-11-03' }
+  }
+}
+
+views {
+
+  // Zoom view: opens when this system is clicked on the map (ADR 0007)
+  view assetManagementSystemZoom of assetManagementSystem {
+    title 'Asset management system'
+    include *
+    include * -> assetManagementSystem where kind is operates
+    include assetManagementSystem -> * where kind is supports
+    global style idccConventions
+    autoLayout LeftRight
+  }
+}

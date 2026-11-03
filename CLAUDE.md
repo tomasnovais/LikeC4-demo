@@ -12,10 +12,11 @@ LikeC4 model of the current and target architectures for the IDCC programme (Ind
 ## Model conventions
 
 - Vocabulary: every element kind, relationship kind and tag is declared in `model/specification.c4`; the terms behind them are defined in `GLOSSARY.md` and the decisions in `docs/adr/`. A new tag or information type needs a glossary entry first.
-- Layout: `model/roles.c4`, `model/capabilities.c4`, `model/standards.c4`, one file per system in `model/systems/<system>.c4` (its datasets, software products and outgoing flows), views in `views/`.
+- Layout: `model/roles.c4`, `model/capabilities.c4`, `model/standards.c4`, one file per system in `model/systems/<system>.c4` (its datasets, software products, outgoing flows and its zoom view), the map in `views/map.c4`, lenses in `views/lenses.c4`.
+- Views follow ADR 0007, one map with zoom views and lenses: never define a view from scratch except the map (`index`). A new system file ends with its `<systemId>Zoom` view (copy an existing one); every other view `extends index` and only filters it or opens one information type's datasets (`include * where tag is #info-…`).
 - Identifiers are camelCase, flat at the top level and named for the role; never put a stage, roadmap state, scope, vendor or organisation in a system's identifier.
 - Every element carries `source` and `reviewed` metadata; software products also `vendor` and `usedBy`; flows `frequency` and `standards`; standards `publisher` and `version`.
-- Every view applies `global style idccConventions` (`model/styles.c4`).
+- The map and every zoom view apply `global style idccConventions` (`model/styles.c4`); lenses inherit it from the map.
 - Preview locally with the `likec4` launch config (`likec4 start`, http://localhost:5173).
 
 ## Agent skills

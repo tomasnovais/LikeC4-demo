@@ -1,0 +1,55 @@
+// Organisation roles (ADR 0006): generic kinds of organisation, never named
+// organisations. Named organisations appear only in a software product's `usedBy`.
+
+model {
+
+  combinedAuthority = role 'Combined authority' {
+    summary 'A combined authority such as Liverpool City Region Combined Authority.'
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  localAuthority = role 'Local authority' {
+    summary 'A council, acting among other things as planning authority.'
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  registeredProvider = role 'Registered provider' {
+    summary 'A social housing landlord registered with the regulator.'
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  contractor = role 'Contractor' {
+    summary 'Builds or assembles a scheme on site, including in-house contractors.'
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  architect = role 'Architect' {
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  manufacturer = role 'Manufacturer' {
+    summary 'Develops and makes industrialised construction products.'
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  certificationBody = role 'Certification body' {
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  regulator = role 'Regulator' {
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  centralGovernment = role 'Central government' {
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  funder = role 'Funder' {
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+
+  deliveryPartner = role 'Delivery partner' {
+    summary 'An organisation contracted to deliver part of the IDCC programme.'
+    metadata { source 'Claude draft 2026-11-03' }
+  }
+}
