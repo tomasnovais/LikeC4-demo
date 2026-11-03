@@ -18,6 +18,7 @@ LikeC4 model of the current and target architectures for the IDCC programme (Ind
 - Every element carries `source` and `reviewed` metadata; software products also `vendor` and `usedBy`; flows `frequency` and `standards`; standards `publisher` and `version`.
 - The map and every zoom view apply `global style idccConventions` (`model/styles.c4`); lenses inherit it from the map.
 - Preview locally with the `likec4` launch config (`likec4 start`, http://localhost:5173).
+- For the online LikeC4 playground, run `node scripts/build-playground.mjs` and paste `dist/idcc-playground.c4` (generated, not committed). Config-only features (implicit zoom views for roles and capabilities, relationship browser scope) and relative links don't carry over. When adding a new folder of `.c4` files, add it to the script's build order; the script fails if a file is missed.
 
 ## Agent skills
 
