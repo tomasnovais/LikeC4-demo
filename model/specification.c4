@@ -73,47 +73,58 @@ specification {
   }
 
   // ---------------------------------------------------------------------------
-  // Relationship kinds
-  // Flows between datasets are typed by mechanism, so each flow has exactly
-  // one mechanism and manual re-keying stands out in every view. The standards
-  // a flow follows go in its `standards` metadata key (a list of standard ids).
+  // Relationship kinds (legend: docs/legend.md)
+  // Structural relationships are plain solid grey lines, labelled with what the
+  // relationship is. Information flows between datasets are always dotted, and
+  // coloured by mechanism, so each flow has exactly one mechanism and manual
+  // re-keying stands out in every view. The standards a flow follows go in its
+  // `standards` metadata key (a list of standard ids).
   // ---------------------------------------------------------------------------
 
   // role -> system
   relationship operates {
+    title 'operates'
+    notation 'An organisation role runs a system'
     color gray
     line solid
   }
 
   // system -> capability
   relationship supports {
-    color muted
-    line dotted
+    title 'supports'
+    notation 'A system supports a capability'
+    color gray
+    line solid
   }
 
   // dataset -> standard
   relationship conformsTo {
-    color muted
-    line dotted
+    title 'conforms to'
+    notation 'Information follows a standard'
+    color gray
+    line solid
   }
 
   // dataset -> dataset
   relationship api {
     technology "API"
-    color slate
-    line solid
+    notation 'Information passes automatically'
+    color green
+    line dotted
   }
 
   relationship fileTransfer {
     technology "File transfer"
-    color slate
-    line dashed
+    notation 'Information passes as a file'
+    color blue
+    line dotted
   }
 
   relationship rekeying {
     technology "Manual re-keying"
+    notation 'Information typed in again by hand'
     color red
-    line dashed
+    line dotted
   }
 
   // ---------------------------------------------------------------------------

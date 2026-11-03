@@ -17,8 +17,9 @@ LikeC4 model of the current and target architectures for the IDCC programme (Ind
 - Identifiers are camelCase, flat at the top level and named for the role; never put a stage, roadmap state, scope, vendor or organisation in a system's identifier.
 - Every element carries `source` and `reviewed` metadata; software products also `vendor` and `usedBy`; flows `frequency` and `standards`; standards `publisher` and `version`.
 - The map and every zoom view apply `global style idccConventions` (`model/styles.c4`); lenses inherit it from the map.
+- Visual conventions are documented in `docs/legend.md`: structural relationships (operates, supports, conforms to) are solid grey and labelled by their kind's default title; information flows are always dotted (api green, file transfer blue, re-keying red). Change the legend whenever the specification's styles change.
 - Preview locally with the `likec4` launch config (`likec4 start`, http://localhost:5173).
-- For the online LikeC4 playground, run `node scripts/build-playground.mjs` and paste `dist/idcc-playground.c4` (generated, not committed). Config-only features (implicit zoom views for roles and capabilities, relationship browser scope) and relative links don't carry over. When adding a new folder of `.c4` files, add it to the script's build order; the script fails if a file is missed.
+- For the online LikeC4 playground, run `node scripts/build-playground.mjs` and paste `dist/idcc-playground.c4` (generated, not committed; `dist/` is excluded in `likec4.config.json` so LikeC4 doesn't read it as a second copy of the model). Config-only features (implicit zoom views for roles and capabilities, relationship browser scope) and relative links don't carry over. When adding a new folder of `.c4` files, add it to the script's build order; the script fails if a file is missed.
 
 ## Agent skills
 
