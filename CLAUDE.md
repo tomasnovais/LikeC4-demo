@@ -8,6 +8,14 @@ LikeC4 model of the current and target architectures for the IDCC programme (Ind
 - Use the `likec4-dsl` skill for all DSL syntax, CLI usage and validation.
 - Use the `enterprise-architecture` skill for **method only**: ArchiMate-style layering (business / application / technology), TOGAF baseline vs target and gap analysis, capability mapping, ADRs (MADR) and design reviews. When it suggests a Structurizr workspace or diagram, express the same content in LikeC4 instead.
 - After editing `.c4` files, run `likec4 validate`.
+
+## Model conventions
+
+- Vocabulary: every element kind, relationship kind and tag is declared in `model/specification.c4`; the terms behind them are defined in `GLOSSARY.md` and the decisions in `docs/adr/`. A new tag or information type needs a glossary entry first.
+- Layout: `model/roles.c4`, `model/capabilities.c4`, `model/standards.c4`, one file per system in `model/systems/<system>.c4` (its datasets, software products and outgoing flows), views in `views/`.
+- Identifiers are camelCase, flat at the top level and named for the role; never put a stage, roadmap state, scope, vendor or organisation in a system's identifier.
+- Every element carries `source` and `reviewed` metadata; software products also `vendor` and `usedBy`; flows `frequency` and `standards`; standards `publisher` and `version`.
+- Every view applies `global style idccConventions` (`model/styles.c4`).
 - Preview locally with the `likec4` launch config (`likec4 start`, http://localhost:5173).
 
 ## Agent skills

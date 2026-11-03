@@ -1,0 +1,16 @@
+// Shared view styling. Every view applies it with:
+//   global style idccConventions
+
+global {
+  styleGroup idccConventions {
+    // Roadmap state: border style (current keeps the default solid border)
+    style element.tag = #state-planned { border dashed }
+    style element.tag = #state-retiring { border dotted }
+
+    // IDCC scope: the one highlight colour
+    style element.tag = #idcc-scope { color primary }
+
+    // Retired last, so a retired element fades even if it was in IDCC scope
+    style element.tag = #state-retired { color muted; opacity 30% }
+  }
+}
