@@ -1,0 +1,11 @@
+# LikeC4 build / export output
+dist/
+node_modules/
+
+# Personal Claude Code settings (shared settings stay in .claude/settings.json)
+.claude/settings.local.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini

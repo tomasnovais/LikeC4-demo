@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "likec4": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "likec4-mcp",
+        "--stdio",
+        "."
+      ],
+      "env": {}
+    }
+  }
+}

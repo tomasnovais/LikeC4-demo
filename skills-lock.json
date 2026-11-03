@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "skills": {
+    "enterprise-architecture": {
+      "source": "gauravs19/enterprise-architecture-skill",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "45f690ef2e0290c4735212faf1ba506e8806324af91d69d213ac17bea2f8931e",
+      "installMode": "copy"
+    },
+    "likec4-dsl": {
+      "source": "likec4/likec4",
+      "sourceType": "github",
+      "skillPath": "skills/likec4-dsl/SKILL.md",
+      "computedHash": "7f4dac7a03d5bee7133b64bf94c643202c3dd4014b911598a380bbd67b80af07",
+      "installMode": "copy"
+    }
+  }
+}
