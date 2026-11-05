@@ -60,15 +60,20 @@
 
     .note p { margin: 0; }
 
+    .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+
     .open {
       display: inline-block;
       background: var(--accent);
       color: var(--accent-text);
+      border: 2px solid var(--accent);
       font-weight: 600;
       text-decoration: none;
       padding: 0.65rem 1.25rem;
       border-radius: 6px;
     }
+
+    .open.secondary { background: transparent; color: var(--accent); }
 
     .small { color: var(--muted); font-size: 0.9rem; margin-top: 0.75rem; }
 
@@ -111,10 +116,13 @@
     <p>A single model of UK food delivery: who is involved, what software they run, what information it holds, how that information moves, and who holds power over whom. Everyone knows how a takeaway reaches their door, so you can judge what a model like this shows.</p>
 
     <div class="note">
-      <p><strong>This is an illustration.</strong> The product names are real, but the flows are simplified and every value is invented. It describes no named company's actual systems, and it is not affiliated with any of them.</p>
+      <p><strong>This is an illustration with mainly AI content using the harness defined by the WS3 team.</strong> The product names are real, but the flows are simplified and every value is invented. It describes no named company's actual systems, and it is not affiliated with any of them.</p>
     </div>
 
-    <a class="open" href="map/#/view/index/">Open the map</a>
+    <div class="actions">
+      <a class="open" href="map/#/view/index/">Open the map</a>
+      <a class="open secondary" href="map/#/">See all views</a>
+    </div>
     <p class="small">Best on a laptop or larger screen: on a phone the map is very small.</p>
 
     <h2>How to use it</h2>
