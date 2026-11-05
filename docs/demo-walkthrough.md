@@ -59,7 +59,7 @@ Example question for stop 10, ready to paste:
 
 ## If people follow the link instead
 
-The published site has no presenter, so its start page gives the disclaimer, how to use the app and a route through stops 1 to 7 and 9. Some stops only work live:
+The published site has no presenter, so its start page gives the disclaimer, a shorter route of its own, how to use the app and the app in a frame. Its links open the app in a new tab. Some stops only work live:
 
 - **Stop 8:** the site is a fixed copy, so a change to the CSV only appears after publishing again.
 - **Stop 10:** the site has no connection to Claude Code.

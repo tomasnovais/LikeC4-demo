@@ -55,7 +55,7 @@ To use the same file in a BI tool, see [docs/bi-import.md](docs/bi-import.md).
 
 ## Sharing the demo by link
 
-`scripts/deploy-site.mjs` publishes the demo to [Cloudflare Pages](https://developers.cloudflare.com/pages/) as a static site behind one shared password. Visitors get a start page with the disclaimer, how to use the app and a suggested route ([site/index.html](site/index.html)), then the app itself. They can't change anything, but anyone with the password can read the whole model and export its diagrams.
+`scripts/deploy-site.mjs` publishes the demo to [Cloudflare Pages](https://developers.cloudflare.com/pages/) as a static site behind one shared password. Visitors get a start page with the disclaimer, a suggested route, how to use the app and the app in a frame ([site/index.html](site/index.html)). Its links open the app in a new tab, so the start page stays open. Visitors can't change anything, but anyone with the password can read the whole model and export its diagrams.
 
 ### First-time setup
 

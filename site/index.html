@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
   <link rel="icon" href="data:,">
+  <base target="_blank">
   <title>Food Delivery Reference Architecture</title>
   <style>
     :root {
@@ -77,6 +78,17 @@
 
     .small { color: var(--muted); font-size: 0.9rem; margin-top: 0.75rem; }
 
+    /* Wider than the text column, because the map needs the room */
+    .embed {
+      display: block;
+      width: min(100vw - 2rem, 90rem);
+      height: min(80vh, 50rem);
+      margin-left: calc(50% - min(50vw - 1rem, 45rem));
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+    }
+
     dl { margin: 0; }
     dl div { padding: 0.6rem 0; border-top: 1px solid var(--line); }
     dl div:first-child { border-top: 0; padding-top: 0; }
@@ -125,6 +137,34 @@
     </div>
     <p class="small">Best on a laptop or larger screen: on a phone the map is very small.</p>
 
+    <h2>A suggested route</h2>
+    <ol>
+      <li>
+        <a href="map/#/view/index/">Landscape / Index</a>
+        <p>Overall view of the ecosystem. You can navigate to every detail from here.</p>
+      </li>
+      <li>
+        <a href="map/#/view/capabilitiesLens/">Capabilities</a>
+        <p>Filtered view of the Capabilities that are required and what enables them.</p>
+      </li>
+      <li>
+        <a href="map/#/view/openItemsLens/">Open Questions and Assumptions</a>
+        <p>Filter of all the elements with open questions and assumptions. If you open the element (top right icon in each box) you can click on the link and view the open question register.</p>
+      </li>
+      <li>
+        <a href="map/#/view/followOneOrder/?dynamic=sequence">Follow One Order (in sequence mode)</a>
+        <p>This view shows the step by step on how an order goes from being placed to being dropped off. Click the "Start" button on the top banner to follow for an additional feature.</p>
+      </li>
+      <li>
+        <a href="map/#/view/deliveryPlatformSystemZoom/">Delivery Platform System</a>
+        <p>This view focuses on a particular system (aka a software solution type).</p>
+      </li>
+      <li>
+        <a href="map/#/view/powerLens/">Power Lens AKA "Neil's View"</a>
+        <p>View of the power elements hold over each other. The relationships (arrows) hold illustrative data values of that power (e.g. fee %). These values come from a data file that can be linked to PowerBI or any other tool. This means we can have dashboards and this relationship model working from the same data source.</p>
+      </li>
+    </ol>
+
     <h2>How to use it</h2>
     <dl>
       <div>
@@ -149,45 +189,8 @@
       </div>
     </dl>
 
-    <h2>A suggested route</h2>
-    <ol>
-      <li>
-        <a href="map/#/view/index/">Landscape</a>
-        <p>One map of who is involved and what software they run, with no vendor names yet.</p>
-      </li>
-      <li>
-        <a href="map/#/view/deliveryPlatformSystemZoom/">Delivery platform system</a>
-        <p>The system is the role, and the products in it are replaceable. Uber Eats UK Limited is the business and Uber Eats is its software, so each can be described separately.</p>
-      </li>
-      <li>
-        <a href="map/#/view/courierDispatchZoom/">Courier dispatch</a>
-        <p>Use the card icon on Courier profiles to see its fields. The layers go down from map to system, subsystem, dataset and schema, all in one model.</p>
-      </li>
-      <li>
-        <a href="map/#/view/followOneOrder/">Follow one order</a>
-        <p>Press Start, then Next, and read the notes. The same model can tell a story, with named people, one step at a time. Step 5 is the manual re-keying.</p>
-      </li>
-      <li>
-        <a href="map/#/view/noStandardLens/">Flows with no standard</a>
-        <p>Click the red line, "staff re-key each order into the till", to see a proposed schema. The model finds the problems and holds a proposal for fixing them.</p>
-      </li>
-      <li>
-        <a href="map/#/view/infrastructure/">Infrastructure</a>
-        <p>Tablets on the counter next to a till that cannot talk to them: the same elements, this time showing where things physically sit.</p>
-      </li>
-      <li>
-        <a href="map/#/view/powerLens/">Who has power over whom</a>
-        <p>Click a red line to see why, and its relationship data. A model can go beyond data flows to include soft power.</p>
-      </li>
-      <li>
-        <a href="map/#/view/moneyLens/">Where the money goes</a>
-        <p>Click a line to see its figures. These commercial relationships sit in the same model.</p>
-      </li>
-      <li>
-        <a href="map/#/view/openItemsLens/">Open questions and assumptions</a>
-        <p>Use the card icon on Till system, then follow its link. What is not known is tracked against what it affects.</p>
-      </li>
-    </ol>
+    <h2>Embedded just for fun :)</h2>
+    <iframe class="embed" src="map/#/view/index/" title="The food delivery map"></iframe>
 
     <footer>Made with <a href="https://likec4.dev">LikeC4</a>.</footer>
   </main>
