@@ -1,0 +1,112 @@
+// Step-through views (ADR 0004): one for each lifecycle, with named actors, so a process
+// can be played step by step with the Start button. Each is defined from scratch.
+// Notes use triple quotes because only triple-quoted strings render as Markdown.
+
+views "Step-throughs" {
+
+  dynamic view followOneOrder {
+    title 'Follow one order'
+    description 'Joe Blogs orders a curry from Corner Curry House on a delivery platform such as Uber Eats, and Sam Rivers drops it off. Order lifecycle: browse, place, accept, prepare, drop-off, settle.'
+    variant sequence
+
+    customers.joeBlogs -> deliveryPlatformSystem.customerOrdering 'browses menus and places an order' {
+      notes '''**Browse and place.** The order is created here, and this dataset stays authoritative.'''
+    }
+    deliveryPlatformSystem.customerOrdering -> paymentGateway 'charges the card' {
+      notes '''**Place.** The platform never holds the card number, only a token. This flow follows PCI DSS.'''
+    }
+    deliveryPlatformSystem.customerOrdering -> deliveryPlatformSystem.restaurantPortal 'shows the order on the tablet'
+    independentRestaurants.cornerCurryHouse -> deliveryPlatformSystem.restaurantPortal 'accepts the order on the tablet' {
+      notes '''**Accept.** A restaurant on three platforms has three tablets on the counter.'''
+    }
+    independentRestaurants.cornerCurryHouse -[rekeying]-> tillSystem 're-keys the order into the till' {
+      notes '''**Prepare.** The manual step. It is the red line on the map, with a proposed schema to replace it. Mistakes here can reach the customer, including with allergens.'''
+    }
+    deliveryPlatformSystem.customerOrdering -> deliveryPlatformSystem.courierDispatch 'creates a delivery job'
+    deliveryPlatformSystem.courierDispatch -> couriers.samRivers 'offers the job' {
+      notes '''**Drop-off.** The platform decides who sees which job, which is part of its power over couriers.'''
+    }
+    couriers.samRivers -> independentRestaurants.cornerCurryHouse 'collects the order'
+    couriers.samRivers -> customers.joeBlogs 'drops off the order'
+    paymentGateway -> deliveryPlatformSystem.restaurantPortal 'reports settled payments' {
+      notes '''**Settle.** The money is divided between the restaurant, the courier and the platform.'''
+    }
+    deliveryPlatformSystem.restaurantPortal -> independentRestaurants.cornerCurryHouse 'sends the weekly payout, less commission'
+    independentRestaurants.cornerCurryHouse -[rekeying]-> accountingSystem 'types the statement into the accounts' {
+      notes '''Another manual step, repeated for each platform. Reconciling across platforms is the gap on the Capabilities lens.'''
+    }
+  }
+
+  dynamic view restaurantJoins {
+    title 'A restaurant joins'
+    description 'Corner Curry House joins a delivery platform. Restaurant lifecycle: onboard, publish menu, comply, trade, get paid.'
+    variant sequence
+
+    independentRestaurants.cornerCurryHouse -> deliveryPlatformSystem.restaurantPortal 'applies and creates a profile' {
+      notes '''**Onboard.** The restaurant agrees to the standard commission here.'''
+    }
+    deliveryPlatformSystem.restaurantPortal -> foodHygieneRegister 'looks up the hygiene rating' {
+      notes '''**Comply.** A public API with an open format: one of the few flows here that follows a standard.'''
+    }
+    foodHygieneRegister -> deliveryPlatformSystem.restaurantPortal 'returns the rating'
+    independentRestaurants.cornerCurryHouse -> menuManagementSystem 'prepares the menu and allergens'
+    menuManagementSystem -> deliveryPlatformSystem.restaurantPortal 'menu typed into the portal' {
+      notes '''**Publish menu.** Typed in again for every platform the restaurant joins.'''
+    }
+    deliveryPlatformSystem.restaurantPortal -> deliveryPlatformSystem.customerOrdering 'restaurant goes live' {
+      notes '''**Trade.** From here on, orders follow the Follow one order view.'''
+      navigateTo followOneOrder
+    }
+  }
+
+  dynamic view courierSignsUp {
+    title 'A courier signs up'
+    description 'Sam Rivers becomes a courier. Courier lifecycle: apply, verify, activate, work, get paid, leave.'
+    variant sequence
+
+    couriers.samRivers -> deliveryPlatformSystem.courierDispatch 'applies with identity, vehicle and insurance details' {
+      notes '''**Apply.** This creates the courier profile. Open that dataset in the Courier dispatch zoom to see its schema.'''
+    }
+    deliveryPlatformSystem.courierDispatch -> identityVerificationSystem 'sends documents for checking' {
+      notes '''**Verify.** The right to work has to be confirmed before any work is offered.'''
+    }
+    identityVerificationSystem -> deliveryPlatformSystem.courierDispatch 'returns the verification result'
+    deliveryPlatformSystem.courierDispatch -> couriers.samRivers 'activates the account' {
+      notes '''**Activate.** A failed check stops here.'''
+    }
+    deliveryPlatformSystem.courierDispatch -> couriers.samRivers 'offers delivery jobs' {
+      notes '''**Work.** The courier depends on the platform for jobs. See the power lens.'''
+    }
+    deliveryPlatformSystem.courierDispatch -> couriers.samRivers 'pays per drop-off, weekly' {
+      notes '''**Get paid.** About £4 per drop-off (illustrative).'''
+    }
+    couriers.samRivers -> deliveryPlatformSystem.courierDispatch 'closes the account' {
+      notes '''**Leave.** The verification result has to be kept for a period, even after the courier has gone.'''
+    }
+  }
+
+  dynamic view customerJoins {
+    title 'A customer joins'
+    description 'Joe Blogs starts using a delivery platform. Customer lifecycle: sign up, first order, repeat order, get help, close account.'
+    variant sequence
+
+    customers.joeBlogs -> deliveryPlatformSystem.customerOrdering 'downloads the app and creates an account' {
+      notes '''**Sign up.** This creates the customer account.'''
+    }
+    deliveryPlatformSystem.customerOrdering -> paymentGateway 'saves a card as a token'
+    customers.joeBlogs -> deliveryPlatformSystem.customerOrdering 'places a first order' {
+      notes '''**First order.** From here, the order follows the Follow one order view.'''
+      navigateTo followOneOrder
+    }
+    customers.joeBlogs -> deliveryPlatformSystem.customerOrdering 'rates the order and orders again' {
+      notes '''**Repeat order.** Ratings feed the search ranking that restaurants depend on.'''
+    }
+    customers.joeBlogs -> deliveryPlatformSystem.customerOrdering 'reports a missing item' {
+      notes '''**Get help.** The customer contacts the platform, not the restaurant.'''
+    }
+    deliveryPlatformSystem.customerOrdering -> paymentGateway 'refunds the item'
+    customers.joeBlogs -> deliveryPlatformSystem.customerOrdering 'closes the account' {
+      notes '''**Close account.** The account closes, but past orders are kept for the accounts.'''
+    }
+  }
+}

@@ -29,7 +29,7 @@ Used by `/wayfinder`. The **map** is a file with one **child** file per ticket.
 - **Claim**: set `Status: claimed` and save before any work.
 - **Resolve**: append the answer under an `## Answer` heading, set `Status: resolved`, then append a context pointer (gist + link) to the map's Decisions-so-far in `map.md`.
 
-## IDCC registers
+## Registers
 
 Two standing registers sit alongside feature work. Number each from `01`; scan the folder for the highest number and increment.
 

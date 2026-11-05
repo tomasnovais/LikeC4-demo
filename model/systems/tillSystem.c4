@@ -1,0 +1,81 @@
+model {
+
+  tillSystem = system 'Till system' {
+    #lifecycle-order #lifecycle-restaurant #open-question
+    summary 'Where a restaurant records orders and takes payment on its premises.'
+    link ../../backlog/questions/01-who-owns-the-order.md 'Open question 01'
+    style { icon bootstrap:calculator }
+    metadata { source 'Illustrative' }
+
+    square = softwareProduct 'Square' {
+      #api-public
+      link https://squareup.com/gb/en 'Square'
+      metadata { vendor 'Block'; usedBy ['Independent restaurants']; source 'Illustrative' }
+    }
+
+    lightspeed = softwareProduct 'Lightspeed' {
+      #api-public
+      link https://www.lightspeedhq.co.uk 'Lightspeed'
+      metadata { vendor 'Lightspeed Commerce'; usedBy ['Independent restaurants', 'Restaurant chains']; source 'Illustrative' }
+    }
+
+    orders = dataset 'Orders' {
+      #info-order #copy #open-question
+      link ../../backlog/questions/01-who-owns-the-order.md 'Open question 01'
+      metadata { source 'Illustrative' }
+    }
+
+    salesRecords = dataset 'Sales records' {
+      #info-sales-record #authoritative
+      metadata { source 'Illustrative' }
+    }
+  }
+
+  independentRestaurants -[operates]-> tillSystem {
+    description '''
+      | Measure | Illustrative value |
+      | --- | --- |
+      | Sales through the till a week | 400 per restaurant |
+    '''
+    metadata { transactionVolume '400 sales a week per restaurant'; source 'Invented' }
+  }
+  restaurantChains -[operates]-> tillSystem {
+    description '''
+      | Measure | Illustrative value |
+      | --- | --- |
+      | Sales through the till a week | 2,500 per site |
+    '''
+    metadata { transactionVolume '2,500 sales a week per site'; source 'Invented' }
+  }
+
+  tillSystem -[supports]-> recordSales
+
+  tillSystem.salesRecords -[fileTransfer]-> accountingSystem.salesRecords 'daily sales export' {
+    description '''
+      **Example schema: daily sales file**
+
+      | Field | Type | Notes |
+      | --- | --- | --- |
+      | tradingDate | date | The day being reported |
+      | siteId | string | Which site |
+      | channel | enum | Dine-in, takeaway or platform |
+      | netSales | money | Excluding VAT |
+      | vat | money | VAT charged |
+    '''
+    metadata { frequency 'daily'; transactionVolume 'One file per site per day'; schemaName 'Daily sales file'; source 'Illustrative' }
+  }
+}
+
+views "System zooms" {
+
+  // Zoom view: opens when this system is clicked on the map (ADR 0004)
+  view tillSystemZoom of tillSystem {
+    title 'Till system'
+    description 'Zoom into this system: the information it holds, who operates it, the capabilities it supports and the systems it exchanges information with.'
+    include *
+    include * -> tillSystem where kind is operates or kind is uses
+    include tillSystem -> * where kind is supports
+    global style conventions
+    autoLayout LeftRight
+  }
+}

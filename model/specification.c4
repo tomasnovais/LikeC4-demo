@@ -1,30 +1,41 @@
-// IDCC reference architecture: element kinds, relationship kinds and tags.
+// Food delivery reference architecture: element kinds, relationship kinds and tags.
 // Terms are defined in GLOSSARY.md; decisions behind them are in docs/adr/.
-// Rules LikeC4 cannot enforce (e.g. "exactly one roadmap state tag") are
+// Rules LikeC4 cannot enforce (e.g. "exactly one information type tag") are
 // listed in backlog/model-checks/issues/01-tag-rule-check-script.md.
 
 specification {
 
   // ---------------------------------------------------------------------------
   // Element kinds
-  // Shape says what something is; border says its roadmap state (model/styles.c4);
-  // the only strong colour (primary) is reserved for IDCC scope.
+  // Shape says what something is; colour separates who (slate) from software (blue).
+  // Software products are coloured by API readiness instead (model/styles.c4).
   // ---------------------------------------------------------------------------
 
-  element role {
-    notation "Organisation role"
+  // A category of actors, such as food delivery platforms or customers (ADR 0003)
+  element actorGroup {
+    notation "Actor group"
+    style {
+      shape rectangle
+      color slate
+      multiple true
+    }
+  }
+
+  // A specific, named member of an actor group, such as Uber Eats or Joe Blogs
+  element actor {
+    notation "Actor"
     style {
       shape person
       color slate
     }
   }
 
-  // Supplier-neutral kind of software, defined by its role (ADR 0006)
+  // Supplier-neutral kind of software, defined by its role (ADR 0003)
   element system {
     notation "System"
     style {
       shape rectangle
-      color gray
+      color primary
     }
   }
 
@@ -32,29 +43,29 @@ specification {
     notation "Subsystem"
     style {
       shape rectangle
-      color gray
+      color sky
     }
   }
 
-  // Notable example filling a system's role; nested in that system
+  // Real software filling a system's role; nested in that system
   element softwareProduct {
     notation "Software product"
     style {
       shape component
-      color slate
+      color gray
     }
   }
 
-  // Information of one information type held in one system (ADR 0002)
+  // Information of one information type held in one system (ADR 0001)
   element dataset {
     notation "Dataset"
     style {
       shape storage
-      color slate
+      color indigo
     }
   }
 
-  // Verb + noun, e.g. "Assess housing need"
+  // Verb + noun, e.g. "Place order"
   element capability {
     notation "Capability"
     style {
@@ -73,23 +84,49 @@ specification {
   }
 
   // ---------------------------------------------------------------------------
-  // Relationship kinds (legend: docs/legend.md)
-  // Structural relationships are plain solid grey lines, labelled with what the
-  // relationship is. Information flows between datasets are always dotted, and
-  // coloured by mechanism, so each flow has exactly one mechanism and manual
-  // re-keying stands out in every view. The standards a flow follows go in its
-  // `standards` metadata key (a list of standard ids).
+  // Deployment node kinds (Infrastructure view)
   // ---------------------------------------------------------------------------
 
-  // role -> system
+  deploymentNode place {
+    notation "Place"
+    style {
+      color gray
+    }
+  }
+
+  deploymentNode device {
+    notation "Device or server"
+    style {
+      color slate
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Relationship kinds (legend: docs/legend.md)
+  // Structural relationships are plain solid grey lines. Information flows between
+  // datasets are always dotted and coloured by mechanism, so manual re-keying stands
+  // out in every view. Power and money are solid and coloured, and only appear in
+  // their own lenses. Figures and schemas go in the label or description, because
+  // the app and the query tools do not show relationship metadata (ADR 0005).
+  // ---------------------------------------------------------------------------
+
+  // actor or actor group -> system or software product
   relationship operates {
     title 'operates'
-    notation 'An organisation role runs a system'
+    notation 'Runs a system and is responsible for its information'
     color gray
     line solid
   }
 
-  // system -> capability
+  // actor group -> system or subsystem
+  relationship uses {
+    title 'uses'
+    notation 'Depends on a system without running it'
+    color gray
+    line solid
+  }
+
+  // system or subsystem -> capability
   relationship supports {
     title 'supports'
     notation 'A system supports a capability'
@@ -127,80 +164,66 @@ specification {
     line dotted
   }
 
+  // actor group -> actor group, pointing from the one holding the power
+  relationship hasPowerOver {
+    title 'has power over'
+    notation 'Can set terms for, or constrain, the other'
+    color amber
+    line solid
+  }
+
+  // actor group -> actor group, pointing the way the money goes
+  relationship pays {
+    title 'pays'
+    notation 'Money passes from one to the other'
+    color indigo
+    line solid
+  }
+
   // ---------------------------------------------------------------------------
-  // Tags: closed vocabularies used for filtering and colouring (Q5 rule).
+  // Tags: closed vocabularies used for filtering and colouring.
   // Anything not used for filtering belongs in metadata instead.
   // ---------------------------------------------------------------------------
 
-  // Roadmap state (exactly one on software products, datasets, flows, standards;
-  // on systems only when the role itself is new or going away)
-  tag state-current
-  tag state-planned
-  tag state-retiring
-  tag state-retired
+  // Lifecycles (one or more on actor groups, systems, subsystems and capabilities)
+  tag lifecycle-order
+  tag lifecycle-restaurant
+  tag lifecycle-courier
+  tag lifecycle-customer
 
-  // Geographic scope (optional; untagged means national)
-  tag lcr
-
-  // Provenance (exactly one on software products)
-  tag prov-off-the-shelf
-  tag prov-configured
-  tag prov-bespoke
-  tag prov-idcc-built
-
-  // Housing delivery lifecycle stages (one or more on roles, systems, datasets, capabilities;
-  // a role carries the stages of the systems it operates)
-  tag housing-need
-  tag housing-pipeline
-  tag housing-scheme-design
-  tag housing-approval
-  tag housing-construction
-  tag housing-handover
-  tag housing-portfolio
-
-  // Product lifecycle stages (one or more on roles, systems, datasets, capabilities)
-  tag product-development
-  tag product-certification
-  tag product-cataloguing
-  tag product-manufacture
-  tag product-improvement
-
-  // Information types: housing (exactly one on each dataset)
-  tag info-housing-need
-  tag info-scheme-proposal
-  tag info-site-information
-  tag info-scheme-brief
-  tag info-home-design
-  tag info-cost-plan
-  tag info-planning-application
-  tag info-planning-decision
-  tag info-funding-approval
-  tag info-contract
-  tag info-construction-progress
-  tag info-inspection-record
-  tag info-handover-information
-  tag info-property-record
-  tag info-repair
-  tag info-stock-condition
-  tag info-energy-performance
-
-  // Information types: products (exactly one on each dataset)
-  tag info-product-specification
-  tag info-test-evidence
-  tag info-product-certificate
-  tag info-product-data
-  tag info-product-order
-  tag info-supply-record
-  tag info-product-performance-feedback
+  // Information types (exactly one on each dataset)
+  tag info-order
+  tag info-menu
+  tag info-restaurant-profile
+  tag info-customer-account
+  tag info-courier-profile
+  tag info-verification-result
+  tag info-delivery-job
+  tag info-payment
+  tag info-payout
+  tag info-sales-record
+  tag info-accounts
+  tag info-hygiene-rating
+  tag info-customer-rating
 
   // Authority (exactly one on each dataset)
   tag authoritative
   tag copy
 
-  // IDCC builds, configures, integrates, standardises or directly influences this.
-  // An IDCC intervention = idcc-scope + state-planned.
-  tag idcc-scope
+  // API readiness (exactly one on software products)
+  tag api-public
+  tag api-partner
+  tag api-none
 
-  // Software product chosen for a pilot
-  tag pilot
+  // Strength of power (exactly one on hasPowerOver relationships)
+  tag power-high
+  tag power-medium
+  tag power-low
+
+  // Something filed against this element in backlog/questions or backlog/assumptions
+  tag open-question
+  tag assumption
+
+  // A capability no system supports
+  tag gap
 }

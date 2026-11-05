@@ -1,0 +1,99 @@
+model {
+
+  orderIntegrationHub = system 'Order integration hub' {
+    #lifecycle-order #lifecycle-restaurant
+    summary "Brings a restaurant's orders from many delivery platform systems into its till system."
+    style { icon bootstrap:diagram-3-fill }
+    metadata { source 'Illustrative' }
+
+    deliverectHub = softwareProduct 'Deliverect' {
+      #api-public
+      link https://developers.deliverect.com 'Developer documentation'
+      metadata { vendor 'Deliverect'; usedBy ['Restaurant chains']; source 'https://developers.deliverect.com' }
+    }
+
+    otterHub = softwareProduct 'Otter' {
+      #api-partner
+      link https://www.tryotter.com 'Otter'
+      metadata { vendor 'Otter'; usedBy ['Restaurant chains']; source 'Illustrative' }
+    }
+
+    orders = dataset 'Orders' {
+      #info-order #copy
+      metadata { source 'Illustrative' }
+    }
+
+    menus = dataset 'Menus' {
+      #info-menu #copy
+      metadata { source 'Illustrative' }
+    }
+  }
+
+  integrationCompanies -[operates]-> orderIntegrationHub {
+    description '''
+      | Measure | Illustrative value |
+      | --- | --- |
+      | Orders routed a week | 1 million |
+    '''
+    metadata { transactionVolume '1 million orders a week'; source 'Invented' }
+  }
+  integrationCompanies.deliverect -[operates]-> orderIntegrationHub.deliverectHub
+  integrationCompanies.otter -[operates]-> orderIntegrationHub.otterHub
+
+  restaurantChains -[uses]-> orderIntegrationHub 'routes orders, about 500 a week per site' {
+    metadata { transactionVolume '500 orders a week per site'; source 'Invented' }
+  }
+
+  orderIntegrationHub -[supports]-> bringOrdersIntoTill
+  orderIntegrationHub -[supports]-> publishMenu
+
+  orderIntegrationHub.menus -[conformsTo]-> schemaOrgMenu
+
+  orderIntegrationHub.orders -[api]-> tillSystem.orders 'order sent straight to the till' {
+    description '''
+      **Example schema: till order**
+
+      | Field | Type | Notes |
+      | --- | --- | --- |
+      | orderId | string | The hub's reference, with the platform's alongside |
+      | tillProductCode | string | The hub maps dishes to till codes |
+      | quantity | number | How many |
+      | collectBy | time | When the courier arrives |
+
+      **Volume:** about 500 orders a week per site (illustrative).
+    '''
+    metadata { frequency 'per order'; transactionVolume '500 orders a week per site'; schemaName 'Till order'; source 'Illustrative' }
+  }
+
+  orderIntegrationHub.menus -[api]-> deliveryPlatformSystem.restaurantPortal.menus 'menu published to every platform' {
+    description '''
+      **Example schema: menu update**
+
+      | Field | Type | Notes |
+      | --- | --- | --- |
+      | siteId | string | Which site |
+      | itemId | string | The dish |
+      | price | money | Can differ by platform |
+      | available | boolean | Switches a dish off when it runs out |
+      | allergens | list | From the 14 allergens |
+
+      **Volume:** about 20 updates a week per site (illustrative).
+    '''
+    metadata { frequency 'on change'; transactionVolume '20 updates a week per site'; schemaName 'Menu update'; source 'Illustrative' }
+  }
+}
+
+views "System zooms" {
+
+  // Zoom view: opens when this system is clicked on the map (ADR 0004)
+  view orderIntegrationHubZoom of orderIntegrationHub {
+    title 'Order integration hub'
+    description 'Zoom into this system: the information it holds, who operates it, the capabilities it supports and the systems it exchanges information with.'
+    include *
+    include integrationCompanies.*
+    include * -> orderIntegrationHub where kind is operates or kind is uses
+    include orderIntegrationHub -> * where kind is supports
+    global style conventions
+    autoLayout LeftRight
+  }
+}

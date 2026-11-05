@@ -2,27 +2,33 @@
 
 model {
 
-  ifc = standard 'IFC' {
-    #state-current
-    summary 'Industry Foundation Classes: open data model for building information (ISO 16739).'
-    metadata { publisher 'buildingSMART International'; source 'Claude draft 2026-11-03' }
+  pciDss = standard 'PCI DSS' {
+    summary 'Security rules for anyone who stores, processes or transmits card data.'
+    link https://www.pcisecuritystandards.org 'PCI Security Standards Council'
+    metadata { publisher 'PCI Security Standards Council'; version 'v4.0.1'; source 'https://www.pcisecuritystandards.org' }
   }
 
-  uniclass = standard 'Uniclass' {
-    #state-current
-    summary 'UK classification system for the built environment.'
-    metadata { publisher 'NBS'; source 'Claude draft 2026-11-03' }
+  fhrsApi = standard 'Food Hygiene Rating Scheme API' {
+    summary 'Open data format for published food hygiene ratings, in XML and JSON.'
+    link https://www.food.gov.uk/food-hygiene-rating-scheme-api-version-2 'API documentation'
+    metadata { publisher 'Food Standards Agency'; version 'Version 2'; source 'https://www.food.gov.uk/food-hygiene-rating-scheme-api-version-2' }
   }
 
-  etim = standard 'ETIM' {
-    #state-current
-    summary 'Classification model for technical product information.'
-    metadata { publisher 'ETIM International'; source 'Claude draft 2026-11-03' }
+  fourteenAllergens = standard '14 allergens' {
+    summary 'The 14 allergens that UK food businesses must declare.'
+    link https://www.food.gov.uk/safety-hygiene/food-allergy-and-intolerance 'Food allergy and intolerance'
+    metadata { publisher 'Food Standards Agency'; version 'Food Information Regulations 2014'; source 'https://www.food.gov.uk/safety-hygiene/food-allergy-and-intolerance' }
   }
 
-  idccDataStandards = standard 'IDCC information standards' {
-    #state-planned #idcc-scope
-    summary 'Placeholder for the information standards IDCC will define or influence; to be split as they take shape.'
-    metadata { publisher 'IDCC'; source 'Claude draft 2026-11-03' }
+  schemaOrgMenu = standard 'Schema.org Menu' {
+    summary 'A shared vocabulary for describing menus and their items.'
+    link https://schema.org/Menu 'Schema.org Menu'
+    metadata { publisher 'Schema.org'; version 'Rolling release'; source 'https://schema.org/Menu' }
+  }
+
+  digitalIdentityTrustFramework = standard 'Digital identity trust framework' {
+    summary 'UK rules for certified digital identity services, including digital right to work checks.'
+    link https://www.gov.uk/government/publications/digital-identity-certification-for-right-to-work-right-to-rent-and-criminal-record-checks/digital-identity-certification-for-right-to-work-right-to-rent-and-criminal-record-checks 'Certification guidance'
+    metadata { publisher 'UK Government'; version 'Not confirmed'; source 'https://www.gov.uk/government/publications/digital-identity-certification-for-right-to-work-right-to-rent-and-criminal-record-checks/digital-identity-certification-for-right-to-work-right-to-rent-and-criminal-record-checks' }
   }
 }

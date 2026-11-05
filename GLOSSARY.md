@@ -1,43 +1,43 @@
-# IDCC Reference Architecture
+# Food Delivery Reference Architecture
 
-The systems used to deliver social housing, from identifying housing need to maintaining completed homes, the information those systems hold, and how they connect to what the IDCC programme is building.
+The systems used to get food from restaurants to customers in the UK, the information those systems hold, and who holds power over whom along the way. An illustrative example: real product names, with simplified flows and invented figures.
 
 ## Language
 
 ### The model
 
 **Reference architecture**:
-The model of the systems used across social housing delivery, the information they hold and how they connect, in both current and target state.
+The model of the systems used across food delivery, the information they hold and how they connect.
 _Avoid_: architecture diagram, system map, process map
 
 **Capability**:
-Something the housing delivery ecosystem must be able to do, independent of which system does it.
+Something the food delivery ecosystem must be able to do, independent of which system does it.
 _Avoid_: function, feature, service
-
-**IDCC pathway**:
-The integrated, standards-based way of delivering social housing that IDCC is establishing across independent systems and organisations.
-_Avoid_: platform, marketplace, hub, digital platform
-
-**IDCC scope**:
-Anything IDCC builds, configures, integrates, standardises or directly influences; an IDCC intervention is something in IDCC scope that is planned.
-_Avoid_: IDCC system, in scope, IDCC-owned
-
-**IDCC platform**:
-A possible system, run by IDCC, that hosts or links to the software IDCC builds or controls centrally; one system among many, not the IDCC pathway.
-_Avoid_: marketplace, hub
 
 **Standard**:
 A published specification that information must follow, such as a data format, classification system or data dictionary.
-_Avoid_: format, schema, spec
+_Avoid_: format, spec
+
+**Gap**:
+A place where the reference architecture shows something missing: a capability no system supports, a system no software product fills, or a flow that follows no standard.
+_Avoid_: issue, shortfall, missing capability
+
+**Open question**:
+Something about the reference architecture that nobody has confirmed yet, recorded with who can answer it.
+_Avoid_: issue, unknown, TBC
+
+**Assumption**:
+Something the reference architecture treats as true without confirmation, recorded with who can confirm it.
+_Avoid_: guess, premise
 
 ### Information
 
 **Dataset**:
-The information of one information type held in one system, such as the housing need held in the Liverpool housing pipeline.
+The information of one information type held in one system, such as the orders held in a delivery platform system.
 _Avoid_: data, data object, entity, record
 
 **Information type**:
-A category of information that exists independently of any system holding it, such as housing need; every dataset has exactly one.
+A category of information that exists independently of any system holding it, such as an order; every dataset has exactly one.
 _Avoid_: data type, data category, entity type
 
 **Authoritative dataset**:
@@ -60,189 +60,201 @@ _Avoid_: method, channel, protocol
 A flow in which a person types information into another system again, or sends it by email or spreadsheet.
 _Avoid_: double entry, manual integration
 
-**Gap**:
-A place where the reference architecture shows something missing: a capability no system supports, a system no software product fills, or a flow that follows no standard.
-_Avoid_: issue, shortfall, missing capability
+**Schema**:
+The fields, types and meanings of the information a flow carries or a dataset holds.
+_Avoid_: data structure, data model, payload
 
-### Information types: housing
+**Transaction volume**:
+How much passes along a relationship in a stated period, such as orders a week.
+_Avoid_: throughput, traffic
 
-**Scheme proposal**:
-A proposed scheme as recorded in the pipeline, before scheme design starts.
-_Avoid_: opportunity, lead
+### Information types
 
-**Site information**:
-Information about a site's location, ownership, constraints and condition.
-_Avoid_: land data
+**Order**:
+A customer's request for food from one restaurant, from placing it to drop-off.
+_Avoid_: basket, ticket, transaction
 
-**Scheme brief**:
-A registered provider's requirements for a scheme: the number, mix and type of homes, the standards they must meet, and the budget.
-_Avoid_: requirements, specification
+**Menu**:
+The dishes a restaurant offers, with their prices and allergens.
+_Avoid_: catalogue, listing
 
-**Home design**:
-The design of a scheme's homes, including drawings and models, whether configured or designed from scratch.
-_Avoid_: BIM model, drawings, design model
+**Restaurant profile**:
+A restaurant's details on a delivery platform, such as its address, opening hours and contact.
+_Avoid_: merchant record, listing
 
-**Cost plan**:
-The estimated and tracked cost of a scheme.
-_Avoid_: budget, estimate
+**Customer account**:
+A customer's contact details, delivery addresses and saved payment method.
+_Avoid_: user profile
 
-**Planning application**:
-A request for planning consent for a scheme, with its supporting documents.
-_Avoid_: planning submission
+**Courier profile**:
+A courier's identity, right to work, vehicle and insurance details.
+_Avoid_: driver record, rider account
 
-**Planning decision**:
-The planning authority's decision on a planning application, with its conditions.
-_Avoid_: consent, permission
+**Verification result**:
+The outcome of checking a courier's identity and right to work.
+_Avoid_: background check, KYC
 
-**Funding approval**:
-A decision to fund a scheme, by a funder or by a registered provider's investment board.
-_Avoid_: grant, investment decision
+**Delivery job**:
+The task of collecting one order and dropping it off, as offered to a courier.
+_Avoid_: trip, drop, shift
 
-**Contract**:
-An agreement to design, supply or build all or part of a scheme.
-_Avoid_: procurement, appointment
+**Payment**:
+A customer's payment for an order.
+_Avoid_: charge, transaction
 
-**Construction progress**:
-The planned and actual progress of a scheme's construction.
-_Avoid_: programme, schedule
+**Payout**:
+What a food delivery platform pays a restaurant or courier for a period, after commission and fees.
+_Avoid_: settlement, remittance, statement
 
-**Inspection record**:
-The outcome of a quality, safety or building control inspection of a scheme.
-_Avoid_: snag, audit
+**Sales record**:
+A restaurant's record of what it sold.
+_Avoid_: takings, EPOS data
 
-**Handover information**:
-The information passed to the registered provider when a scheme is completed, such as as-built details and operating and maintenance information.
-_Avoid_: O&M manual, handover pack
+**Accounts**:
+A restaurant's financial records.
+_Avoid_: books, ledger
 
-**Property record**:
-The record of one home in a registered provider's portfolio.
-_Avoid_: asset record, unit
+**Hygiene rating**:
+A food regulator's published score of a restaurant's food hygiene.
+_Avoid_: food safety grade
 
-**Repair**:
-A request for, and the record of, a repair or maintenance job on a home.
-_Avoid_: work order, job
-
-**Stock condition**:
-The assessed physical condition of a home and what it is built from.
-_Avoid_: condition survey
-
-**Energy performance**:
-The measured or calculated energy performance of a home.
-_Avoid_: EPC
-
-### Information types: products
-
-**Product specification**:
-A manufacturer's description of a product's design, dimensions, materials and performance.
-_Avoid_: datasheet, spec
-
-**Test evidence**:
-The results of tests carried out on a product to show how it performs.
-_Avoid_: test report
-
-**Product certificate**:
-A certification body's confirmation that a product meets a stated standard.
-_Avoid_: approval, accreditation
-
-**Product data**:
-The structured information about a certified product that is published to a product catalogue.
-_Avoid_: product information, catalogue entry
-
-**Product order**:
-An order for products for a specific scheme.
-_Avoid_: purchase order, call-off
-
-**Supply record**:
-The record of products made and supplied to a scheme's site, traceable to each product.
-_Avoid_: delivery record, delivery note, traceability record
-
-**Product performance feedback**:
-Information on how a product has performed in manufacture, on site or in occupied homes, gathered for continuous improvement.
-_Avoid_: defect report, feedback
+**Customer rating**:
+A customer's score and comments on an order, restaurant or courier.
+_Avoid_: review, feedback
 
 ### Systems
 
 **System**:
-A kind of software used in social housing delivery or the product lifecycle, defined by the role it plays rather than by any supplier, such as a housing management system or a configurator.
-_Avoid_: tool, application, platform, installation
+A kind of software used in food delivery, defined by the role it plays rather than by any supplier, such as a till system.
+_Avoid_: tool, application, platform on its own, installation
 
 **Subsystem**:
-A distinct part of a system with its own responsibilities and datasets.
+A distinct part of a system with its own responsibilities and datasets, such as courier dispatch within a delivery platform system.
 _Avoid_: module, component, container
 
 **Software product**:
-A specific piece of software that fills a system's role, such as one vendor's housing management product, used by named organisations.
-_Avoid_: tool, solution, application, vendor system
-
-**Provenance**:
-Where a software product comes from: off-the-shelf, configured, bespoke or IDCC-built.
-_Avoid_: origin, source, type
-
-**Off-the-shelf**:
-A commercial software product used largely as supplied.
-_Avoid_: COTS, SaaS, packaged
-
-**Configured**:
-A commercial software product with significant configuration or customisation for the organisations using it.
-_Avoid_: customised, tailored
-
-**Bespoke**:
-An existing software product custom-built by or for one organisation, including spreadsheets or lists used as a system of record.
-_Avoid_: custom, in-house, legacy
-
-**IDCC-built**:
-A new software product developed by the IDCC programme.
-_Avoid_: new-build, IDCC system
-
-**Geographic scope**:
-Whether something applies only within Liverpool City Region or nationally.
-_Avoid_: region, coverage, locality
-
-**Organisation role**:
-A kind of organisation that takes part in social housing delivery or the IDCC programme: combined authority, local authority, registered provider, contractor, manufacturer, certification body, architect, regulator, central government, funder or delivery partner.
-_Avoid_: stakeholder, organisation type, sector
-
-**Operator**:
-The organisation role that runs a system and is responsible for the information it holds.
-_Avoid_: owner, user, tenant
-
-**Registered provider**:
-A social housing landlord registered with the regulator, such as Onward Homes or Torus.
-_Avoid_: housing association, landlord, RP, housing provider
-
-**Contractor**:
-An organisation that builds or assembles a scheme on site, including a registered provider's in-house contractor.
-_Avoid_: builder, developer, main contractor
-
-**Delivery partner**:
-An organisation contracted to deliver part of the IDCC programme, such as HVM Catapult.
-_Avoid_: contractor, consultant, partner
+A specific piece of software that fills a system's role, such as the Uber Eats app filling the role of a delivery platform system; not the business that runs it, which is an actor.
+_Avoid_: tool, solution, application, vendor system, provider
 
 **Software vendor**:
-The company that supplies a software product.
+The company that supplies a software product, such as Uber for the Uber Eats app.
 _Avoid_: supplier, provider
 
-### Products
+**API readiness**:
+Whether a software product offers an API to outsiders: public, for partners only, or none.
+_Avoid_: integration maturity, openness
 
-**Product**:
-An industrialised construction component or assembly offered by a manufacturer.
-_Avoid_: component, part, module, element
+**Delivery platform system**:
+A system through which customers order food from restaurants for delivery; the Uber Eats, Deliveroo and Just Eat apps are software products that fill this role.
+_Avoid_: delivery platform on its own, marketplace, aggregator, delivery service, provider
 
-**Manufacturer**:
-An organisation that develops and makes products.
-_Avoid_: supplier, vendor, fabricator
+**Customer ordering**:
+The subsystem of a delivery platform system where customers manage their accounts, browse menus and place orders.
+_Avoid_: customer app, storefront
 
-**Kit of parts**:
-A defined set of compatible products from which home designs can be configured.
-_Avoid_: product range, product system
+**Restaurant portal**:
+The subsystem of a delivery platform system where restaurants manage their profiles and menus, accept orders and see payouts.
+_Avoid_: merchant portal, restaurant app
 
-**Product catalogue**:
-A system listing certified products and their information, available for use in configuring home designs.
-_Avoid_: library, marketplace
+**Courier dispatch**:
+The subsystem of a delivery platform system that signs up couriers, offers them delivery jobs and tracks each drop-off.
+_Avoid_: driver app, routing
 
-**Configurator**:
-A system that composes products from a kit of parts into a home design.
-_Avoid_: design tool, generator
+**Till system**:
+A system in which a restaurant records orders and takes payment on its premises.
+_Avoid_: POS, EPOS, register
+
+**Order integration hub**:
+A system that brings a restaurant's orders from many delivery platform systems into its till system.
+_Avoid_: middleware, aggregator, tablet consolidation
+
+**Menu management system**:
+A system in which a restaurant keeps the master version of its menu, even if that is only a spreadsheet.
+_Avoid_: menu tool, content system
+
+**Payment gateway**:
+A system that takes a customer's card payment and passes the money on.
+_Avoid_: payment processor, PSP
+
+**Accounting system**:
+A system in which a restaurant keeps its accounts.
+_Avoid_: bookkeeping tool, finance system
+
+**Food hygiene register**:
+A system that publishes the hygiene ratings of food businesses.
+_Avoid_: FHRS database, ratings site
+
+**Identity verification system**:
+A system that checks a person's identity documents and right to work.
+_Avoid_: KYC tool, background check service
+
+### Actor groups and actors
+
+**Actor group**:
+A category of actors that play the same part in food delivery, such as food delivery platforms or customers.
+_Avoid_: organisation, organisation role, stakeholder, sector, person
+
+**Actor**:
+A specific, named member of an actor group, whether an organisation or an individual, such as Uber Eats within food delivery platforms or Joe Blogs within customers.
+_Avoid_: organisation, company, provider, stakeholder, person, user
+
+**Operator**:
+The actor or actor group that runs a system and is responsible for the information it holds.
+_Avoid_: owner, user, tenant
+
+**Customers**:
+The actor group of people who order food through a delivery platform system.
+_Avoid_: users, consumers, eaters
+
+**Couriers**:
+The actor group of people who collect orders from restaurants and drop them off with customers.
+_Avoid_: riders, drivers, contributors, partners
+
+**Food delivery platforms**:
+The actor group of businesses that run delivery platform systems, such as Uber Eats, Deliveroo and Just Eat.
+_Avoid_: platform operators, providers, marketplaces, aggregators, delivery companies
+
+**Independent restaurants**:
+The actor group of restaurants with one site or a few, which take a food delivery platform's standard terms.
+_Avoid_: merchants, small businesses, partners
+
+**Restaurant chains**:
+The actor group of restaurant brands with many sites, which negotiate their own terms with food delivery platforms.
+_Avoid_: merchants, enterprises, multi-site operators
+
+**Integration companies**:
+The actor group of businesses that run order integration hubs.
+_Avoid_: middleware vendors
+
+**Payment companies**:
+The actor group of businesses that run payment gateways.
+_Avoid_: payment providers, PSPs
+
+**Verification companies**:
+The actor group of businesses that run identity verification systems.
+_Avoid_: KYC providers
+
+**Food regulators**:
+The actor group of public bodies that set and enforce food safety rules and publish hygiene ratings.
+_Avoid_: authorities, inspectors
+
+### Power and money
+
+**Power**:
+The ability of one actor group to set terms for, or constrain, another; it has a basis and a strength.
+_Avoid_: influence, leverage, authority
+
+**Basis**:
+Where power comes from: commercial, regulatory or dependency.
+_Avoid_: source, type
+
+**Value exchange**:
+Money passing from one actor group to another, such as customers paying for orders.
+_Avoid_: money flow, funding, revenue
+
+**Commission**:
+The share of an order's value that a food delivery platform keeps.
+_Avoid_: fee, take rate
 
 ### Lifecycles
 
@@ -250,63 +262,26 @@ _Avoid_: design tool, generator
 An independent sequence of stages that one kind of thing passes through; lifecycles run in parallel and connect only where information from one feeds another.
 _Avoid_: process, flow, journey
 
-**Housing delivery lifecycle**:
-The lifecycle of a scheme: housing need, pipeline, scheme design, approval, construction, handover, portfolio management.
-_Avoid_: housing process, delivery process
+**Order lifecycle**:
+The lifecycle of an order: browse, place, accept, prepare, drop-off, settle.
+_Avoid_: order journey, fulfilment
 
-**Scheme design**:
-The housing delivery stage covering a scheme's feasibility, design and costing.
-_Avoid_: development, design stage
+**Restaurant lifecycle**:
+The lifecycle of a restaurant on a food delivery platform: onboard, publish menu, comply, trade, get paid.
+_Avoid_: merchant journey
 
-**Construction**:
-The housing delivery stage covering procurement, manufacture and on-site assembly for a scheme, and tracking its progress.
-_Avoid_: delivery, build
+**Courier lifecycle**:
+The lifecycle of a courier on a food delivery platform: apply, verify, activate, work, get paid, leave.
+_Avoid_: rider journey, driver onboarding
 
-**Product lifecycle**:
-The lifecycle of a product: product development, certification, cataloguing, manufacture and supply, continuous improvement.
-_Avoid_: new product introduction, NPI
+**Customer lifecycle**:
+The lifecycle of a customer on a food delivery platform: sign up, first order, repeat order, get help, close account.
+_Avoid_: user journey, customer journey
 
-**Product development**:
-The product lifecycle stage in which a manufacturer designs, develops and tests a product.
-_Avoid_: new product introduction, NPI, R&D
+**Drop-off**:
+The order lifecycle stage in which an order is handed to the customer.
+_Avoid_: delivery, fulfilment
 
-**Cataloguing**:
-The product lifecycle stage in which a certified product's information is published to the product catalogue.
-_Avoid_: listing, onboarding
-
-**Continuous improvement**:
-The product lifecycle stage in which feedback on a product's performance in manufacture, on site and in occupied homes goes back into developing its next version.
-_Avoid_: feedback loop, lessons learned
-
-### Housing delivery
-
-**Housing need**:
-The demand for social homes in an area, by number, type, tenure and location.
-_Avoid_: demand, requirement
-
-**Pipeline**:
-The prioritised list of proposed and active schemes.
-_Avoid_: programme, list
-
-**Scheme**:
-One development of social homes on one site, from proposal to completion.
-_Avoid_: project, development, site
-
-**Portfolio**:
-The homes a provider owns and manages after handover.
-_Avoid_: housing stock, assets, estate
-
-
-### Change over time
-
-**Current state**:
-The reference architecture as it exists today.
-_Avoid_: as-is, baseline
-
-**Target state**:
-The reference architecture as IDCC intends it to be once its systems and integrations are delivered.
-_Avoid_: to-be, future state, end state
-
-**Roadmap state**:
-Whether a system, or a connection between systems, exists today, is planned, is being retired, or has been retired.
-_Avoid_: lifecycle state, status, phase
+**Settle**:
+The order lifecycle stage in which an order's money is divided between the restaurant, the courier and the food delivery platform.
+_Avoid_: reconciliation

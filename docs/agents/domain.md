@@ -50,11 +50,11 @@ If your output contradicts an existing ADR, surface it explicitly rather than si
 
 > _Contradicts ADR-0007 (event-sourced orders), but worth reopening because…_
 
-## IDCC conventions
+## Project conventions
 
 ### ADR header
 
-IDCC is a publicly funded, multi-partner programme, so every ADR records who decided what and when. Use the short ADR format, but always start with this header:
+Every ADR records who decided what and when. Use the short ADR format, but always start with this header:
 
 ```md
 # NNNN. {Short title of the decision}

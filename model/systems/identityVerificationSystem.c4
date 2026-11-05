@@ -1,0 +1,76 @@
+model {
+
+  identityVerificationSystem = system 'Identity verification system' {
+    #lifecycle-courier
+    summary "Checks a person's identity documents and right to work."
+    style { icon bootstrap:person-badge }
+    metadata { source 'Illustrative' }
+
+    onfidoVerification = softwareProduct 'Onfido' {
+      #api-public
+      link https://onfido.com 'Onfido'
+      metadata { vendor 'Entrust'; usedBy ['Food delivery platforms']; source 'Illustrative' }
+    }
+
+    yotiVerification = softwareProduct 'Yoti' {
+      #api-public
+      link https://www.yoti.com 'Yoti'
+      metadata { vendor 'Yoti'; usedBy ['Food delivery platforms']; source 'Illustrative' }
+    }
+
+    verificationResults = dataset 'Verification results' {
+      #info-verification-result #authoritative
+      metadata { source 'Illustrative' }
+    }
+  }
+
+  verificationCompanies -[operates]-> identityVerificationSystem {
+    description '''
+      | Measure | Illustrative value |
+      | --- | --- |
+      | Courier checks a month | 5,000 |
+    '''
+    metadata { transactionVolume '5,000 checks a month'; source 'Invented' }
+  }
+  verificationCompanies.onfido -[operates]-> identityVerificationSystem.onfidoVerification
+  verificationCompanies.yoti -[operates]-> identityVerificationSystem.yotiVerification
+
+  foodDeliveryPlatforms -[uses]-> identityVerificationSystem 'checks couriers, 5,000 a month' {
+    metadata { transactionVolume '5,000 checks a month'; source 'Invented' }
+  }
+
+  identityVerificationSystem -[supports]-> verifyCourier
+
+  identityVerificationSystem.verificationResults -[conformsTo]-> digitalIdentityTrustFramework
+
+  identityVerificationSystem.verificationResults -[api]-> deliveryPlatformSystem.courierDispatch.verificationResults 'verification result returned' {
+    description '''
+      **Example schema: verification result**
+
+      | Field | Type | Notes |
+      | --- | --- | --- |
+      | courierId | string | The platform's reference |
+      | outcome | enum | Passed, failed or needs review |
+      | rightToWorkExpiry | date | Empty if there is no time limit |
+      | checkedAt | datetime | When the check finished |
+
+      **Volume:** about 5,000 checks a month (illustrative).
+    '''
+    metadata { frequency 'per sign-up'; standards ['digitalIdentityTrustFramework']; transactionVolume '5,000 checks a month'; schemaName 'Verification result'; source 'Illustrative' }
+  }
+}
+
+views "System zooms" {
+
+  // Zoom view: opens when this system is clicked on the map (ADR 0004)
+  view identityVerificationSystemZoom of identityVerificationSystem {
+    title 'Identity verification system'
+    description 'Zoom into this system: the information it holds, who operates it, the capabilities it supports and the systems it exchanges information with.'
+    include *
+    include verificationCompanies.*
+    include * -> identityVerificationSystem where kind is operates or kind is uses
+    include identityVerificationSystem -> * where kind is supports
+    global style conventions
+    autoLayout LeftRight
+  }
+}

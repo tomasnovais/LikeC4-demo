@@ -1,16 +1,14 @@
-// Shared view styling. Every view applies it with:
-//   global style idccConventions
+// Shared view styling. The map and every zoom view apply it with:
+//   global style conventions
 
 global {
-  styleGroup idccConventions {
-    // Roadmap state: border style (current keeps the default solid border)
-    style element.tag = #state-planned { border dashed }
-    style element.tag = #state-retiring { border dotted }
+  styleGroup conventions {
+    // API readiness of software products: the same logic as the flow colours
+    style element.tag = #api-public { color green }
+    style element.tag = #api-partner { color amber }
+    style element.tag = #api-none { color red }
 
-    // IDCC scope: the one highlight colour
-    style element.tag = #idcc-scope { color primary }
-
-    // Retired last, so a retired element fades even if it was in IDCC scope
-    style element.tag = #state-retired { color muted; opacity 30% }
+    // A gap stands out wherever it appears
+    style element.tag = #gap { color red; border dashed }
   }
 }

@@ -1,0 +1,68 @@
+model {
+
+  foodHygieneRegister = system 'Food hygiene register' {
+    #lifecycle-restaurant
+    summary 'Publishes the hygiene ratings of food businesses.'
+    style { icon bootstrap:award }
+    metadata { source 'Illustrative' }
+
+    foodHygieneRatingScheme = softwareProduct 'Food Hygiene Rating Scheme' {
+      #api-public
+      summary 'Public, free and with no API key needed.'
+      link https://ratings.food.gov.uk 'Food hygiene ratings'
+      link https://www.food.gov.uk/food-hygiene-rating-scheme-api-version-2 'API documentation'
+      metadata { vendor 'Food Standards Agency'; usedBy ['Customers', 'Food delivery platforms']; source 'https://www.food.gov.uk/food-hygiene-rating-scheme-api-version-2' }
+    }
+
+    hygieneRatings = dataset 'Hygiene ratings' {
+      #info-hygiene-rating #authoritative
+      metadata { source 'Illustrative' }
+    }
+  }
+
+  foodRegulators -[operates]-> foodHygieneRegister {
+    description '''
+      | Measure | Illustrative value |
+      | --- | --- |
+      | Businesses rated | 500,000 |
+    '''
+    metadata { transactionVolume '500,000 businesses rated'; source 'Invented' }
+  }
+  foodRegulators.foodStandardsAgency -[operates]-> foodHygieneRegister.foodHygieneRatingScheme
+
+  foodHygieneRegister -[supports]-> publishHygieneRating
+
+  foodHygieneRegister.hygieneRatings -[conformsTo]-> fhrsApi
+
+  foodHygieneRegister.hygieneRatings -[api]-> deliveryPlatformSystem.restaurantPortal.hygieneRatings 'rating shown on the platform' {
+    description '''
+      **Example schema: establishment rating**
+
+      | Field | Type | Notes |
+      | --- | --- | --- |
+      | businessName | string | As registered |
+      | postcode | string | Used to match the restaurant |
+      | ratingValue | number | 0 to 5 |
+      | ratingDate | date | The last inspection |
+      | localAuthority | string | Who inspected it |
+
+      **Volume:** the register is refreshed daily (illustrative).
+    '''
+    metadata { frequency 'daily'; standards ['fhrsApi']; transactionVolume 'Refreshed daily'; schemaName 'Establishment rating'; source 'Illustrative' }
+  }
+}
+
+views "System zooms" {
+
+  // Zoom view: opens when this system is clicked on the map (ADR 0004)
+  view foodHygieneRegisterZoom of foodHygieneRegister {
+    title 'Food hygiene register'
+    description 'Zoom into this system: the information it holds, who operates it, the capabilities it supports and the systems it exchanges information with.'
+    include *
+    include foodRegulators.*
+    include * -> foodHygieneRegister where kind is operates or kind is uses
+    include foodHygieneRegister -> * where kind is supports
+    global style conventions
+    autoLayout LeftRight
+  }
+}

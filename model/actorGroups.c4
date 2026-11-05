@@ -1,0 +1,154 @@
+// Actor groups and the actors inside them (ADR 0003). The map shows groups; actors
+// appear on zoom views and in the step-through views. An actor connects only to
+// its own software, or is connected through its group.
+// Invented figures stay on groups, never on a named company (ADR 0005).
+
+model {
+
+  customers = actorGroup 'Customers' {
+    #lifecycle-order #lifecycle-customer
+    summary 'People who order food through a delivery platform system.'
+    style { icon bootstrap:people-fill }
+    metadata { source 'Illustrative' }
+
+    joeBlogs = actor 'Joe Blogs' {
+      summary 'An example customer.'
+      metadata { source 'Invented' }
+    }
+  }
+
+  couriers = actorGroup 'Couriers' {
+    #lifecycle-order #lifecycle-courier
+    summary 'People who collect orders from restaurants and drop them off with customers.'
+    style { icon bootstrap:bicycle }
+    metadata { source 'Illustrative' }
+
+    samRivers = actor 'Sam Rivers' {
+      summary 'An example courier.'
+      metadata { source 'Invented' }
+    }
+  }
+
+  foodDeliveryPlatforms = actorGroup 'Food delivery platforms' {
+    #lifecycle-order #lifecycle-restaurant #lifecycle-courier #lifecycle-customer
+    summary 'Businesses that run delivery platform systems.'
+    style { icon bootstrap:phone-fill }
+    metadata { source 'Illustrative' }
+
+    uberEats = actor 'Uber Eats' {
+      link https://www.ubereats.com/gb 'Uber Eats'
+      metadata { source 'https://www.ubereats.com/gb' }
+    }
+
+    deliveroo = actor 'Deliveroo' {
+      summary 'Owned by DoorDash.'
+      link https://deliveroo.co.uk 'Deliveroo'
+      metadata { source 'https://foodondemand.com/10062025/doordash-offically-acquires-deliveroo/' }
+    }
+
+    justEat = actor 'Just Eat' {
+      summary 'Owned by Prosus.'
+      link https://www.just-eat.co.uk 'Just Eat'
+      metadata { source 'https://www.retaildetail.eu/news/food/acquisition-of-just-eat-takeaway-completed-the-hard-work-is-just-beginning/' }
+    }
+  }
+
+  independentRestaurants = actorGroup 'Independent restaurants' {
+    #lifecycle-order #lifecycle-restaurant #assumption
+    summary "Restaurants with one site or a few, which take a platform's standard terms."
+    link ../backlog/assumptions/02-independents-rekey-orders.md 'Assumption 02'
+    style { icon bootstrap:shop }
+    metadata { source 'Illustrative' }
+
+    cornerCurryHouse = actor 'Corner Curry House' {
+      summary 'An example independent restaurant.'
+      metadata { source 'Invented' }
+    }
+  }
+
+  restaurantChains = actorGroup 'Restaurant chains' {
+    #lifecycle-order #lifecycle-restaurant
+    summary 'Restaurant brands with many sites, which negotiate their own terms with platforms.'
+    style { icon bootstrap:shop-window }
+    metadata { source 'Illustrative' }
+
+    nandos = actor "Nando's" {
+      summary 'Named as an example of the group only; nothing here describes its actual systems.'
+      metadata { source 'Illustrative' }
+    }
+
+    wagamama = actor 'Wagamama' {
+      summary 'Named as an example of the group only; nothing here describes its actual systems.'
+      metadata { source 'Illustrative' }
+    }
+  }
+
+  integrationCompanies = actorGroup 'Integration companies' {
+    #lifecycle-order #lifecycle-restaurant
+    summary 'Businesses that run order integration hubs.'
+    style { icon bootstrap:plug-fill }
+    metadata { source 'Illustrative' }
+
+    deliverect = actor 'Deliverect' {
+      link https://www.deliverect.com 'Deliverect'
+      metadata { source 'https://www.deliverect.com' }
+    }
+
+    otter = actor 'Otter' {
+      link https://www.tryotter.com 'Otter'
+      metadata { source 'https://www.tryotter.com' }
+    }
+  }
+
+  paymentCompanies = actorGroup 'Payment companies' {
+    #lifecycle-order #lifecycle-customer
+    summary 'Businesses that run payment gateways.'
+    style { icon bootstrap:credit-card-fill }
+    metadata { source 'Illustrative' }
+
+    stripe = actor 'Stripe' {
+      link https://stripe.com/gb 'Stripe'
+      metadata { source 'https://stripe.com/gb' }
+    }
+
+    adyen = actor 'Adyen' {
+      link https://www.adyen.com 'Adyen'
+      metadata { source 'https://www.adyen.com' }
+    }
+  }
+
+  verificationCompanies = actorGroup 'Verification companies' {
+    #lifecycle-courier
+    summary 'Businesses that run identity verification systems.'
+    style { icon bootstrap:person-check-fill }
+    metadata { source 'Illustrative' }
+
+    onfido = actor 'Onfido' {
+      summary 'Owned by Entrust.'
+      link https://onfido.com 'Onfido'
+      metadata { source 'https://www.entrust.com' }
+    }
+
+    yoti = actor 'Yoti' {
+      link https://www.yoti.com 'Yoti'
+      metadata { source 'https://www.yoti.com' }
+    }
+  }
+
+  foodRegulators = actorGroup 'Food regulators' {
+    #lifecycle-restaurant
+    summary 'Public bodies that set and enforce food safety rules and publish hygiene ratings.'
+    style { icon bootstrap:shield-check }
+    metadata { source 'Illustrative' }
+
+    foodStandardsAgency = actor 'Food Standards Agency' {
+      link https://www.food.gov.uk 'Food Standards Agency'
+      metadata { source 'https://www.food.gov.uk' }
+    }
+
+    localAuthorityFoodTeams = actor 'Local authority food teams' {
+      summary 'Inspect food businesses and award their hygiene ratings.'
+      metadata { source 'https://www.food.gov.uk/safety-hygiene/food-hygiene-rating-scheme' }
+    }
+  }
+}

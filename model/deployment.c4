@@ -1,0 +1,82 @@
+// Infrastructure: what physically sits where. Instances point at elements of the
+// model, so this layer stays connected to the map (ADR 0004).
+
+deployment {
+
+  restaurantPremises = place 'Restaurant premises' {
+    style { icon bootstrap:shop }
+
+    tablets = device 'Tablets, one per platform' {
+      style { icon bootstrap:tablet }
+      uberEatsTablet = instanceOf deliveryPlatformSystem.uberEatsApp
+      deliverooTablet = instanceOf deliveryPlatformSystem.deliverooApp
+      justEatTablet = instanceOf deliveryPlatformSystem.justEatApp
+    }
+
+    tillTerminal = device 'Till terminal' {
+      style { icon bootstrap:calculator }
+      instanceOf tillSystem.square
+    }
+
+    backOfficePc = device 'Back-office PC' {
+      style { icon bootstrap:pc-display }
+      instanceOf menuManagementSystem.menuSpreadsheet
+    }
+
+    tablets -[rekeying]-> tillTerminal 'staff re-key each order'
+  }
+
+  customerHome = place 'At home' {
+    style { icon bootstrap:house-door-fill }
+
+    customerPhone = device "Customer's phone" {
+      style { icon bootstrap:phone }
+      instanceOf deliveryPlatformSystem.customerOrdering
+    }
+  }
+
+  onTheRoad = place 'On the road' {
+    style { icon bootstrap:bicycle }
+
+    courierPhone = device "Courier's phone" {
+      style { icon bootstrap:phone }
+      instanceOf deliveryPlatformSystem.courierDispatch
+    }
+  }
+
+  cloud = place 'Cloud' {
+    style { icon bootstrap:cloud-fill }
+
+    platformServers = device 'Platform servers' {
+      instanceOf deliveryPlatformSystem.restaurantPortal
+    }
+
+    gatewayServers = device 'Payment gateway servers' {
+      instanceOf paymentGateway.stripeGateway
+    }
+
+    accountingServers = device 'Accounting servers' {
+      instanceOf accountingSystem.xero
+    }
+  }
+
+  customerHome.customerPhone -[api]-> cloud.platformServers 'over mobile data or wifi'
+  onTheRoad.courierPhone -[api]-> cloud.platformServers 'over mobile data, with location'
+  cloud.platformServers -[api]-> restaurantPremises.tablets 'over the restaurant wifi'
+  cloud.platformServers -[api]-> cloud.gatewayServers 'card payments'
+  restaurantPremises.tillTerminal -[fileTransfer]-> cloud.accountingServers 'daily sales export'
+  restaurantPremises.backOfficePc -[rekeying]-> restaurantPremises.tablets 'menu typed in on each tablet'
+}
+
+views {
+
+  deployment view infrastructure {
+    title 'Infrastructure'
+    description 'What physically sits where: a tablet per platform on the counter next to a till that cannot talk to them. Illustrative.'
+    include restaurantPremises, restaurantPremises.*, restaurantPremises.tablets.*, restaurantPremises.tillTerminal.*, restaurantPremises.backOfficePc.*
+    include customerHome, customerHome.*, customerHome.customerPhone.*
+    include onTheRoad, onTheRoad.*, onTheRoad.courierPhone.*
+    include cloud, cloud.*, cloud.platformServers.*, cloud.gatewayServers.*, cloud.accountingServers.*
+    autoLayout LeftRight
+  }
+}

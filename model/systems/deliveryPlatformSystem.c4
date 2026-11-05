@@ -1,0 +1,354 @@
+model {
+
+  deliveryPlatformSystem = system 'Delivery platform system' {
+    #lifecycle-order #lifecycle-restaurant #lifecycle-courier #lifecycle-customer #open-question
+    summary 'How customers order food for delivery, and how those orders reach restaurants and couriers.'
+    link ../../backlog/questions/01-who-owns-the-order.md 'Open question 01'
+    link ../../backlog/questions/02-structured-allergen-data.md 'Open question 02'
+    style { icon bootstrap:bag-fill }
+    metadata { source 'Illustrative' }
+
+    // Replaceable software filling this system's role (ADR 0003)
+
+    uberEatsApp = softwareProduct 'Uber Eats app' {
+      #api-partner
+      summary 'Platform couriers, with a partner API for restaurants and integrators.'
+      link https://www.ubereats.com/gb 'Uber Eats'
+      metadata { vendor 'Uber'; usedBy ['Customers', 'Couriers', 'Independent restaurants', 'Restaurant chains']; source 'Illustrative' }
+    }
+
+    deliverooApp = softwareProduct 'Deliveroo app' {
+      #api-partner
+      summary 'Platform couriers, with a partner API for restaurants and integrators.'
+      link https://deliveroo.co.uk 'Deliveroo'
+      metadata { vendor 'Deliveroo (DoorDash)'; usedBy ['Customers', 'Couriers', 'Independent restaurants', 'Restaurant chains']; source 'Illustrative' }
+    }
+
+    justEatApp = softwareProduct 'Just Eat app' {
+      #api-partner
+      summary "Platform couriers or the restaurant's own drivers, so courier dispatch is not always used."
+      link https://www.just-eat.co.uk 'Just Eat'
+      metadata { vendor 'Just Eat (Prosus)'; usedBy ['Customers', 'Couriers', 'Independent restaurants', 'Restaurant chains']; source 'Illustrative' }
+    }
+
+    customerOrdering = subsystem 'Customer ordering' {
+      #lifecycle-order #lifecycle-customer
+      summary 'Where customers manage their accounts, browse menus and place orders.'
+      metadata { source 'Illustrative' }
+
+      customerAccounts = dataset 'Customer accounts' {
+        #info-customer-account #authoritative
+        metadata { source 'Illustrative' }
+      }
+
+      orders = dataset 'Orders' {
+        #info-order #authoritative #open-question
+        summary 'The order as the platform holds it. Open its details to see the schema.'
+        description '''
+          **Example schema: order**
+
+          | Field | Type | Notes |
+          | --- | --- | --- |
+          | orderId | string | The platform's order reference |
+          | customerId | string | Links to the customer account |
+          | restaurantId | string | Links to the restaurant profile |
+          | items | list | Dish, quantity and options |
+          | allergenNotes | string | What the customer told the restaurant |
+          | total | money | Including the delivery fee |
+          | status | enum | Placed, accepted, prepared, collected, dropped off |
+        '''
+        link ../../backlog/questions/01-who-owns-the-order.md 'Open question 01'
+        metadata { fields ['orderId', 'customerId', 'restaurantId', 'items', 'allergenNotes', 'total', 'status']; source 'Illustrative' }
+      }
+
+      customerRatings = dataset 'Customer ratings' {
+        #info-customer-rating #authoritative
+        metadata { source 'Illustrative' }
+      }
+    }
+
+    restaurantPortal = subsystem 'Restaurant portal' {
+      #lifecycle-order #lifecycle-restaurant
+      summary 'Where restaurants manage their profiles and menus, accept orders and see payouts. In a kitchen, this is the tablet.'
+      metadata { source 'Illustrative' }
+
+      restaurantProfiles = dataset 'Restaurant profiles' {
+        #info-restaurant-profile #authoritative
+        metadata { source 'Illustrative' }
+      }
+
+      menus = dataset 'Menus' {
+        #info-menu #copy #open-question
+        link ../../backlog/questions/02-structured-allergen-data.md 'Open question 02'
+        metadata { source 'Illustrative' }
+      }
+
+      orders = dataset 'Orders' {
+        #info-order #copy
+        metadata { source 'Illustrative' }
+      }
+
+      hygieneRatings = dataset 'Hygiene ratings' {
+        #info-hygiene-rating #copy
+        metadata { source 'Illustrative' }
+      }
+
+      payouts = dataset 'Restaurant payouts' {
+        #info-payout #authoritative
+        metadata { source 'Illustrative' }
+      }
+    }
+
+    courierDispatch = subsystem 'Courier dispatch' {
+      #lifecycle-order #lifecycle-courier
+      summary 'Signs up couriers, offers them delivery jobs and tracks each drop-off.'
+      metadata { source 'Illustrative' }
+
+      courierProfiles = dataset 'Courier profiles' {
+        #info-courier-profile #authoritative
+        summary 'Who the courier is and whether they may work. Open its details to see the schema.'
+        description '''
+          **Example schema: courier profile**
+
+          | Field | Type | Notes |
+          | --- | --- | --- |
+          | courierId | string | The platform's reference |
+          | fullName | string | As shown on the identity document |
+          | rightToWorkExpiry | date | Empty if there is no time limit |
+          | vehicleType | enum | Bicycle, motorbike or car |
+          | insuranceExpiry | date | Needed for motor vehicles |
+          | status | enum | Applied, verified, active or left |
+        '''
+        metadata { fields ['courierId', 'fullName', 'rightToWorkExpiry', 'vehicleType', 'insuranceExpiry', 'status']; source 'Illustrative' }
+      }
+
+      verificationResults = dataset 'Verification results' {
+        #info-verification-result #copy
+        metadata { source 'Illustrative' }
+      }
+
+      deliveryJobs = dataset 'Delivery jobs' {
+        #info-delivery-job #authoritative
+        metadata { source 'Illustrative' }
+      }
+
+      payouts = dataset 'Courier payouts' {
+        #info-payout #authoritative
+        metadata { source 'Illustrative' }
+      }
+    }
+  }
+
+  // Who runs it. The group-level line carries the figures; the actor-level lines
+  // show which business runs which app, and stay free of invented numbers.
+  foodDeliveryPlatforms -[operates]-> deliveryPlatformSystem {
+    description '''
+      | Measure | Illustrative value |
+      | --- | --- |
+      | Orders a week across all platforms | 4 million |
+      | Restaurants listed | 100,000 |
+    '''
+    metadata { transactionVolume '4 million orders a week'; source 'Invented' }
+  }
+  foodDeliveryPlatforms.uberEats -[operates]-> deliveryPlatformSystem.uberEatsApp
+  foodDeliveryPlatforms.deliveroo -[operates]-> deliveryPlatformSystem.deliverooApp
+  foodDeliveryPlatforms.justEat -[operates]-> deliveryPlatformSystem.justEatApp
+
+  // Who depends on it
+  customers -[uses]-> deliveryPlatformSystem.customerOrdering 'places orders, 4 million a week' {
+    metadata { transactionVolume '4 million orders a week'; source 'Invented' }
+  }
+  couriers -[uses]-> deliveryPlatformSystem.courierDispatch 'takes delivery jobs, 3 million a week' {
+    metadata { transactionVolume '3 million delivery jobs a week'; source 'Invented' }
+  }
+  independentRestaurants -[uses]-> deliveryPlatformSystem.restaurantPortal 'receives orders, about 80 a week each' {
+    metadata { transactionVolume '80 orders a week per restaurant'; source 'Invented' }
+  }
+  restaurantChains -[uses]-> deliveryPlatformSystem.restaurantPortal 'receives orders, about 500 a week per site' {
+    metadata { transactionVolume '500 orders a week per site'; source 'Invented' }
+  }
+
+  deliveryPlatformSystem.customerOrdering -[supports]-> browseMenus
+  deliveryPlatformSystem.customerOrdering -[supports]-> placeOrder
+  deliveryPlatformSystem.customerOrdering -[supports]-> manageCustomerAccount
+  deliveryPlatformSystem.customerOrdering -[supports]-> handleCustomerHelp
+  deliveryPlatformSystem.restaurantPortal -[supports]-> onboardRestaurant
+  deliveryPlatformSystem.restaurantPortal -[supports]-> acceptOrder
+  deliveryPlatformSystem.restaurantPortal -[supports]-> publishMenu
+  deliveryPlatformSystem.restaurantPortal -[supports]-> settleOrder
+  deliveryPlatformSystem.courierDispatch -[supports]-> dispatchCourier
+  deliveryPlatformSystem.courierDispatch -[supports]-> payCouriers
+
+  deliveryPlatformSystem.restaurantPortal.menus -[conformsTo]-> fourteenAllergens
+
+  // Flows inside the system, visible when you open a subsystem
+
+  deliveryPlatformSystem.customerOrdering.orders -[api]-> deliveryPlatformSystem.restaurantPortal.orders 'order shown on the tablet' {
+    description '''
+      **Example schema: new order**
+
+      | Field | Type | Notes |
+      | --- | --- | --- |
+      | orderId | string | The platform's order reference |
+      | items | list | Dish, quantity and options |
+      | allergenNotes | string | What the customer told the restaurant |
+      | collectBy | time | When the courier arrives |
+    '''
+    metadata { frequency 'per order'; transactionVolume '4 million orders a week'; schemaName 'New order'; source 'Illustrative' }
+  }
+
+  deliveryPlatformSystem.customerOrdering.orders -[api]-> deliveryPlatformSystem.courierDispatch.deliveryJobs 'order becomes a delivery job' {
+    description '''
+      **Example schema: delivery job**
+
+      | Field | Type | Notes |
+      | --- | --- | --- |
+      | jobId | string | The platform's job reference |
+      | orderId | string | Links to the order |
+      | pickupAddress | address | The restaurant |
+      | dropOffAddress | address | The customer |
+      | offeredPay | money | What the courier sees before accepting |
+    '''
+    metadata { frequency 'per order'; transactionVolume '3 million delivery jobs a week'; schemaName 'Delivery job'; source 'Illustrative' }
+  }
+
+  // Flows out to other systems
+
+  deliveryPlatformSystem.restaurantPortal.orders -[rekeying]-> tillSystem.orders 'staff re-key each order into the till' {
+    #assumption
+    description '''
+      Today a member of staff reads the tablet and types the order into the till, once per order and once per platform.
+
+      **Proposed schema: order message**, what an integration would need to send instead
+
+      | Field | Type | Notes |
+      | --- | --- | --- |
+      | orderId | string | The platform's order reference |
+      | platform | enum | Uber Eats, Deliveroo or Just Eat |
+      | items | list | Till product code, quantity and options |
+      | allergenNotes | string | What the customer told the restaurant |
+      | collectBy | time | When the courier arrives |
+      | total | money | What the customer paid |
+
+      **Volume:** about 80 orders a week per restaurant (illustrative).
+    '''
+    link ../../backlog/assumptions/02-independents-rekey-orders.md 'Assumption 02'
+    metadata { frequency 'per order'; transactionVolume '80 orders a week per restaurant'; schemaName 'Order message'; source 'Illustrative' }
+  }
+
+  deliveryPlatformSystem.restaurantPortal.orders -[api]-> orderIntegrationHub.orders 'order sent to the hub' {
+    description '''
+      **Example schema: order webhook**
+
+      | Field | Type | Notes |
+      | --- | --- | --- |
+      | eventType | enum | Order created, updated or cancelled |
+      | orderId | string | The platform's order reference |
+      | siteId | string | Which of the chain's sites |
+      | items | list | Dish, quantity and options |
+      | total | money | What the customer paid |
+
+      **Volume:** about 500 orders a week per site (illustrative).
+    '''
+    metadata { frequency 'per order'; transactionVolume '500 orders a week per site'; schemaName 'Order webhook'; source 'Illustrative' }
+  }
+
+  deliveryPlatformSystem.customerOrdering.orders -[api]-> paymentGateway.payments 'charges the customer' {
+    description '''
+      **Example schema: payment request**
+
+      | Field | Type | Notes |
+      | --- | --- | --- |
+      | orderId | string | Links to the order |
+      | amount | money | Total including the delivery fee |
+      | currency | enum | GBP |
+      | cardToken | string | Stands in for the card, so the platform never holds the number |
+
+      **Volume:** 4 million payments a week (illustrative).
+    '''
+    metadata { frequency 'per order'; standards ['pciDss']; transactionVolume '4 million payments a week'; schemaName 'Payment request'; source 'Illustrative' }
+  }
+
+  deliveryPlatformSystem.restaurantPortal.payouts -[rekeying]-> accountingSystem.payouts 'payout statement typed into the accounts' {
+    #open-question
+    description '''
+      Each platform sends its own statement, and someone types the totals into the accounts by hand.
+
+      **Proposed schema: payout statement**, what an integration would need to send instead
+
+      | Field | Type | Notes |
+      | --- | --- | --- |
+      | periodEnd | date | The end of the payment week |
+      | platform | enum | Uber Eats, Deliveroo or Just Eat |
+      | grossSales | money | Before commission |
+      | commission | money | What the platform kept |
+      | netPaid | money | What reached the bank |
+
+      **Volume:** one statement per platform per week (illustrative).
+    '''
+    link ../../backlog/questions/03-who-reconciles-payouts.md 'Open question 03'
+    metadata { frequency 'weekly'; transactionVolume 'One statement per platform per week'; schemaName 'Payout statement'; source 'Illustrative' }
+  }
+
+  deliveryPlatformSystem.courierDispatch.courierProfiles -[api]-> identityVerificationSystem.verificationResults 'documents sent for checking' {
+    description '''
+      **Example schema: verification request**
+
+      | Field | Type | Notes |
+      | --- | --- | --- |
+      | courierId | string | The platform's reference |
+      | documentType | enum | Passport, biometric residence permit or share code |
+      | documentImage | file | Photo of the document |
+      | selfie | file | Compared with the document |
+
+      **Volume:** about 5,000 checks a month (illustrative).
+    '''
+    metadata { frequency 'per sign-up'; standards ['digitalIdentityTrustFramework']; transactionVolume '5,000 checks a month'; schemaName 'Verification request'; source 'Illustrative' }
+  }
+}
+
+views "System zooms" {
+
+  // Zoom view: opens when this system is clicked on the map (ADR 0004)
+  view deliveryPlatformSystemZoom of deliveryPlatformSystem {
+    title 'Delivery platform system'
+    description 'Zoom into this system: the replaceable apps that fill its role, the businesses that run them, its subsystems and the systems it exchanges information with. Use the zoom icon on a subsystem to open its datasets.'
+    include *
+    include foodDeliveryPlatforms.*
+    include * -> deliveryPlatformSystem where kind is operates or kind is uses
+    // Capabilities are shown one level down, on each subsystem
+    exclude * where kind is capability
+    global style conventions
+    autoLayout LeftRight
+  }
+
+  view customerOrderingZoom of deliveryPlatformSystem.customerOrdering {
+    title 'Customer ordering'
+    description 'One level further down: the datasets this subsystem holds and how they move. Use the card icon on a dataset, or click a dotted line, to see its schema.'
+    include *
+    include * -> deliveryPlatformSystem.customerOrdering where kind is uses
+    include deliveryPlatformSystem.customerOrdering -> * where kind is supports
+    global style conventions
+    autoLayout LeftRight
+  }
+
+  view restaurantPortalZoom of deliveryPlatformSystem.restaurantPortal {
+    title 'Restaurant portal'
+    description 'One level further down: the datasets this subsystem holds and how they move. Use the card icon on a dataset, or click a dotted line, to see its schema.'
+    include *
+    include * -> deliveryPlatformSystem.restaurantPortal where kind is uses
+    include deliveryPlatformSystem.restaurantPortal -> * where kind is supports
+    global style conventions
+    autoLayout LeftRight
+  }
+
+  view courierDispatchZoom of deliveryPlatformSystem.courierDispatch {
+    title 'Courier dispatch'
+    description 'One level further down: the datasets this subsystem holds and how they move. Use the card icon on a dataset, or click a dotted line, to see its schema.'
+    include *
+    include * -> deliveryPlatformSystem.courierDispatch where kind is uses
+    include deliveryPlatformSystem.courierDispatch -> * where kind is supports
+    global style conventions
+    autoLayout LeftRight
+  }
+}

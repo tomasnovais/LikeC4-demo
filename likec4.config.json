@@ -1,7 +1,7 @@
 {
   "$schema": "https://likec4.dev/schemas/config.json",
-  "name": "idcc",
-  "title": "IDCC Reference Architecture",
+  "name": "food-delivery",
+  "title": "Food Delivery Reference Architecture",
   "exclude": ["**/node_modules/**", "dist/**"],
   "webapp": {
     "relationshipsBrowser": {

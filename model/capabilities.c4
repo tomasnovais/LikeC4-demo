@@ -1,91 +1,106 @@
-// Capabilities: flat list, verb + noun, tagged with the stages they belong to.
-// A capability with no system supporting it is a gap; capabilities are only seen
-// in system zoom views, so add one together with the system that supports it.
+// Capabilities: flat list, verb + noun, tagged with their lifecycles, with the stage in
+// metadata. A capability with no system supporting it is a gap: it is tagged #gap and
+// is the one kind of element allowed to stay unconnected. See the Capabilities lens.
 
 model {
 
-  // Housing delivery lifecycle
+  // Order lifecycle
 
-  assessHousingNeed = capability 'Assess housing need' {
-    #housing-need
-    metadata { source 'Claude draft 2026-11-03' }
+  browseMenus = capability 'Browse menus' {
+    #lifecycle-order
+    metadata { stage 'browse'; source 'Illustrative' }
   }
 
-  prioritisePipeline = capability 'Prioritise pipeline' {
-    #housing-pipeline
-    metadata { source 'Claude draft 2026-11-03' }
+  placeOrder = capability 'Place order' {
+    #lifecycle-order #lifecycle-customer
+    metadata { stage 'place'; source 'Illustrative' }
   }
 
-  aggregateDemand = capability 'Aggregate demand' {
-    #housing-pipeline #product-manufacture
-    summary 'Combine the pipelines of many registered providers into demand manufacturers can plan for.'
-    metadata { source 'Claude draft 2026-11-03' }
+  takeCardPayment = capability 'Take card payment' {
+    #lifecycle-order #lifecycle-customer
+    metadata { stage 'place'; source 'Illustrative' }
   }
 
-  configureHomeDesign = capability 'Configure home design' {
-    #housing-scheme-design
-    metadata { source 'Claude draft 2026-11-03' }
+  acceptOrder = capability 'Accept order' {
+    #lifecycle-order
+    metadata { stage 'accept'; source 'Illustrative' }
   }
 
-  appraiseScheme = capability 'Appraise scheme viability' {
-    #housing-scheme-design #housing-approval
-    metadata { source 'Claude draft 2026-11-03' }
+  bringOrdersIntoTill = capability 'Bring orders into the till' {
+    #lifecycle-order
+    metadata { stage 'prepare'; source 'Illustrative' }
   }
 
-  determinePlanningApplication = capability 'Determine planning application' {
-    #housing-approval
-    metadata { source 'Claude draft 2026-11-03' }
+  dispatchCourier = capability 'Dispatch courier' {
+    #lifecycle-order #lifecycle-courier
+    metadata { stage 'drop-off'; source 'Illustrative' }
   }
 
-  approveFunding = capability 'Approve funding' {
-    #housing-approval
-    metadata { source 'Claude draft 2026-11-03' }
+  settleOrder = capability 'Settle order' {
+    #lifecycle-order #lifecycle-restaurant
+    metadata { stage 'settle'; source 'Illustrative' }
   }
 
-  manageConstructionInformation = capability 'Manage construction information' {
-    #housing-construction #housing-handover
-    metadata { source 'Claude draft 2026-11-03' }
+  // Restaurant lifecycle
+
+  onboardRestaurant = capability 'Onboard restaurant' {
+    #lifecycle-restaurant
+    metadata { stage 'onboard'; source 'Illustrative' }
   }
 
-  trackConstructionProgress = capability 'Track construction progress' {
-    #housing-construction
-    metadata { source 'Claude draft 2026-11-03' }
+  publishMenu = capability 'Publish menu' {
+    #lifecycle-restaurant
+    metadata { stage 'publish menu'; source 'Illustrative' }
   }
 
-  manageHomes = capability 'Manage homes' {
-    #housing-portfolio
-    metadata { source 'Claude draft 2026-11-03' }
+  declareAllergens = capability 'Declare allergens' {
+    #lifecycle-restaurant
+    metadata { stage 'comply'; source 'Illustrative' }
   }
 
-  planMaintenance = capability 'Plan maintenance' {
-    #housing-portfolio
-    metadata { source 'Claude draft 2026-11-03' }
+  publishHygieneRating = capability 'Publish hygiene rating' {
+    #lifecycle-restaurant
+    metadata { stage 'comply'; source 'Illustrative' }
   }
 
-  // Product lifecycle
-
-  developProduct = capability 'Develop product' {
-    #product-development
-    metadata { source 'Claude draft 2026-11-03' }
+  recordSales = capability 'Record sales' {
+    #lifecycle-restaurant
+    metadata { stage 'trade'; source 'Illustrative' }
   }
 
-  certifyProduct = capability 'Certify product' {
-    #product-certification
-    metadata { source 'Claude draft 2026-11-03' }
+  keepAccounts = capability 'Keep accounts' {
+    #lifecycle-restaurant
+    metadata { stage 'get paid'; source 'Illustrative' }
   }
 
-  publishProductData = capability 'Publish product data' {
-    #product-cataloguing
-    metadata { source 'Claude draft 2026-11-03' }
+  reconcilePayouts = capability 'Reconcile payouts across platforms' {
+    #lifecycle-restaurant #gap #open-question
+    summary 'A gap: no system supports this, so restaurants on several platforms do it by hand.'
+    link ../backlog/questions/03-who-reconciles-payouts.md 'Open question 03'
+    metadata { stage 'get paid'; source 'Illustrative' }
   }
 
-  manufactureAndSupplyProducts = capability 'Manufacture and supply products' {
-    #product-manufacture
-    metadata { source 'Claude draft 2026-11-03' }
+  // Courier lifecycle
+
+  verifyCourier = capability 'Verify courier' {
+    #lifecycle-courier
+    metadata { stage 'verify'; source 'Illustrative' }
   }
 
-  learnFromProductPerformance = capability 'Learn from product performance' {
-    #product-improvement
-    metadata { source 'Claude draft 2026-11-03' }
+  payCouriers = capability 'Pay couriers' {
+    #lifecycle-courier
+    metadata { stage 'get paid'; source 'Illustrative' }
+  }
+
+  // Customer lifecycle
+
+  manageCustomerAccount = capability 'Manage customer account' {
+    #lifecycle-customer
+    metadata { stage 'sign up'; source 'Illustrative' }
+  }
+
+  handleCustomerHelp = capability 'Handle customer help' {
+    #lifecycle-customer
+    metadata { stage 'get help'; source 'Illustrative' }
   }
 }

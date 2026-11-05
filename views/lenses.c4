@@ -1,64 +1,98 @@
-// Lenses (ADR 0007): each one extends the map and only filters it, or opens one
-// information type's datasets inside their systems (an information thread).
+// Lenses (ADR 0004): each one extends the map and only filters it, opens one
+// information type's datasets inside their systems, or brings back a layer the map hides.
 
-views {
+views "Lenses" {
 
-  // Roadmap lenses
+  // Layers the map hides
 
-  view currentState extends index {
-    title 'Landscape: current state'
-    description 'As it exists today: current and retiring systems and flows.'
-    exclude * where tag is #state-planned or tag is #state-retired
-    exclude * -> * where tag is #state-planned or tag is #state-retired
+  view powerLens extends index {
+    title 'Who has power over whom'
+    description 'Red is strong, amber is moderate, grey is weak. Lines point from the one holding the power; click a line to see why, with the figures. All figures are invented.'
+    exclude * where kind is system
+    include * -> * where kind is hasPowerOver
+    include * -> * where tag is #power-high with { color red }
+    include * -> * where tag is #power-low with { color gray }
+    autoLayout LeftRight
   }
 
-  view targetState extends index {
-    title 'Landscape: target state'
-    description 'Once planned systems and flows are delivered and retiring ones are gone.'
-    exclude * where tag is #state-retiring or tag is #state-retired
-    exclude * -> * where tag is #state-retiring or tag is #state-retired
+  view moneyLens extends index {
+    title 'Where the money goes'
+    description 'Lines point the way the money goes; click a line to see the figures. All figures are invented.'
+    exclude * where kind is system
+    exclude foodRegulators
+    include * -> * where kind is pays
+    autoLayout LeftRight
   }
 
-  view idccScope extends index {
-    title 'Landscape: IDCC scope'
-    description 'Only the flows IDCC builds, integrates or standardises; dashed items are planned, i.e. IDCC interventions.'
-    exclude * where kind is role
-    exclude * -> * where tag is not #idcc-scope
-    // Systems with no IDCC flow would be left unconnected. LikeC4 can't filter on
-    // "has no relationships", so they are listed by hand; the model check script
-    // reports any element left unconnected in a view.
-    exclude energyPerformanceRegister, grantFundingSystem, planningCaseManagementSystem
-    include idccDataStandards
+  // Finding gaps
+
+  view noStandardLens extends index {
+    title 'Flows with no standard'
+    description 'Every flow here follows no published standard, so each pair of systems has its own arrangement. Red lines are typed in by hand. Click one to see a proposed schema.'
+    exclude * where kind is actorGroup
+    exclude * -> * where kind is operates or kind is uses
+    exclude * -> * where metadata.standards
+    // Systems with only standard flows would be left unconnected. LikeC4 can't filter
+    // on "has no relationships", so they are listed by hand.
+    exclude paymentGateway, foodHygieneRegister, identityVerificationSystem
+  }
+
+  view capabilitiesLens extends index {
+    title 'Capabilities'
+    description 'What the ecosystem must be able to do, and which system supports it. The red dashed box is a gap: no system supports it.'
+    exclude * where kind is actorGroup
+    exclude * -> * where kind is api or kind is fileTransfer or kind is rekeying
+    include * where kind is capability
+    autoLayout LeftRight
+  }
+
+  view openItemsLens extends index {
+    title 'Open questions and assumptions'
+    description 'Only what has something filed against it: amber for an open question, sky blue for an assumption. Use the card icon on an element to see which; the files themselves are in backlog/questions and backlog/assumptions.'
+    exclude * where tag is not #open-question and tag is not #assumption
+    include * where kind is capability and tag is #open-question
+    style element.tag = #open-question { color amber }
+    style element.tag = #assumption { color sky }
+    autoLayout LeftRight
+  }
+
+  // Information thread: one information type across every system that holds it
+
+  view orderThreadLens extends index {
+    title 'Follow the order data'
+    description 'Where order data is authoritative, where it is copied, and how it moves.'
+    exclude * where kind is actorGroup
+    exclude * -> * where kind is operates or kind is uses
+    exclude paymentGateway, foodHygieneRegister, identityVerificationSystem, accountingSystem, menuManagementSystem
+    include deliveryPlatformSystem.customerOrdering.* where tag is #info-order
+    include deliveryPlatformSystem.restaurantPortal.* where tag is #info-order
+    include orderIntegrationHub.* where tag is #info-order
+    include tillSystem.* where tag is #info-order
   }
 
   // Lifecycle lenses
 
-  view housingLifecycle extends index {
-    title 'Landscape: housing delivery lifecycle'
-    description 'Systems serving at least one housing delivery stage, and the roles that operate them.'
-    exclude *
-      where (kind is system or kind is role) and not (
-        tag is #housing-need or tag is #housing-pipeline or tag is #housing-scheme-design or
-        tag is #housing-approval or tag is #housing-construction or tag is #housing-handover or
-        tag is #housing-portfolio
-      )
+  view orderLifecycleLens extends index {
+    title 'Order lifecycle'
+    description 'Browse, place, accept, prepare, drop-off, settle: everything that takes part. Step through it in Follow one order.'
+    exclude * where (kind is system or kind is actorGroup) and tag is not #lifecycle-order
   }
 
-  view productLifecycle extends index {
-    title 'Landscape: product lifecycle'
-    description 'Systems serving at least one product lifecycle stage, and the roles that operate them.'
-    exclude *
-      where (kind is system or kind is role) and not (
-        tag is #product-development or tag is #product-certification or tag is #product-cataloguing or
-        tag is #product-manufacture or tag is #product-improvement
-      )
+  view restaurantLifecycleLens extends index {
+    title 'Restaurant lifecycle'
+    description 'Onboard, publish menu, comply, trade, get paid: everything that takes part. Step through it in A restaurant joins.'
+    exclude * where (kind is system or kind is actorGroup) and tag is not #lifecycle-restaurant
   }
 
-  // Information threads (added on request)
+  view courierLifecycleLens extends index {
+    title 'Courier lifecycle'
+    description 'Apply, verify, activate, work, get paid, leave: everything that takes part. Step through it in A courier signs up.'
+    exclude * where (kind is system or kind is actorGroup) and tag is not #lifecycle-courier
+  }
 
-  view productDataThread extends index {
-    title 'Landscape: product data'
-    description 'Where product data is authoritative, where it is copied, and how it moves today and in the target state.'
-    include * where tag is #info-product-data
+  view customerLifecycleLens extends index {
+    title 'Customer lifecycle'
+    description 'Sign up, first order, repeat order, get help, close account: everything that takes part. Step through it in A customer joins.'
+    exclude * where (kind is system or kind is actorGroup) and tag is not #lifecycle-customer
   }
 }

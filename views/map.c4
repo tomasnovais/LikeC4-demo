@@ -1,13 +1,15 @@
-// The map (ADR 0007): the one view defined from scratch. Every lens extends it;
-// clicking a system opens that system's zoom view (defined in its own file).
+// The map (ADR 0004): the one structural view defined from scratch. Every lens extends
+// it; clicking a system opens that system's zoom view (defined in its own file).
 
 views {
 
   view index {
     title 'Landscape'
-    description 'Every system and organisation role, with who operates what. Click a system to zoom into its datasets; click a flow to see the dataset-level flows behind it.'
-    include * where kind is role or kind is system
-    global style idccConventions
-    autoLayout LeftRight
+    description 'Every actor group and system, who runs what, and how information moves between them. Use the zoom icon on a system to open it and the card icon on any box for its details; click a line to see what moves along it. Illustrative: real product names, with simplified flows and invented figures. Not affiliated with any named company.'
+    include * where kind is actorGroup or kind is system
+    // Power and money have their own lenses
+    exclude * -> * where kind is hasPowerOver or kind is pays
+    global style conventions
+    autoLayout TopBottom
   }
 }

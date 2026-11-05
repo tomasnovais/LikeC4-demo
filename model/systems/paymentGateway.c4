@@ -1,0 +1,76 @@
+model {
+
+  paymentGateway = system 'Payment gateway' {
+    #lifecycle-order #lifecycle-customer
+    summary "Takes a customer's card payment and passes the money on."
+    style { icon bootstrap:credit-card }
+    metadata { source 'Illustrative' }
+
+    stripeGateway = softwareProduct 'Stripe' {
+      #api-public
+      link https://stripe.com/gb 'Stripe'
+      metadata { vendor 'Stripe'; usedBy ['Food delivery platforms']; source 'Illustrative' }
+    }
+
+    adyenGateway = softwareProduct 'Adyen' {
+      #api-public
+      link https://www.adyen.com 'Adyen'
+      metadata { vendor 'Adyen'; usedBy ['Food delivery platforms']; source 'Illustrative' }
+    }
+
+    payments = dataset 'Payments' {
+      #info-payment #authoritative
+      metadata { source 'Illustrative' }
+    }
+  }
+
+  paymentCompanies -[operates]-> paymentGateway {
+    description '''
+      | Measure | Illustrative value |
+      | --- | --- |
+      | Payments a week | 4 million |
+    '''
+    metadata { transactionVolume '4 million payments a week'; source 'Invented' }
+  }
+  paymentCompanies.stripe -[operates]-> paymentGateway.stripeGateway
+  paymentCompanies.adyen -[operates]-> paymentGateway.adyenGateway
+
+  foodDeliveryPlatforms -[uses]-> paymentGateway 'takes card payments, 4 million a week' {
+    metadata { transactionVolume '4 million payments a week'; source 'Invented' }
+  }
+
+  paymentGateway -[supports]-> takeCardPayment
+
+  paymentGateway.payments -[conformsTo]-> pciDss
+
+  paymentGateway.payments -[api]-> deliveryPlatformSystem.restaurantPortal.payouts 'settled payments feed payouts' {
+    description '''
+      **Example schema: settlement report**
+
+      | Field | Type | Notes |
+      | --- | --- | --- |
+      | settlementDate | date | When the money moved |
+      | orderId | string | Links to the order |
+      | grossAmount | money | What the customer paid |
+      | processingFee | money | What the gateway kept |
+
+      **Volume:** 4 million payments a week, reported daily (illustrative).
+    '''
+    metadata { frequency 'daily'; standards ['pciDss']; transactionVolume '4 million payments a week'; schemaName 'Settlement report'; source 'Illustrative' }
+  }
+}
+
+views "System zooms" {
+
+  // Zoom view: opens when this system is clicked on the map (ADR 0004)
+  view paymentGatewayZoom of paymentGateway {
+    title 'Payment gateway'
+    description 'Zoom into this system: the information it holds, who operates it, the capabilities it supports and the systems it exchanges information with.'
+    include *
+    include paymentCompanies.*
+    include * -> paymentGateway where kind is operates or kind is uses
+    include paymentGateway -> * where kind is supports
+    global style conventions
+    autoLayout LeftRight
+  }
+}

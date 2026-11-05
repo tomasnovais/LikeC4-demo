@@ -1,0 +1,56 @@
+model {
+
+  accountingSystem = system 'Accounting system' {
+    #lifecycle-restaurant #open-question
+    summary 'Where a restaurant keeps its accounts.'
+    link ../../backlog/questions/03-who-reconciles-payouts.md 'Open question 03'
+    style { icon bootstrap:cash-coin }
+    metadata { source 'Illustrative' }
+
+    xero = softwareProduct 'Xero' {
+      #api-public
+      link https://www.xero.com/uk/ 'Xero'
+      metadata { vendor 'Xero'; usedBy ['Independent restaurants']; source 'Illustrative' }
+    }
+
+    quickBooks = softwareProduct 'QuickBooks' {
+      #api-public
+      link https://quickbooks.intuit.com/uk/ 'QuickBooks'
+      metadata { vendor 'Intuit'; usedBy ['Independent restaurants', 'Restaurant chains']; source 'Illustrative' }
+    }
+
+    accounts = dataset 'Accounts' {
+      #info-accounts #authoritative
+      metadata { source 'Illustrative' }
+    }
+
+    payouts = dataset 'Payouts' {
+      #info-payout #copy
+      metadata { source 'Illustrative' }
+    }
+
+    salesRecords = dataset 'Sales records' {
+      #info-sales-record #copy
+      metadata { source 'Illustrative' }
+    }
+  }
+
+  independentRestaurants -[operates]-> accountingSystem
+  restaurantChains -[operates]-> accountingSystem
+
+  accountingSystem -[supports]-> keepAccounts
+}
+
+views "System zooms" {
+
+  // Zoom view: opens when this system is clicked on the map (ADR 0004)
+  view accountingSystemZoom of accountingSystem {
+    title 'Accounting system'
+    description 'Zoom into this system: the information it holds, who operates it, the capabilities it supports and the systems it exchanges information with.'
+    include *
+    include * -> accountingSystem where kind is operates or kind is uses
+    include accountingSystem -> * where kind is supports
+    global style conventions
+    autoLayout LeftRight
+  }
+}
