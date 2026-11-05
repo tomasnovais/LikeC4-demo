@@ -1,0 +1,43 @@
+source,kind,target,transactionVolume,transactionUnit,transactionPeriod,feePercentage,feeAmountGbp,feeUnit,averageValueGbp,shareOfOrdersPercentage,frequency,dataSource
+foodDeliveryPlatforms,operates,deliveryPlatformSystem,4000000,orders,week,,,,,,,Invented
+foodRegulators,operates,foodHygieneRegister,500000,businesses rated,,,,,,,,Invented
+independentRestaurants,operates,tillSystem,400,sales per restaurant,week,,,,,,,Invented
+integrationCompanies,operates,orderIntegrationHub,1000000,orders,week,,,,,,,Invented
+paymentCompanies,operates,paymentGateway,4000000,payments,week,,,,,,,Invented
+restaurantChains,operates,tillSystem,2500,sales per site,week,,,,,,,Invented
+verificationCompanies,operates,identityVerificationSystem,5000,checks,month,,,,,,,Invented
+couriers,uses,deliveryPlatformSystem.courierDispatch,3000000,delivery jobs,week,,,,,,,Invented
+customers,uses,deliveryPlatformSystem.customerOrdering,4000000,orders,week,,,,,,,Invented
+foodDeliveryPlatforms,uses,identityVerificationSystem,5000,checks,month,,,,,,,Invented
+foodDeliveryPlatforms,uses,paymentGateway,4000000,payments,week,,,,,,,Invented
+independentRestaurants,uses,deliveryPlatformSystem.restaurantPortal,80,orders per restaurant,week,,,,,,,Invented
+restaurantChains,uses,deliveryPlatformSystem.restaurantPortal,500,orders per site,week,,,,,,,Invented
+restaurantChains,uses,orderIntegrationHub,500,orders per site,week,,,,,,,Invented
+deliveryPlatformSystem.courierDispatch.courierProfiles,api,identityVerificationSystem.verificationResults,5000,checks,month,,,,,,per sign-up,Invented
+deliveryPlatformSystem.customerOrdering.orders,api,deliveryPlatformSystem.courierDispatch.deliveryJobs,3000000,delivery jobs,week,,,,,,per order,Invented
+deliveryPlatformSystem.customerOrdering.orders,api,deliveryPlatformSystem.restaurantPortal.orders,4000000,orders,week,,,,,,per order,Invented
+deliveryPlatformSystem.customerOrdering.orders,api,paymentGateway.payments,4000000,payments,week,,,,,,per order,Invented
+deliveryPlatformSystem.restaurantPortal.orders,api,orderIntegrationHub.orders,500,orders per site,week,,,,,,per order,Invented
+foodHygieneRegister.hygieneRatings,api,deliveryPlatformSystem.restaurantPortal.hygieneRatings,,,,,,,,,daily,Invented
+identityVerificationSystem.verificationResults,api,deliveryPlatformSystem.courierDispatch.verificationResults,5000,checks,month,,,,,,per sign-up,Invented
+orderIntegrationHub.menus,api,deliveryPlatformSystem.restaurantPortal.menus,20,updates per site,week,,,,,,on change,Invented
+orderIntegrationHub.orders,api,tillSystem.orders,500,orders per site,week,,,,,,per order,Invented
+paymentGateway.payments,api,deliveryPlatformSystem.restaurantPortal.payouts,4000000,payments,week,,,,,,daily,Invented
+menuManagementSystem.menus,fileTransfer,orderIntegrationHub.menus,3,files per chain,month,,,,,,on change,Invented
+tillSystem.salesRecords,fileTransfer,accountingSystem.salesRecords,1,file per site,day,,,,,,daily,Invented
+deliveryPlatformSystem.restaurantPortal.orders,rekeying,tillSystem.orders,80,orders per restaurant,week,,,,,,per order,Invented
+deliveryPlatformSystem.restaurantPortal.payouts,rekeying,accountingSystem.payouts,1,statement per platform,week,,,,,,weekly,Invented
+menuManagementSystem.menus,rekeying,deliveryPlatformSystem.restaurantPortal.menus,10,updates per restaurant,week,,,,,,on change,Invented
+customers,hasPowerOver,independentRestaurants,,,,,,,,20,,Invented
+foodDeliveryPlatforms,hasPowerOver,couriers,3000000,delivery jobs,week,,,,4,,,Invented
+foodDeliveryPlatforms,hasPowerOver,independentRestaurants,80,orders per restaurant,week,30,,,,40,,Invented
+foodRegulators,hasPowerOver,independentRestaurants,500000,businesses rated,,,,,,,,Invented
+paymentCompanies,hasPowerOver,foodDeliveryPlatforms,,,,1.5,,,,,,Invented
+restaurantChains,hasPowerOver,foodDeliveryPlatforms,500,orders per site,week,20,,,,,,Invented
+customers,pays,foodDeliveryPlatforms,4000000,orders,week,,,,25,,,Invented
+foodDeliveryPlatforms,pays,couriers,3000000,delivery jobs,week,,,,4,,weekly,Invented
+foodDeliveryPlatforms,pays,independentRestaurants,80,orders per restaurant,week,30,,,,,weekly,Invented
+foodDeliveryPlatforms,pays,paymentCompanies,4000000,payments,week,1.5,,,,,,Invented
+foodDeliveryPlatforms,pays,restaurantChains,500,orders per site,week,20,,,,,weekly,Invented
+foodDeliveryPlatforms,pays,verificationCompanies,5000,checks,month,,2,per check,,,,Invented
+restaurantChains,pays,integrationCompanies,,,,,100,per site per month,,,,Invented

@@ -41,9 +41,16 @@ model {
   menuManagementSystem.menus -[conformsTo]-> fourteenAllergens
 
   menuManagementSystem.menus -[rekeying]-> deliveryPlatformSystem.restaurantPortal.menus 'menu typed into each platform' {
-    technology 'Manual re-keying: about 10 updates a week per restaurant'
     description '''
       Each platform has its own screens, so the same menu is typed in once per platform, and a price change means doing it all again.
+
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 10 updates per restaurant a week |
+      | Frequency | On change |
+      | Data source | Invented |
 
       **Proposed schema: menu update**, what an integration would need to send instead
 
@@ -54,12 +61,19 @@ model {
       | price | money | Can differ by platform |
       | allergens | list | From the 14 allergens |
     '''
-    metadata { frequency 'on change'; transactionVolume '10'; transactionUnit 'updates per restaurant'; transactionPeriod 'week'; schemaName 'Menu update'; source 'Illustrative' }
+    metadata { schemaName 'Menu update'; source 'Illustrative' }
   }
 
   menuManagementSystem.menus -[fileTransfer]-> orderIntegrationHub.menus 'menu exported to the hub' {
-    technology 'File transfer: about 3 files a month per chain'
     description '''
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 3 files per chain a month |
+      | Frequency | On change |
+      | Data source | Invented |
+
       **Example schema: menu file**
 
       | Field | Type | Notes |
@@ -69,7 +83,7 @@ model {
       | basePrice | money | The hub applies each platform's uplift |
       | allergens | list | Separated by semicolons |
     '''
-    metadata { frequency 'on change'; transactionVolume '3'; transactionUnit 'files per chain'; transactionPeriod 'month'; schemaName 'Menu file'; source 'Illustrative' }
+    metadata { schemaName 'Menu file'; source 'Illustrative' }
   }
 }
 

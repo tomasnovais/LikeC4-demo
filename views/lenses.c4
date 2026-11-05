@@ -7,7 +7,7 @@ views "Lenses" {
 
   view powerLens extends index {
     title 'Who has power over whom'
-    description 'Red is strong, amber is moderate, grey is weak. Lines point from the one holding the power, with its basis and figures under each label; click a line to see why. All figures are invented.'
+    description 'Red is strong, amber is moderate, grey is weak. Lines point from the one holding the power, with its basis under each label; click a line to see why, and its relationship data. All values are invented.'
     exclude * where kind is system
     include * -> * where kind is hasPowerOver
     include * -> * where tag is #power-high with { color red }
@@ -17,7 +17,7 @@ views "Lenses" {
 
   view moneyLens extends index {
     title 'Where the money goes'
-    description 'Lines point the way the money goes, with the figures under each label. All figures are invented.'
+    description 'Lines point the way the money goes; click a line to see its relationship data. All values are invented.'
     exclude * where kind is system
     exclude foodRegulators
     include * -> * where kind is pays

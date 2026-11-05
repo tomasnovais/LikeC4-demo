@@ -11,4 +11,4 @@ An actor keeps its everyday name, such as Nando's or Joe Blogs. The exception is
 
 We rejected one top-level element per company because it would describe an inventory rather than a reference architecture, make the map unreadable as the number of companies grows, and require inventing internals that are not public. Keeping the system generic also shows that the products are replaceable: the role stays when Uber Eats, Deliveroo or Just Eat fills it.
 
-The cost is that no brand appears on the opening map; they appear on zoom views and in the step-through views. Invented figures stay on actor groups and generic systems, never on a named company (ADR 0005).
+The cost is that no brand appears on the opening map; they appear on zoom views and in the step-through views. Invented values stay on actor groups and generic systems, never on a named company (ADR 0005).

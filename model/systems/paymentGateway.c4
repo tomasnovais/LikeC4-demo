@@ -25,15 +25,29 @@ model {
   }
 
   paymentCompanies -[operates]-> paymentGateway {
-    technology '4 million payments a week'
-    metadata { transactionVolume '4000000'; transactionUnit 'payments'; transactionPeriod 'week'; source 'Invented' }
+    description '''
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 4,000,000 payments a week |
+      | Data source | Invented |
+    '''
+    metadata { source 'Invented' }
   }
   paymentCompanies.stripe -[operates]-> paymentGateway.stripeGateway
   paymentCompanies.adyen -[operates]-> paymentGateway.adyenGateway
 
   foodDeliveryPlatforms -[uses]-> paymentGateway 'takes card payments' {
-    technology '4 million payments a week'
-    metadata { transactionVolume '4000000'; transactionUnit 'payments'; transactionPeriod 'week'; source 'Invented' }
+    description '''
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 4,000,000 payments a week |
+      | Data source | Invented |
+    '''
+    metadata { source 'Invented' }
   }
 
   paymentGateway -[supports]-> takeCardPayment
@@ -41,8 +55,15 @@ model {
   paymentGateway.payments -[conformsTo]-> pciDss
 
   paymentGateway.payments -[api]-> deliveryPlatformSystem.restaurantPortal.payouts 'settled payments feed payouts' {
-    technology 'API: 4 million payments a week, reported daily'
     description '''
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 4,000,000 payments a week |
+      | Frequency | Daily |
+      | Data source | Invented |
+
       **Example schema: settlement report**
 
       | Field | Type | Notes |
@@ -52,7 +73,7 @@ model {
       | grossAmount | money | What the customer paid |
       | processingFee | money | What the gateway kept |
     '''
-    metadata { frequency 'daily'; standards ['pciDss']; transactionVolume '4000000'; transactionUnit 'payments'; transactionPeriod 'week'; schemaName 'Settlement report'; source 'Illustrative' }
+    metadata { standards ['pciDss']; schemaName 'Settlement report'; source 'Illustrative' }
   }
 }
 

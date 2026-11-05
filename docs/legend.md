@@ -34,7 +34,7 @@ How to read the food delivery reference architecture diagrams. The styles are de
 
 ## Lines
 
-Relationships between things are plain solid grey lines, labelled with what the relationship is. Information moving between systems is always a dotted line, coloured by how it moves. The second line of a label, in brackets, shows how a flow moves or where power comes from, then any figures. Click a line to see the same details, its description and any schema.
+Relationships between things are plain solid grey lines, labelled with what the relationship is. Information moving between systems is always a dotted line, coloured by how it moves. The second line of a label, in brackets, shows how a flow moves or where power comes from. Click a line to see its relationship data, wording and any schema.
 
 | Line | Meaning |
 |---|---|

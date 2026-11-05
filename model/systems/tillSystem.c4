@@ -32,19 +32,40 @@ model {
   }
 
   independentRestaurants -[operates]-> tillSystem {
-    technology 'About 400 sales a week each'
-    metadata { transactionVolume '400'; transactionUnit 'sales per restaurant'; transactionPeriod 'week'; source 'Invented' }
+    description '''
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 400 sales per restaurant a week |
+      | Data source | Invented |
+    '''
+    metadata { source 'Invented' }
   }
   restaurantChains -[operates]-> tillSystem {
-    technology 'About 2,500 sales a week per site'
-    metadata { transactionVolume '2500'; transactionUnit 'sales per site'; transactionPeriod 'week'; source 'Invented' }
+    description '''
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 2,500 sales per site a week |
+      | Data source | Invented |
+    '''
+    metadata { source 'Invented' }
   }
 
   tillSystem -[supports]-> recordSales
 
   tillSystem.salesRecords -[fileTransfer]-> accountingSystem.salesRecords 'daily sales export' {
-    technology 'File transfer: one file per site a day'
     description '''
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 1 file per site a day |
+      | Frequency | Daily |
+      | Data source | Invented |
+
       **Example schema: daily sales file**
 
       | Field | Type | Notes |
@@ -55,7 +76,7 @@ model {
       | netSales | money | Excluding VAT |
       | vat | money | VAT charged |
     '''
-    metadata { frequency 'daily'; transactionVolume '1'; transactionUnit 'files per site'; transactionPeriod 'day'; schemaName 'Daily sales file'; source 'Illustrative' }
+    metadata { schemaName 'Daily sales file'; source 'Illustrative' }
   }
 }
 

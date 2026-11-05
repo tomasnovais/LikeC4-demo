@@ -139,11 +139,18 @@ model {
     }
   }
 
-  // Who runs it. The group-level line carries the figures; the actor-level lines
-  // show which business runs which app, and stay free of invented numbers.
+  // Who runs it. The group-level line carries the relationship data; the actor-level
+  // lines show which business runs which app, and stay free of invented values.
   foodDeliveryPlatforms -[operates]-> deliveryPlatformSystem {
-    technology '4 million orders a week'
-    metadata { transactionVolume '4000000'; transactionUnit 'orders'; transactionPeriod 'week'; source 'Invented' }
+    description '''
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 4,000,000 orders a week |
+      | Data source | Invented |
+    '''
+    metadata { source 'Invented' }
   }
   foodDeliveryPlatforms.uberEats -[operates]-> deliveryPlatformSystem.uberEatsApp
   foodDeliveryPlatforms.deliveroo -[operates]-> deliveryPlatformSystem.deliverooApp
@@ -151,20 +158,48 @@ model {
 
   // Who depends on it
   customers -[uses]-> deliveryPlatformSystem.customerOrdering 'places orders' {
-    technology '4 million orders a week'
-    metadata { transactionVolume '4000000'; transactionUnit 'orders'; transactionPeriod 'week'; source 'Invented' }
+    description '''
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 4,000,000 orders a week |
+      | Data source | Invented |
+    '''
+    metadata { source 'Invented' }
   }
   couriers -[uses]-> deliveryPlatformSystem.courierDispatch 'takes delivery jobs' {
-    technology '3 million jobs a week'
-    metadata { transactionVolume '3000000'; transactionUnit 'delivery jobs'; transactionPeriod 'week'; source 'Invented' }
+    description '''
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 3,000,000 delivery jobs a week |
+      | Data source | Invented |
+    '''
+    metadata { source 'Invented' }
   }
   independentRestaurants -[uses]-> deliveryPlatformSystem.restaurantPortal 'receives orders' {
-    technology 'About 80 orders a week each'
-    metadata { transactionVolume '80'; transactionUnit 'orders per restaurant'; transactionPeriod 'week'; source 'Invented' }
+    description '''
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 80 orders per restaurant a week |
+      | Data source | Invented |
+    '''
+    metadata { source 'Invented' }
   }
   restaurantChains -[uses]-> deliveryPlatformSystem.restaurantPortal 'receives orders' {
-    technology 'About 500 orders a week per site'
-    metadata { transactionVolume '500'; transactionUnit 'orders per site'; transactionPeriod 'week'; source 'Invented' }
+    description '''
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 500 orders per site a week |
+      | Data source | Invented |
+    '''
+    metadata { source 'Invented' }
   }
 
   deliveryPlatformSystem.customerOrdering -[supports]-> browseMenus
@@ -183,8 +218,15 @@ model {
   // Flows inside the system, visible when you open a subsystem
 
   deliveryPlatformSystem.customerOrdering.orders -[api]-> deliveryPlatformSystem.restaurantPortal.orders 'order shown on the tablet' {
-    technology 'API: 4 million orders a week'
     description '''
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 4,000,000 orders a week |
+      | Frequency | Per order |
+      | Data source | Invented |
+
       **Example schema: new order**
 
       | Field | Type | Notes |
@@ -194,12 +236,19 @@ model {
       | allergenNotes | string | What the customer told the restaurant |
       | collectBy | time | When the courier arrives |
     '''
-    metadata { frequency 'per order'; transactionVolume '4000000'; transactionUnit 'orders'; transactionPeriod 'week'; schemaName 'New order'; source 'Illustrative' }
+    metadata { schemaName 'New order'; source 'Illustrative' }
   }
 
   deliveryPlatformSystem.customerOrdering.orders -[api]-> deliveryPlatformSystem.courierDispatch.deliveryJobs 'order becomes a delivery job' {
-    technology 'API: 3 million jobs a week'
     description '''
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 3,000,000 delivery jobs a week |
+      | Frequency | Per order |
+      | Data source | Invented |
+
       **Example schema: delivery job**
 
       | Field | Type | Notes |
@@ -210,16 +259,23 @@ model {
       | dropOffAddress | address | The customer |
       | offeredPay | money | What the courier sees before accepting |
     '''
-    metadata { frequency 'per order'; transactionVolume '3000000'; transactionUnit 'delivery jobs'; transactionPeriod 'week'; schemaName 'Delivery job'; source 'Illustrative' }
+    metadata { schemaName 'Delivery job'; source 'Illustrative' }
   }
 
   // Flows out to other systems
 
   deliveryPlatformSystem.restaurantPortal.orders -[rekeying]-> tillSystem.orders 'staff re-key each order into the till' {
     #assumption
-    technology 'Manual re-keying: about 80 orders a week per restaurant'
     description '''
       Today a member of staff reads the tablet and types the order into the till, once per order and once per platform.
+
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 80 orders per restaurant a week |
+      | Frequency | Per order |
+      | Data source | Invented |
 
       **Proposed schema: order message**, what an integration would need to send instead
 
@@ -233,12 +289,19 @@ model {
       | total | money | What the customer paid |
     '''
     link ../../backlog/assumptions/02-independents-rekey-orders.md 'Assumption 02'
-    metadata { frequency 'per order'; transactionVolume '80'; transactionUnit 'orders per restaurant'; transactionPeriod 'week'; schemaName 'Order message'; source 'Illustrative' }
+    metadata { schemaName 'Order message'; source 'Illustrative' }
   }
 
   deliveryPlatformSystem.restaurantPortal.orders -[api]-> orderIntegrationHub.orders 'order sent to the hub' {
-    technology 'API: about 500 orders a week per site'
     description '''
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 500 orders per site a week |
+      | Frequency | Per order |
+      | Data source | Invented |
+
       **Example schema: order webhook**
 
       | Field | Type | Notes |
@@ -249,12 +312,19 @@ model {
       | items | list | Dish, quantity and options |
       | total | money | What the customer paid |
     '''
-    metadata { frequency 'per order'; transactionVolume '500'; transactionUnit 'orders per site'; transactionPeriod 'week'; schemaName 'Order webhook'; source 'Illustrative' }
+    metadata { schemaName 'Order webhook'; source 'Illustrative' }
   }
 
   deliveryPlatformSystem.customerOrdering.orders -[api]-> paymentGateway.payments 'charges the customer' {
-    technology 'API: 4 million payments a week'
     description '''
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 4,000,000 payments a week |
+      | Frequency | Per order |
+      | Data source | Invented |
+
       **Example schema: payment request**
 
       | Field | Type | Notes |
@@ -264,14 +334,21 @@ model {
       | currency | enum | GBP |
       | cardToken | string | Stands in for the card, so the platform never holds the number |
     '''
-    metadata { frequency 'per order'; standards ['pciDss']; transactionVolume '4000000'; transactionUnit 'payments'; transactionPeriod 'week'; schemaName 'Payment request'; source 'Illustrative' }
+    metadata { standards ['pciDss']; schemaName 'Payment request'; source 'Illustrative' }
   }
 
   deliveryPlatformSystem.restaurantPortal.payouts -[rekeying]-> accountingSystem.payouts 'payout statement typed into the accounts' {
     #open-question
-    technology 'Manual re-keying: one statement per platform a week'
     description '''
       Each platform sends its own statement, and someone types the totals into the accounts by hand.
+
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 1 statement per platform a week |
+      | Frequency | Weekly |
+      | Data source | Invented |
 
       **Proposed schema: payout statement**, what an integration would need to send instead
 
@@ -284,12 +361,19 @@ model {
       | netPaid | money | What reached the bank |
     '''
     link ../../backlog/questions/03-who-reconciles-payouts.md 'Open question 03'
-    metadata { frequency 'weekly'; transactionVolume '1'; transactionUnit 'statements per platform'; transactionPeriod 'week'; schemaName 'Payout statement'; source 'Illustrative' }
+    metadata { schemaName 'Payout statement'; source 'Illustrative' }
   }
 
   deliveryPlatformSystem.courierDispatch.courierProfiles -[api]-> identityVerificationSystem.verificationResults 'documents sent for checking' {
-    technology 'API: about 5,000 checks a month'
     description '''
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 5,000 checks a month |
+      | Frequency | Per sign-up |
+      | Data source | Invented |
+
       **Example schema: verification request**
 
       | Field | Type | Notes |
@@ -299,7 +383,7 @@ model {
       | documentImage | file | Photo of the document |
       | selfie | file | Compared with the document |
     '''
-    metadata { frequency 'per sign-up'; standards ['digitalIdentityTrustFramework']; transactionVolume '5000'; transactionUnit 'checks'; transactionPeriod 'month'; schemaName 'Verification request'; source 'Illustrative' }
+    metadata { standards ['digitalIdentityTrustFramework']; schemaName 'Verification request'; source 'Illustrative' }
   }
 }
 

@@ -64,6 +64,10 @@ _Avoid_: double entry, manual integration
 The fields, types and meanings of the information a flow carries or a dataset holds.
 _Avoid_: data structure, data model, payload
 
+**Relationship data**:
+The table of measured or estimated values on relationships, such as transaction volume or fee percentage; the source of truth for those values.
+_Avoid_: weighting, relationship figures, metrics, KPIs
+
 **Transaction volume**:
 How much passes along a relationship in a stated period, such as orders a week.
 _Avoid_: throughput, traffic

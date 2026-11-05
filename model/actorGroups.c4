@@ -3,7 +3,7 @@
 // its own software, or is connected through its group.
 // An actor keeps its everyday name, unless it runs software with the same brand: then
 // the actor takes its registered name and the software keeps the brand.
-// Invented figures stay on groups, never on a named company (ADR 0005).
+// Invented values stay on groups, never on a named company (ADR 0005).
 
 model {
 

@@ -30,15 +30,29 @@ model {
   }
 
   integrationCompanies -[operates]-> orderIntegrationHub {
-    technology '1 million orders a week'
-    metadata { transactionVolume '1000000'; transactionUnit 'orders'; transactionPeriod 'week'; source 'Invented' }
+    description '''
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 1,000,000 orders a week |
+      | Data source | Invented |
+    '''
+    metadata { source 'Invented' }
   }
   integrationCompanies.deliverect -[operates]-> orderIntegrationHub.deliverectHub
   integrationCompanies.otter -[operates]-> orderIntegrationHub.otterHub
 
   restaurantChains -[uses]-> orderIntegrationHub 'routes orders' {
-    technology 'About 500 orders a week per site'
-    metadata { transactionVolume '500'; transactionUnit 'orders per site'; transactionPeriod 'week'; source 'Invented' }
+    description '''
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 500 orders per site a week |
+      | Data source | Invented |
+    '''
+    metadata { source 'Invented' }
   }
 
   orderIntegrationHub -[supports]-> bringOrdersIntoTill
@@ -47,8 +61,15 @@ model {
   orderIntegrationHub.menus -[conformsTo]-> schemaOrgMenu
 
   orderIntegrationHub.orders -[api]-> tillSystem.orders 'order sent straight to the till' {
-    technology 'API: about 500 orders a week per site'
     description '''
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 500 orders per site a week |
+      | Frequency | Per order |
+      | Data source | Invented |
+
       **Example schema: till order**
 
       | Field | Type | Notes |
@@ -58,12 +79,19 @@ model {
       | quantity | number | How many |
       | collectBy | time | When the courier arrives |
     '''
-    metadata { frequency 'per order'; transactionVolume '500'; transactionUnit 'orders per site'; transactionPeriod 'week'; schemaName 'Till order'; source 'Illustrative' }
+    metadata { schemaName 'Till order'; source 'Illustrative' }
   }
 
   orderIntegrationHub.menus -[api]-> deliveryPlatformSystem.restaurantPortal.menus 'menu published to every platform' {
-    technology 'API: about 20 updates a week per site'
     description '''
+      **Relationship data**
+
+      | Measure | Value |
+      | --- | --- |
+      | Transaction volume | 20 updates per site a week |
+      | Frequency | On change |
+      | Data source | Invented |
+
       **Example schema: menu update**
 
       | Field | Type | Notes |
@@ -74,7 +102,7 @@ model {
       | available | boolean | Switches a dish off when it runs out |
       | allergens | list | From the 14 allergens |
     '''
-    metadata { frequency 'on change'; transactionVolume '20'; transactionUnit 'updates per site'; transactionPeriod 'week'; schemaName 'Menu update'; source 'Illustrative' }
+    metadata { schemaName 'Menu update'; source 'Illustrative' }
   }
 }
 
