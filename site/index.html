@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="data:,">
+  <title>Food Delivery Reference Architecture</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f6f6f4;
+      --panel: #ffffff;
+      --text: #1f2328;
+      --muted: #59616b;
+      --line: #dcdfe3;
+      --accent: #17627d;
+      --accent-text: #ffffff;
+      --note-bg: #fdf3dc;
+      --note-line: #c8921a;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1e1f22;
+        --panel: #27292d;
+        --text: #e8e9eb;
+        --muted: #a7adb5;
+        --line: #3a3d42;
+        --accent: #6bbbd8;
+        --accent-text: #10242c;
+        --note-bg: #38301a;
+        --note-line: #c8921a;
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 1rem/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+
+    main { max-width: 46rem; margin: 0 auto; padding: 3rem 1rem 4rem; }
+
+    h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 0.75rem; }
+    h2 { font-size: 1.2rem; margin: 2.5rem 0 0.75rem; }
+    p { margin: 0 0 1rem; }
+    a { color: var(--accent); }
+    kbd { font: inherit; font-weight: 600; }
+
+    .note {
+      background: var(--note-bg);
+      border-left: 4px solid var(--note-line);
+      padding: 0.75rem 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .note p { margin: 0; }
+
+    .open {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--accent-text);
+      font-weight: 600;
+      text-decoration: none;
+      padding: 0.65rem 1.25rem;
+      border-radius: 6px;
+    }
+
+    .small { color: var(--muted); font-size: 0.9rem; margin-top: 0.75rem; }
+
+    dl { margin: 0; }
+    dl div { padding: 0.6rem 0; border-top: 1px solid var(--line); }
+    dl div:first-child { border-top: 0; padding-top: 0; }
+    dt { font-weight: 600; }
+    dd { margin: 0; color: var(--muted); }
+
+    ol { list-style: none; counter-reset: stop; margin: 0; padding: 0; }
+
+    ol li {
+      counter-increment: stop;
+      position: relative;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0.75rem 1rem 0.75rem 3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    ol li::before {
+      content: counter(stop);
+      position: absolute;
+      left: 1rem;
+      top: 0.75rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    ol a { font-weight: 600; }
+    ol p { margin: 0.15rem 0 0; color: var(--muted); }
+
+    footer { margin-top: 2.5rem; color: var(--muted); font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Food Delivery Reference Architecture</h1>
+    <p>A single model of UK food delivery: who is involved, what software they run, what information it holds, how that information moves, and who holds power over whom. Everyone knows how a takeaway reaches their door, so you can judge what a model like this shows.</p>
+
+    <div class="note">
+      <p><strong>This is an illustration.</strong> The product names are real, but the flows are simplified and every value is invented. It describes no named company's actual systems, and it is not affiliated with any of them.</p>
+    </div>
+
+    <a class="open" href="map/#/view/index/">Open the map</a>
+    <p class="small">Best on a laptop or larger screen: on a phone the map is very small.</p>
+
+    <h2>How to use it</h2>
+    <dl>
+      <div>
+        <dt>Zoom icon, at the bottom of a box</dt>
+        <dd>Opens that system or subsystem.</dd>
+      </div>
+      <div>
+        <dt>Card icon, at the top right of a box</dt>
+        <dd>Opens its details, including any schema and links. Press <kbd>Esc</kbd> to close them.</dd>
+      </div>
+      <div>
+        <dt>Clicking a line</dt>
+        <dd>Shows its relationship data, wording and any schema. Click the empty canvas to close it.</dd>
+      </div>
+      <div>
+        <dt>Clicking a box</dt>
+        <dd>Only focuses it and dims the rest. Press <kbd>Esc</kbd> to clear that.</dd>
+      </div>
+      <div>
+        <dt><kbd>Ctrl</kbd> + <kbd>K</kbd></dt>
+        <dd>Searches for any view or element by name.</dd>
+      </div>
+    </dl>
+
+    <h2>A suggested route</h2>
+    <ol>
+      <li>
+        <a href="map/#/view/index/">Landscape</a>
+        <p>One map of who is involved and what software they run, with no vendor names yet.</p>
+      </li>
+      <li>
+        <a href="map/#/view/deliveryPlatformSystemZoom/">Delivery platform system</a>
+        <p>The system is the role, and the products in it are replaceable. Uber Eats UK Limited is the business and Uber Eats is its software, so each can be described separately.</p>
+      </li>
+      <li>
+        <a href="map/#/view/courierDispatchZoom/">Courier dispatch</a>
+        <p>Use the card icon on Courier profiles to see its fields. The layers go down from map to system, subsystem, dataset and schema, all in one model.</p>
+      </li>
+      <li>
+        <a href="map/#/view/followOneOrder/">Follow one order</a>
+        <p>Press Start, then Next, and read the notes. The same model can tell a story, with named people, one step at a time. Step 5 is the manual re-keying.</p>
+      </li>
+      <li>
+        <a href="map/#/view/noStandardLens/">Flows with no standard</a>
+        <p>Click the red line, "staff re-key each order into the till", to see a proposed schema. The model finds the problems and holds a proposal for fixing them.</p>
+      </li>
+      <li>
+        <a href="map/#/view/infrastructure/">Infrastructure</a>
+        <p>Tablets on the counter next to a till that cannot talk to them: the same elements, this time showing where things physically sit.</p>
+      </li>
+      <li>
+        <a href="map/#/view/powerLens/">Who has power over whom</a>
+        <p>Click a red line to see why, and its relationship data. A model can go beyond data flows to include soft power.</p>
+      </li>
+      <li>
+        <a href="map/#/view/moneyLens/">Where the money goes</a>
+        <p>Click a line to see its figures. These commercial relationships sit in the same model.</p>
+      </li>
+      <li>
+        <a href="map/#/view/openItemsLens/">Open questions and assumptions</a>
+        <p>Use the card icon on Till system, then follow its link. What is not known is tracked against what it affects.</p>
+      </li>
+    </ol>
+
+    <footer>Made with <a href="https://likec4.dev">LikeC4</a>.</footer>
+  </main>
+</body>
+</html>

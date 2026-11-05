@@ -53,6 +53,64 @@ Transaction volumes, fee percentages and similar values live in [data/relationsh
 
 To use the same file in a BI tool, see [docs/bi-import.md](docs/bi-import.md).
 
+## Sharing the demo by link
+
+`scripts/deploy-site.mjs` publishes the demo to [Cloudflare Pages](https://developers.cloudflare.com/pages/) as a static site behind one shared password. Visitors get a start page with the disclaimer, how to use the app and a suggested route ([site/index.html](site/index.html)), then the app itself. They can't change anything, but anyone with the password can read the whole model and export its diagrams.
+
+### First-time setup
+
+You need a free Cloudflare account. Then run these in order, so that the password is in place before anything is published:
+
+```bash
+npx wrangler@4 login
+```
+
+```bash
+npx wrangler@4 pages project create food-delivery-demo --production-branch main
+```
+
+```bash
+npx wrangler@4 pages secret put SITE_PASSWORD --project-name food-delivery-demo
+```
+
+The last command asks you to type the password. It is stored only at Cloudflare, never in this repo.
+
+```bash
+node scripts/deploy-site.mjs
+```
+
+Send people the link and the password separately. The browser asks for a username too: any will do, or none.
+
+### Publishing a change
+
+```bash
+node scripts/deploy-site.mjs
+```
+
+It publishes the working folder as it is, including anything not yet committed. It stops without publishing if:
+
+- the CSV and the `.c4` files differ, or `likec4 validate` fails
+- the output contains a word this branch leaves out, or the owner's name from a backlog file
+- an element links to a file that isn't published, or the start page links to a view that doesn't exist
+
+After publishing, it confirms that the site asks for the password. To check the site first without publishing:
+
+```bash
+node scripts/deploy-site.mjs --preview
+```
+
+Then open http://localhost:8788 with the password `preview`.
+
+### Changing the password
+
+Run the `pages secret put` command again, then publish, as the new password only applies from the next deployment. Earlier deployments keep their own addresses and may still accept the old password, so delete them in the Cloudflare dashboard if that matters.
+
+### Why it works this way
+
+- **Cloudflare Pages:** the demo is one static page, so it needs no server of our own to maintain. GitHub Pages was ruled out because its free plan needs a public repo, and this branch's history includes models that aren't meant to be public.
+- **A single-file build:** the normal `likec4 build` fails on Windows with LikeC4 1.60. The single file also uses `/#/` URLs, so a link to any view works without server routing.
+- **A password:** the site puts real company names next to invented figures, so it shouldn't be open to everyone or indexed by search engines.
+
 ## Where things are
 
 | Path | What it holds |
@@ -60,7 +118,8 @@ To use the same file in a BI tool, see [docs/bi-import.md](docs/bi-import.md).
 | `model/` | Actor groups, systems, capabilities, standards and infrastructure |
 | `views/` | The map, lenses and step-through views |
 | `data/relationship-data.csv` | Volumes, fees and similar values |
-| `scripts/` | The sync script and the playground build |
+| `scripts/` | The sync script, the playground build and the site deploy |
+| `site/` | The published site's start page, headers and password check |
 | `GLOSSARY.md` | What each term means |
 | `docs/legend.md` | How to read the diagrams |
 | `docs/adr/` | Decisions and why they were made |

@@ -5,7 +5,7 @@ views {
 
   view index {
     title 'Landscape'
-    description 'Every actor group and system, who runs what, and how information moves between them. Use the zoom icon on a system to open it and the card icon on any box for its details; click a line to see what moves along it. Illustrative: real product names, with simplified flows and invented figures. Not affiliated with any named company.'
+    description 'Illustrative: real product names, with simplified flows and invented figures. Not affiliated with any named company. Every actor group and system, who runs what, and how information moves between them. Use the zoom icon on a system to open it and the card icon on any box for its details; click a line to see what moves along it.'
     include * where kind is actorGroup or kind is system
     // Power and money have their own lenses
     exclude * -> * where kind is hasPowerOver or kind is pays

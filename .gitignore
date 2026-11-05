@@ -2,6 +2,9 @@
 dist/
 node_modules/
 
+# Local state from Wrangler (Cloudflare Pages)
+.wrangler/
+
 # Personal Claude Code settings (shared settings stay in .claude/settings.json)
 .claude/settings.local.json
 

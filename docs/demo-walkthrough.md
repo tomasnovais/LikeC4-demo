@@ -57,6 +57,16 @@ Example question for stop 10, ready to paste:
 | **A courier signs up**, **A restaurant joins**, **A customer joins** | The other step-through views |
 | Any other system | Green, amber and red software products show which have a public API, a partner API or none |
 
+## If people follow the link instead
+
+The published site has no presenter, so its start page gives the disclaimer, how to use the app and a route through stops 1 to 7 and 9. Some stops only work live:
+
+- **Stop 8:** the site is a fixed copy, so a change to the CSV only appears after publishing again.
+- **Stop 10:** the site has no connection to Claude Code.
+- **Stop 9:** this one works better on the site, as the link on **Till system** opens the question.
+
+See the README for how to publish.
+
 ## Good to know
 
 - **Not in this demo:** today versus a planned future state. It was left out to keep things simple, not because the tool cannot do it.

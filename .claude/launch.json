@@ -6,6 +6,12 @@
       "runtimeExecutable": "likec4.cmd",
       "runtimeArgs": ["start", "--port", "5173"],
       "port": 5173
+    },
+    {
+      "name": "site-preview",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["scripts/deploy-site.mjs", "--preview"],
+      "port": 8788
     }
   ]
 }
