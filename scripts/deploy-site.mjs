@@ -101,22 +101,22 @@ const checkOutput = () => {
   if (problems.length) fail(`Nothing was published:\n  ${problems.join('\n  ')}`)
 }
 
+// Only a page served without the password counts as exposed. A new deployment's address can
+// answer 404 for a few seconds before it is ready, so any other answer is tried again.
 const confirmPasswordRequired = async url => {
-  for (let attempt = 0; attempt < 6; attempt++) {
-    let status
-    try {
-      ;({ status } = await fetch(url))
-    } catch {
-      await new Promise(resolve => setTimeout(resolve, 5000))
-      continue
-    }
+  let status
+  for (let attempt = 0; attempt < 12; attempt++) {
+    status = await fetch(url).then(response => response.status, () => 'no response')
     if (status === 401) return console.log(`\nConfirmed: ${url} asks for the password.`)
     if (status === 503) {
       fail(`Published, but shut: the password is not set. Set it, then run this script again:\n  ${wrangler} pages secret put SITE_PASSWORD --project-name ${projectName}`)
     }
-    fail(`WARNING: PUBLISHED WITHOUT A PASSWORD. ${url} answered ${status} instead of 401. Delete this deployment in the Cloudflare dashboard.`)
+    if (status >= 200 && status < 300) {
+      fail(`WARNING: PUBLISHED WITHOUT A PASSWORD. ${url} answered ${status} instead of 401. Delete this deployment in the Cloudflare dashboard.`)
+    }
+    await new Promise(resolve => setTimeout(resolve, 5000))
   }
-  fail(`Published, but ${url} could not be reached yet. Open it yourself and check that it asks for the password.`)
+  fail(`Published, but the password could not be confirmed: ${url} last answered ${status}. Open it yourself and check that it asks for the password.`)
 }
 
 run('node scripts/sync-relationship-data.mjs --check')
