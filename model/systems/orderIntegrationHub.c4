@@ -30,18 +30,15 @@ model {
   }
 
   integrationCompanies -[operates]-> orderIntegrationHub {
-    description '''
-      | Measure | Illustrative value |
-      | --- | --- |
-      | Orders routed a week | 1 million |
-    '''
-    metadata { transactionVolume '1 million orders a week'; source 'Invented' }
+    technology '1 million orders a week'
+    metadata { transactionVolume '1000000'; transactionUnit 'orders'; transactionPeriod 'week'; source 'Invented' }
   }
   integrationCompanies.deliverect -[operates]-> orderIntegrationHub.deliverectHub
   integrationCompanies.otter -[operates]-> orderIntegrationHub.otterHub
 
-  restaurantChains -[uses]-> orderIntegrationHub 'routes orders, about 500 a week per site' {
-    metadata { transactionVolume '500 orders a week per site'; source 'Invented' }
+  restaurantChains -[uses]-> orderIntegrationHub 'routes orders' {
+    technology 'About 500 orders a week per site'
+    metadata { transactionVolume '500'; transactionUnit 'orders per site'; transactionPeriod 'week'; source 'Invented' }
   }
 
   orderIntegrationHub -[supports]-> bringOrdersIntoTill
@@ -50,6 +47,7 @@ model {
   orderIntegrationHub.menus -[conformsTo]-> schemaOrgMenu
 
   orderIntegrationHub.orders -[api]-> tillSystem.orders 'order sent straight to the till' {
+    technology 'API: about 500 orders a week per site'
     description '''
       **Example schema: till order**
 
@@ -59,13 +57,12 @@ model {
       | tillProductCode | string | The hub maps dishes to till codes |
       | quantity | number | How many |
       | collectBy | time | When the courier arrives |
-
-      **Volume:** about 500 orders a week per site (illustrative).
     '''
-    metadata { frequency 'per order'; transactionVolume '500 orders a week per site'; schemaName 'Till order'; source 'Illustrative' }
+    metadata { frequency 'per order'; transactionVolume '500'; transactionUnit 'orders per site'; transactionPeriod 'week'; schemaName 'Till order'; source 'Illustrative' }
   }
 
   orderIntegrationHub.menus -[api]-> deliveryPlatformSystem.restaurantPortal.menus 'menu published to every platform' {
+    technology 'API: about 20 updates a week per site'
     description '''
       **Example schema: menu update**
 
@@ -76,10 +73,8 @@ model {
       | price | money | Can differ by platform |
       | available | boolean | Switches a dish off when it runs out |
       | allergens | list | From the 14 allergens |
-
-      **Volume:** about 20 updates a week per site (illustrative).
     '''
-    metadata { frequency 'on change'; transactionVolume '20 updates a week per site'; schemaName 'Menu update'; source 'Illustrative' }
+    metadata { frequency 'on change'; transactionVolume '20'; transactionUnit 'updates per site'; transactionPeriod 'week'; schemaName 'Menu update'; source 'Illustrative' }
   }
 }
 

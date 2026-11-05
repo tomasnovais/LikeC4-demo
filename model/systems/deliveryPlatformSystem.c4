@@ -10,21 +10,21 @@ model {
 
     // Replaceable software filling this system's role (ADR 0003)
 
-    uberEatsApp = softwareProduct 'Uber Eats app' {
+    uberEatsApp = softwareProduct 'Uber Eats' {
       #api-partner
       summary 'Platform couriers, with a partner API for restaurants and integrators.'
       link https://www.ubereats.com/gb 'Uber Eats'
       metadata { vendor 'Uber'; usedBy ['Customers', 'Couriers', 'Independent restaurants', 'Restaurant chains']; source 'Illustrative' }
     }
 
-    deliverooApp = softwareProduct 'Deliveroo app' {
+    deliverooApp = softwareProduct 'Deliveroo' {
       #api-partner
       summary 'Platform couriers, with a partner API for restaurants and integrators.'
       link https://deliveroo.co.uk 'Deliveroo'
       metadata { vendor 'Deliveroo (DoorDash)'; usedBy ['Customers', 'Couriers', 'Independent restaurants', 'Restaurant chains']; source 'Illustrative' }
     }
 
-    justEatApp = softwareProduct 'Just Eat app' {
+    justEatApp = softwareProduct 'Just Eat' {
       #api-partner
       summary "Platform couriers or the restaurant's own drivers, so courier dispatch is not always used."
       link https://www.just-eat.co.uk 'Just Eat'
@@ -142,30 +142,29 @@ model {
   // Who runs it. The group-level line carries the figures; the actor-level lines
   // show which business runs which app, and stay free of invented numbers.
   foodDeliveryPlatforms -[operates]-> deliveryPlatformSystem {
-    description '''
-      | Measure | Illustrative value |
-      | --- | --- |
-      | Orders a week across all platforms | 4 million |
-      | Restaurants listed | 100,000 |
-    '''
-    metadata { transactionVolume '4 million orders a week'; source 'Invented' }
+    technology '4 million orders a week'
+    metadata { transactionVolume '4000000'; transactionUnit 'orders'; transactionPeriod 'week'; source 'Invented' }
   }
   foodDeliveryPlatforms.uberEats -[operates]-> deliveryPlatformSystem.uberEatsApp
   foodDeliveryPlatforms.deliveroo -[operates]-> deliveryPlatformSystem.deliverooApp
   foodDeliveryPlatforms.justEat -[operates]-> deliveryPlatformSystem.justEatApp
 
   // Who depends on it
-  customers -[uses]-> deliveryPlatformSystem.customerOrdering 'places orders, 4 million a week' {
-    metadata { transactionVolume '4 million orders a week'; source 'Invented' }
+  customers -[uses]-> deliveryPlatformSystem.customerOrdering 'places orders' {
+    technology '4 million orders a week'
+    metadata { transactionVolume '4000000'; transactionUnit 'orders'; transactionPeriod 'week'; source 'Invented' }
   }
-  couriers -[uses]-> deliveryPlatformSystem.courierDispatch 'takes delivery jobs, 3 million a week' {
-    metadata { transactionVolume '3 million delivery jobs a week'; source 'Invented' }
+  couriers -[uses]-> deliveryPlatformSystem.courierDispatch 'takes delivery jobs' {
+    technology '3 million jobs a week'
+    metadata { transactionVolume '3000000'; transactionUnit 'delivery jobs'; transactionPeriod 'week'; source 'Invented' }
   }
-  independentRestaurants -[uses]-> deliveryPlatformSystem.restaurantPortal 'receives orders, about 80 a week each' {
-    metadata { transactionVolume '80 orders a week per restaurant'; source 'Invented' }
+  independentRestaurants -[uses]-> deliveryPlatformSystem.restaurantPortal 'receives orders' {
+    technology 'About 80 orders a week each'
+    metadata { transactionVolume '80'; transactionUnit 'orders per restaurant'; transactionPeriod 'week'; source 'Invented' }
   }
-  restaurantChains -[uses]-> deliveryPlatformSystem.restaurantPortal 'receives orders, about 500 a week per site' {
-    metadata { transactionVolume '500 orders a week per site'; source 'Invented' }
+  restaurantChains -[uses]-> deliveryPlatformSystem.restaurantPortal 'receives orders' {
+    technology 'About 500 orders a week per site'
+    metadata { transactionVolume '500'; transactionUnit 'orders per site'; transactionPeriod 'week'; source 'Invented' }
   }
 
   deliveryPlatformSystem.customerOrdering -[supports]-> browseMenus
@@ -184,6 +183,7 @@ model {
   // Flows inside the system, visible when you open a subsystem
 
   deliveryPlatformSystem.customerOrdering.orders -[api]-> deliveryPlatformSystem.restaurantPortal.orders 'order shown on the tablet' {
+    technology 'API: 4 million orders a week'
     description '''
       **Example schema: new order**
 
@@ -194,10 +194,11 @@ model {
       | allergenNotes | string | What the customer told the restaurant |
       | collectBy | time | When the courier arrives |
     '''
-    metadata { frequency 'per order'; transactionVolume '4 million orders a week'; schemaName 'New order'; source 'Illustrative' }
+    metadata { frequency 'per order'; transactionVolume '4000000'; transactionUnit 'orders'; transactionPeriod 'week'; schemaName 'New order'; source 'Illustrative' }
   }
 
   deliveryPlatformSystem.customerOrdering.orders -[api]-> deliveryPlatformSystem.courierDispatch.deliveryJobs 'order becomes a delivery job' {
+    technology 'API: 3 million jobs a week'
     description '''
       **Example schema: delivery job**
 
@@ -209,13 +210,14 @@ model {
       | dropOffAddress | address | The customer |
       | offeredPay | money | What the courier sees before accepting |
     '''
-    metadata { frequency 'per order'; transactionVolume '3 million delivery jobs a week'; schemaName 'Delivery job'; source 'Illustrative' }
+    metadata { frequency 'per order'; transactionVolume '3000000'; transactionUnit 'delivery jobs'; transactionPeriod 'week'; schemaName 'Delivery job'; source 'Illustrative' }
   }
 
   // Flows out to other systems
 
   deliveryPlatformSystem.restaurantPortal.orders -[rekeying]-> tillSystem.orders 'staff re-key each order into the till' {
     #assumption
+    technology 'Manual re-keying: about 80 orders a week per restaurant'
     description '''
       Today a member of staff reads the tablet and types the order into the till, once per order and once per platform.
 
@@ -229,14 +231,13 @@ model {
       | allergenNotes | string | What the customer told the restaurant |
       | collectBy | time | When the courier arrives |
       | total | money | What the customer paid |
-
-      **Volume:** about 80 orders a week per restaurant (illustrative).
     '''
     link ../../backlog/assumptions/02-independents-rekey-orders.md 'Assumption 02'
-    metadata { frequency 'per order'; transactionVolume '80 orders a week per restaurant'; schemaName 'Order message'; source 'Illustrative' }
+    metadata { frequency 'per order'; transactionVolume '80'; transactionUnit 'orders per restaurant'; transactionPeriod 'week'; schemaName 'Order message'; source 'Illustrative' }
   }
 
   deliveryPlatformSystem.restaurantPortal.orders -[api]-> orderIntegrationHub.orders 'order sent to the hub' {
+    technology 'API: about 500 orders a week per site'
     description '''
       **Example schema: order webhook**
 
@@ -247,13 +248,12 @@ model {
       | siteId | string | Which of the chain's sites |
       | items | list | Dish, quantity and options |
       | total | money | What the customer paid |
-
-      **Volume:** about 500 orders a week per site (illustrative).
     '''
-    metadata { frequency 'per order'; transactionVolume '500 orders a week per site'; schemaName 'Order webhook'; source 'Illustrative' }
+    metadata { frequency 'per order'; transactionVolume '500'; transactionUnit 'orders per site'; transactionPeriod 'week'; schemaName 'Order webhook'; source 'Illustrative' }
   }
 
   deliveryPlatformSystem.customerOrdering.orders -[api]-> paymentGateway.payments 'charges the customer' {
+    technology 'API: 4 million payments a week'
     description '''
       **Example schema: payment request**
 
@@ -263,14 +263,13 @@ model {
       | amount | money | Total including the delivery fee |
       | currency | enum | GBP |
       | cardToken | string | Stands in for the card, so the platform never holds the number |
-
-      **Volume:** 4 million payments a week (illustrative).
     '''
-    metadata { frequency 'per order'; standards ['pciDss']; transactionVolume '4 million payments a week'; schemaName 'Payment request'; source 'Illustrative' }
+    metadata { frequency 'per order'; standards ['pciDss']; transactionVolume '4000000'; transactionUnit 'payments'; transactionPeriod 'week'; schemaName 'Payment request'; source 'Illustrative' }
   }
 
   deliveryPlatformSystem.restaurantPortal.payouts -[rekeying]-> accountingSystem.payouts 'payout statement typed into the accounts' {
     #open-question
+    technology 'Manual re-keying: one statement per platform a week'
     description '''
       Each platform sends its own statement, and someone types the totals into the accounts by hand.
 
@@ -283,14 +282,13 @@ model {
       | grossSales | money | Before commission |
       | commission | money | What the platform kept |
       | netPaid | money | What reached the bank |
-
-      **Volume:** one statement per platform per week (illustrative).
     '''
     link ../../backlog/questions/03-who-reconciles-payouts.md 'Open question 03'
-    metadata { frequency 'weekly'; transactionVolume 'One statement per platform per week'; schemaName 'Payout statement'; source 'Illustrative' }
+    metadata { frequency 'weekly'; transactionVolume '1'; transactionUnit 'statements per platform'; transactionPeriod 'week'; schemaName 'Payout statement'; source 'Illustrative' }
   }
 
   deliveryPlatformSystem.courierDispatch.courierProfiles -[api]-> identityVerificationSystem.verificationResults 'documents sent for checking' {
+    technology 'API: about 5,000 checks a month'
     description '''
       **Example schema: verification request**
 
@@ -300,10 +298,8 @@ model {
       | documentType | enum | Passport, biometric residence permit or share code |
       | documentImage | file | Photo of the document |
       | selfie | file | Compared with the document |
-
-      **Volume:** about 5,000 checks a month (illustrative).
     '''
-    metadata { frequency 'per sign-up'; standards ['digitalIdentityTrustFramework']; transactionVolume '5,000 checks a month'; schemaName 'Verification request'; source 'Illustrative' }
+    metadata { frequency 'per sign-up'; standards ['digitalIdentityTrustFramework']; transactionVolume '5000'; transactionUnit 'checks'; transactionPeriod 'month'; schemaName 'Verification request'; source 'Illustrative' }
   }
 }
 

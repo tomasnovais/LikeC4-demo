@@ -25,18 +25,15 @@ model {
   }
 
   verificationCompanies -[operates]-> identityVerificationSystem {
-    description '''
-      | Measure | Illustrative value |
-      | --- | --- |
-      | Courier checks a month | 5,000 |
-    '''
-    metadata { transactionVolume '5,000 checks a month'; source 'Invented' }
+    technology 'About 5,000 checks a month'
+    metadata { transactionVolume '5000'; transactionUnit 'checks'; transactionPeriod 'month'; source 'Invented' }
   }
   verificationCompanies.onfido -[operates]-> identityVerificationSystem.onfidoVerification
   verificationCompanies.yoti -[operates]-> identityVerificationSystem.yotiVerification
 
-  foodDeliveryPlatforms -[uses]-> identityVerificationSystem 'checks couriers, 5,000 a month' {
-    metadata { transactionVolume '5,000 checks a month'; source 'Invented' }
+  foodDeliveryPlatforms -[uses]-> identityVerificationSystem 'checks couriers' {
+    technology 'About 5,000 checks a month'
+    metadata { transactionVolume '5000'; transactionUnit 'checks'; transactionPeriod 'month'; source 'Invented' }
   }
 
   identityVerificationSystem -[supports]-> verifyCourier
@@ -44,6 +41,7 @@ model {
   identityVerificationSystem.verificationResults -[conformsTo]-> digitalIdentityTrustFramework
 
   identityVerificationSystem.verificationResults -[api]-> deliveryPlatformSystem.courierDispatch.verificationResults 'verification result returned' {
+    technology 'API: about 5,000 checks a month'
     description '''
       **Example schema: verification result**
 
@@ -53,10 +51,8 @@ model {
       | outcome | enum | Passed, failed or needs review |
       | rightToWorkExpiry | date | Empty if there is no time limit |
       | checkedAt | datetime | When the check finished |
-
-      **Volume:** about 5,000 checks a month (illustrative).
     '''
-    metadata { frequency 'per sign-up'; standards ['digitalIdentityTrustFramework']; transactionVolume '5,000 checks a month'; schemaName 'Verification result'; source 'Illustrative' }
+    metadata { frequency 'per sign-up'; standards ['digitalIdentityTrustFramework']; transactionVolume '5000'; transactionUnit 'checks'; transactionPeriod 'month'; schemaName 'Verification result'; source 'Illustrative' }
   }
 }
 

@@ -32,25 +32,18 @@ model {
   }
 
   independentRestaurants -[operates]-> tillSystem {
-    description '''
-      | Measure | Illustrative value |
-      | --- | --- |
-      | Sales through the till a week | 400 per restaurant |
-    '''
-    metadata { transactionVolume '400 sales a week per restaurant'; source 'Invented' }
+    technology 'About 400 sales a week each'
+    metadata { transactionVolume '400'; transactionUnit 'sales per restaurant'; transactionPeriod 'week'; source 'Invented' }
   }
   restaurantChains -[operates]-> tillSystem {
-    description '''
-      | Measure | Illustrative value |
-      | --- | --- |
-      | Sales through the till a week | 2,500 per site |
-    '''
-    metadata { transactionVolume '2,500 sales a week per site'; source 'Invented' }
+    technology 'About 2,500 sales a week per site'
+    metadata { transactionVolume '2500'; transactionUnit 'sales per site'; transactionPeriod 'week'; source 'Invented' }
   }
 
   tillSystem -[supports]-> recordSales
 
   tillSystem.salesRecords -[fileTransfer]-> accountingSystem.salesRecords 'daily sales export' {
+    technology 'File transfer: one file per site a day'
     description '''
       **Example schema: daily sales file**
 
@@ -62,7 +55,7 @@ model {
       | netSales | money | Excluding VAT |
       | vat | money | VAT charged |
     '''
-    metadata { frequency 'daily'; transactionVolume 'One file per site per day'; schemaName 'Daily sales file'; source 'Illustrative' }
+    metadata { frequency 'daily'; transactionVolume '1'; transactionUnit 'files per site'; transactionPeriod 'day'; schemaName 'Daily sales file'; source 'Illustrative' }
   }
 }
 

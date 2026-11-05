@@ -7,10 +7,10 @@ How to read the food delivery reference architecture diagrams. The styles are de
 | Symbol | Element | Examples |
 |---|---|---|
 | Stacked grey box | **Actor group**: a category of participants | Customers, Food delivery platforms, Food regulators |
-| Person shape | **Actor**: a named member of a group | Joe Blogs, Uber Eats, Corner Curry House |
+| Person shape | **Actor**: a named member of a group | Joe Blogs, Corner Curry House, Uber Eats UK Limited |
 | Blue box | **System**: a kind of software, named for its job | Delivery platform system, Till system |
 | Light blue box inside a system | **Subsystem**: a distinct part of a system | Customer ordering, Courier dispatch |
-| Component shape inside a system | **Software product**: real software doing that system's job | Uber Eats app, Square, Stripe |
+| Component shape inside a system | **Software product**: real software doing that system's job | Uber Eats, Square, Stripe |
 | Purple cylinder | **Dataset**: the information a system holds | Orders, Menus, Courier profiles |
 | Grey box with a target icon | **Capability**: something the sector must be able to do | Place order, Verify courier |
 | Page shape | **Standard**: a published information format | PCI DSS, 14 allergens |
@@ -34,12 +34,12 @@ How to read the food delivery reference architecture diagrams. The styles are de
 
 ## Lines
 
-Relationships between things are plain solid grey lines, labelled with what the relationship is. Information moving between systems is always a dotted line, coloured by how it moves. Click any line to see its schema or figures.
+Relationships between things are plain solid grey lines, labelled with what the relationship is. Information moving between systems is always a dotted line, coloured by how it moves. The second line of a label, in brackets, shows how a flow moves or where power comes from, then any figures. Click a line to see the same details, its description and any schema.
 
 | Line | Meaning |
 |---|---|
 | Grey solid, labelled "operates" | Runs that system and is responsible for its information |
-| Grey solid, labelled "uses" | Depends on that system without running it, usually with a volume in the label |
+| Grey solid, labelled "uses" | Depends on that system without running it |
 | Grey solid, labelled "supports" | A system supports that capability |
 | Grey solid, labelled "conforms to" | The information follows that standard |
 | Green dotted | Information passes automatically (API) |

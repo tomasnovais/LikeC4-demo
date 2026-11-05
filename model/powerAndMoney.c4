@@ -1,67 +1,38 @@
 // Who holds power over whom, and where the money goes. Both run between actor groups
-// and stay off the map; each has its own lens (views/lenses.c4). Every figure is
-// invented, and each one appears in the label or description as well as in metadata,
-// because the app does not show relationship metadata (ADR 0005).
+// and stay off the map; each has its own lens (views/lenses.c4). Every figure is invented.
+// Labels carry no figures. Figures sit in `technology`, which shows under the label and
+// on click, and in metadata as separate fields for filtering (ADR 0005).
 
 model {
 
-  // Power: points from the one holding it. Technology shows the basis.
+  // Power: points from the one holding it. Technology shows the basis, then any figures.
 
   foodDeliveryPlatforms -[hasPowerOver]-> independentRestaurants 'sets commission and search ranking' {
     #power-high
-    technology 'Commercial'
-    description '''
-      The platform brings customers the restaurant could not reach alone, so the restaurant takes the standard terms.
-
-      | Measure | Illustrative value |
-      | --- | --- |
-      | Commission | 30% of order value |
-      | Share of the restaurant's orders | 40% |
-      | Orders a week per restaurant | 80 |
-    '''
-    metadata { basis 'commercial'; transactionVolume '80 orders a week per restaurant'; source 'Invented' }
+    technology 'Commercial: 30% commission, 40% of orders, 80 orders a week each'
+    description 'The platform brings customers the restaurant could not reach alone, so the restaurant takes the standard terms.'
+    metadata { basis 'commercial'; feePercent '30'; shareOfOrdersPercent '40'; transactionVolume '80'; transactionUnit 'orders per restaurant'; transactionPeriod 'week'; source 'Invented' }
   }
 
   foodDeliveryPlatforms -[hasPowerOver]-> couriers 'allocates work and sets pay' {
     #power-high
-    technology 'Dependency'
-    description '''
-      Couriers depend on the platform for jobs, and the algorithm decides who is offered what.
-
-      | Measure | Illustrative value |
-      | --- | --- |
-      | Pay per drop-off | About £4 |
-      | Jobs a week across all couriers | 3 million |
-    '''
-    metadata { basis 'dependency'; transactionVolume '3 million delivery jobs a week'; source 'Invented' }
+    technology 'Dependency: about £4 per drop-off, 3 million jobs a week'
+    description 'Couriers depend on the platform for jobs, and the algorithm decides who is offered what.'
+    metadata { basis 'dependency'; averageValueGbp '4'; transactionVolume '3000000'; transactionUnit 'delivery jobs'; transactionPeriod 'week'; source 'Invented' }
   }
 
   foodRegulators -[hasPowerOver]-> independentRestaurants 'publishes the hygiene rating' {
     #power-high
-    technology 'Regulatory'
-    description '''
-      A poor rating is public, and an inspection can close a kitchen.
-
-      | Measure | Illustrative value |
-      | --- | --- |
-      | Businesses rated | 500,000 |
-      | Typical inspection interval | 1 to 2 years |
-    '''
-    metadata { basis 'regulatory'; transactionVolume '500,000 businesses rated'; source 'Invented' }
+    technology 'Regulatory: 500,000 businesses rated'
+    description 'A poor rating is public, and an inspection can close a kitchen.'
+    metadata { basis 'regulatory'; transactionVolume '500000'; transactionUnit 'businesses rated'; source 'Invented' }
   }
 
   restaurantChains -[hasPowerOver]-> foodDeliveryPlatforms 'negotiates rates and can walk away' {
     #power-medium
-    technology 'Commercial'
-    description '''
-      A national brand brings volume the platform wants, so the commission is negotiated.
-
-      | Measure | Illustrative value |
-      | --- | --- |
-      | Negotiated commission | About 20% of order value |
-      | Orders a week per site | 500 |
-    '''
-    metadata { basis 'commercial'; transactionVolume '500 orders a week per site'; source 'Invented' }
+    technology 'Commercial: about 20% commission, 500 orders a week per site'
+    description 'A national brand brings volume the platform wants, so the commission is negotiated.'
+    metadata { basis 'commercial'; feePercent '20'; transactionVolume '500'; transactionUnit 'orders per site'; transactionPeriod 'week'; source 'Invented' }
   }
 
   foodDeliveryPlatforms -[hasPowerOver]-> restaurantChains 'controls placement and promotions' {
@@ -73,15 +44,9 @@ model {
 
   customers -[hasPowerOver]-> independentRestaurants 'leaves ratings that drive orders' {
     #power-medium
-    technology 'Commercial'
-    description '''
-      One customer has little power, but together their ratings decide which restaurants get seen.
-
-      | Measure | Illustrative value |
-      | --- | --- |
-      | Orders that get rated | 1 in 5 |
-    '''
-    metadata { basis 'commercial'; source 'Invented' }
+    technology 'Commercial: 20% of orders get rated'
+    description 'One customer has little power, but together their ratings decide which restaurants get seen.'
+    metadata { basis 'commercial'; shareOfOrdersPercent '20'; source 'Invented' }
   }
 
   foodRegulators -[hasPowerOver]-> restaurantChains 'publishes the hygiene rating' {
@@ -107,9 +72,9 @@ model {
 
   paymentCompanies -[hasPowerOver]-> foodDeliveryPlatforms 'sets processing fees' {
     #power-low
-    technology 'Commercial'
+    technology 'Commercial: about 1.5% fee'
     description 'Fees can be negotiated at this volume, and several gateways compete for the business.'
-    metadata { basis 'commercial'; source 'Invented' }
+    metadata { basis 'commercial'; feePercent '1.5'; source 'Invented' }
   }
 
   verificationCompanies -[hasPowerOver]-> couriers 'can block a sign-up' {
@@ -121,77 +86,38 @@ model {
 
   // Money: points the way the money goes.
 
-  customers -[pays]-> foodDeliveryPlatforms 'about £25 per order' {
-    description '''
-      | Measure | Illustrative value |
-      | --- | --- |
-      | Average order | £25, including delivery fee |
-      | Orders a week | 4 million |
-      | Money a week | £100 million |
-    '''
-    metadata { value '£25 per order'; transactionVolume '4 million orders a week'; source 'Invented' }
+  customers -[pays]-> foodDeliveryPlatforms 'pays for orders' {
+    technology 'About £25 per order, 4 million orders a week'
+    metadata { averageValueGbp '25'; transactionVolume '4000000'; transactionUnit 'orders'; transactionPeriod 'week'; source 'Invented' }
   }
 
-  foodDeliveryPlatforms -[pays]-> independentRestaurants 'order value less 30% commission' {
-    description '''
-      | Measure | Illustrative value |
-      | --- | --- |
-      | Commission | 30% |
-      | Paid | Weekly |
-      | Money to a restaurant per week | About £1,100 |
-    '''
-    metadata { value 'order value less 30%'; transactionVolume '80 orders a week per restaurant'; source 'Invented' }
+  foodDeliveryPlatforms -[pays]-> independentRestaurants 'pays order value less commission' {
+    technology '30% commission, 80 orders a week each'
+    metadata { feePercent '30'; transactionVolume '80'; transactionUnit 'orders per restaurant'; transactionPeriod 'week'; frequency 'weekly'; source 'Invented' }
   }
 
-  foodDeliveryPlatforms -[pays]-> restaurantChains 'order value less about 20% commission' {
-    description '''
-      | Measure | Illustrative value |
-      | --- | --- |
-      | Commission | About 20% |
-      | Paid | Weekly |
-      | Money to a site per week | About £8,000 |
-    '''
-    metadata { value 'order value less about 20%'; transactionVolume '500 orders a week per site'; source 'Invented' }
+  foodDeliveryPlatforms -[pays]-> restaurantChains 'pays order value less commission' {
+    technology 'About 20% commission, 500 orders a week per site'
+    metadata { feePercent '20'; transactionVolume '500'; transactionUnit 'orders per site'; transactionPeriod 'week'; frequency 'weekly'; source 'Invented' }
   }
 
-  foodDeliveryPlatforms -[pays]-> couriers 'about £4 per drop-off' {
-    description '''
-      | Measure | Illustrative value |
-      | --- | --- |
-      | Pay per drop-off | About £4 |
-      | Paid | Weekly |
-      | Delivery jobs a week | 3 million |
-    '''
-    metadata { value '£4 per drop-off'; transactionVolume '3 million delivery jobs a week'; source 'Invented' }
+  foodDeliveryPlatforms -[pays]-> couriers 'pays per drop-off' {
+    technology 'About £4 per drop-off, 3 million jobs a week'
+    metadata { averageValueGbp '4'; transactionVolume '3000000'; transactionUnit 'delivery jobs'; transactionPeriod 'week'; frequency 'weekly'; source 'Invented' }
   }
 
-  foodDeliveryPlatforms -[pays]-> paymentCompanies 'about 1.5% per payment' {
-    description '''
-      | Measure | Illustrative value |
-      | --- | --- |
-      | Processing fee | About 1.5% of each payment |
-      | Payments a week | 4 million |
-    '''
-    metadata { value '1.5% per payment'; transactionVolume '4 million payments a week'; source 'Invented' }
+  foodDeliveryPlatforms -[pays]-> paymentCompanies 'pays processing fees' {
+    technology 'About 1.5% fee, 4 million payments a week'
+    metadata { feePercent '1.5'; transactionVolume '4000000'; transactionUnit 'payments'; transactionPeriod 'week'; source 'Invented' }
   }
 
-  foodDeliveryPlatforms -[pays]-> verificationCompanies 'about £2 per check' {
-    description '''
-      | Measure | Illustrative value |
-      | --- | --- |
-      | Fee per check | About £2 |
-      | Checks a month | 5,000 |
-    '''
-    metadata { value '£2 per check'; transactionVolume '5,000 checks a month'; source 'Invented' }
+  foodDeliveryPlatforms -[pays]-> verificationCompanies 'pays per check' {
+    technology 'About £2 per check, 5,000 checks a month'
+    metadata { feeAmountGbp '2'; feeUnit 'per check'; transactionVolume '5000'; transactionUnit 'checks'; transactionPeriod 'month'; source 'Invented' }
   }
 
-  restaurantChains -[pays]-> integrationCompanies 'about £100 a month per site' {
-    description '''
-      | Measure | Illustrative value |
-      | --- | --- |
-      | Subscription | About £100 a month per site |
-      | Orders routed per site | 500 a week |
-    '''
-    metadata { value '£100 a month per site'; transactionVolume '500 orders a week per site'; source 'Invented' }
+  restaurantChains -[pays]-> integrationCompanies 'pays a subscription' {
+    technology 'About £100 a month per site'
+    metadata { feeAmountGbp '100'; feeUnit 'per site per month'; source 'Invented' }
   }
 }

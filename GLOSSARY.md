@@ -133,11 +133,11 @@ A distinct part of a system with its own responsibilities and datasets, such as 
 _Avoid_: module, component, container
 
 **Software product**:
-A specific piece of software that fills a system's role, such as the Uber Eats app filling the role of a delivery platform system; not the business that runs it, which is an actor.
+A specific piece of software that fills a system's role, known by its brand, such as Uber Eats filling the role of a delivery platform system; not the business that runs it, which is an actor.
 _Avoid_: tool, solution, application, vendor system, provider
 
 **Software vendor**:
-The company that supplies a software product, such as Uber for the Uber Eats app.
+The company that supplies a software product, such as Uber for Uber Eats.
 _Avoid_: supplier, provider
 
 **API readiness**:
@@ -145,7 +145,7 @@ Whether a software product offers an API to outsiders: public, for partners only
 _Avoid_: integration maturity, openness
 
 **Delivery platform system**:
-A system through which customers order food from restaurants for delivery; the Uber Eats, Deliveroo and Just Eat apps are software products that fill this role.
+A system through which customers order food from restaurants for delivery; Uber Eats, Deliveroo and Just Eat are software products that fill this role.
 _Avoid_: delivery platform on its own, marketplace, aggregator, delivery service, provider
 
 **Customer ordering**:
@@ -195,7 +195,7 @@ A category of actors that play the same part in food delivery, such as food deli
 _Avoid_: organisation, organisation role, stakeholder, sector, person
 
 **Actor**:
-A specific, named member of an actor group, whether an organisation or an individual, such as Uber Eats within food delivery platforms or Joe Blogs within customers.
+A specific member of an actor group, known by its everyday name, such as Joe Blogs within customers; an actor that runs software with the same brand takes its registered name instead, such as Stripe Payments UK Limited.
 _Avoid_: organisation, company, provider, stakeholder, person, user
 
 **Operator**:
@@ -211,7 +211,7 @@ The actor group of people who collect orders from restaurants and drop them off 
 _Avoid_: riders, drivers, contributors, partners
 
 **Food delivery platforms**:
-The actor group of businesses that run delivery platform systems, such as Uber Eats, Deliveroo and Just Eat.
+The actor group of businesses that run delivery platform systems, such as the companies behind Uber Eats, Deliveroo and Just Eat.
 _Avoid_: platform operators, providers, marketplaces, aggregators, delivery companies
 
 **Independent restaurants**:
@@ -252,9 +252,13 @@ _Avoid_: source, type
 Money passing from one actor group to another, such as customers paying for orders.
 _Avoid_: money flow, funding, revenue
 
+**Fee**:
+What one actor group charges another, as a percentage or an amount, such as a payment company's processing fee.
+_Avoid_: charge, cost, rate
+
 **Commission**:
-The share of an order's value that a food delivery platform keeps.
-_Avoid_: fee, take rate
+The fee a food delivery platform charges: the share of an order's value that it keeps.
+_Avoid_: take rate
 
 ### Lifecycles
 

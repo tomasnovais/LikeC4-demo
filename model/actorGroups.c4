@@ -1,6 +1,8 @@
 // Actor groups and the actors inside them (ADR 0003). The map shows groups; actors
 // appear on zoom views and in the step-through views. An actor connects only to
 // its own software, or is connected through its group.
+// An actor keeps its everyday name, unless it runs software with the same brand: then
+// the actor takes its registered name and the software keeps the brand.
 // Invented figures stay on groups, never on a named company (ADR 0005).
 
 model {
@@ -35,21 +37,24 @@ model {
     style { icon bootstrap:phone-fill }
     metadata { source 'Illustrative' }
 
-    uberEats = actor 'Uber Eats' {
-      link https://www.ubereats.com/gb 'Uber Eats'
-      metadata { source 'https://www.ubereats.com/gb' }
+    uberEats = actor 'Uber Eats UK Limited' {
+      summary 'Trades as Uber Eats.'
+      link https://find-and-update.company-information.service.gov.uk/company/10078453 'Companies House'
+      link ../backlog/assumptions/04-registered-names.md 'Assumption 04'
+      metadata { tradingName 'Uber Eats'; companyNumber '10078453'; source 'https://find-and-update.company-information.service.gov.uk/company/10078453' }
     }
 
-    deliveroo = actor 'Deliveroo' {
-      summary 'Owned by DoorDash.'
-      link https://deliveroo.co.uk 'Deliveroo'
-      metadata { source 'https://foodondemand.com/10062025/doordash-offically-acquires-deliveroo/' }
+    deliveroo = actor 'Roofoods Ltd' {
+      summary 'Trades as Deliveroo. Owned by DoorDash.'
+      link https://ico.org.uk/ESDWebPages/Entry/ZA048107 'ICO register'
+      link ../backlog/assumptions/04-registered-names.md 'Assumption 04'
+      metadata { tradingName 'Deliveroo'; source 'https://ico.org.uk/ESDWebPages/Entry/ZA048107' }
     }
 
-    justEat = actor 'Just Eat' {
-      summary 'Owned by Prosus.'
-      link https://www.just-eat.co.uk 'Just Eat'
-      metadata { source 'https://www.retaildetail.eu/news/food/acquisition-of-just-eat-takeaway-completed-the-hard-work-is-just-beginning/' }
+    justEat = actor 'Just Eat.co.uk Ltd' {
+      summary 'Trades as Just Eat. Owned by Prosus.'
+      link https://find-and-update.company-information.service.gov.uk/company/04656315 'Companies House'
+      metadata { tradingName 'Just Eat'; companyNumber '04656315'; source 'https://find-and-update.company-information.service.gov.uk/company/04656315/filing-history' }
     }
   }
 
@@ -89,14 +94,18 @@ model {
     style { icon bootstrap:plug-fill }
     metadata { source 'Illustrative' }
 
-    deliverect = actor 'Deliverect' {
-      link https://www.deliverect.com 'Deliverect'
-      metadata { source 'https://www.deliverect.com' }
+    deliverect = actor 'Deliverect NV' {
+      summary 'Trades as Deliverect. Registered in Belgium.'
+      link https://www.deliverect.com/en/online-ordering-terms-and-conditions 'Terms naming the company'
+      metadata { tradingName 'Deliverect'; companyNumber '0692.623.253'; source 'https://www.deliverect.com/en/online-ordering-terms-and-conditions' }
     }
 
-    otter = actor 'Otter' {
+    otter = actor 'Otter (registered name not confirmed)' {
+      #open-question
+      summary 'Trades as Otter. Its registered name could not be found.'
+      link ../backlog/questions/04-otter-registered-name.md 'Open question 04'
       link https://www.tryotter.com 'Otter'
-      metadata { source 'https://www.tryotter.com' }
+      metadata { tradingName 'Otter'; source 'https://www.tryotter.com' }
     }
   }
 
@@ -106,14 +115,16 @@ model {
     style { icon bootstrap:credit-card-fill }
     metadata { source 'Illustrative' }
 
-    stripe = actor 'Stripe' {
-      link https://stripe.com/gb 'Stripe'
-      metadata { source 'https://stripe.com/gb' }
+    stripe = actor 'Stripe Payments UK Limited' {
+      summary 'Trades as Stripe. Its US entity is Stripe, LLC.'
+      link https://stripe.com/legal/spukl 'Terms naming the company'
+      metadata { tradingName 'Stripe'; source 'https://support.stripe.com/questions/your-contract-with-stripe-stripe-services-agreement-%28ssa%29-overview-faq' }
     }
 
-    adyen = actor 'Adyen' {
-      link https://www.adyen.com 'Adyen'
-      metadata { source 'https://www.adyen.com' }
+    adyen = actor 'Adyen N.V.' {
+      summary 'Trades as Adyen.'
+      link https://find-and-update.company-information.service.gov.uk/company/OE031010 'Companies House'
+      metadata { tradingName 'Adyen'; companyNumber 'OE031010'; source 'https://find-and-update.company-information.service.gov.uk/company/OE031010' }
     }
   }
 
@@ -123,15 +134,16 @@ model {
     style { icon bootstrap:person-check-fill }
     metadata { source 'Illustrative' }
 
-    onfido = actor 'Onfido' {
-      summary 'Owned by Entrust.'
-      link https://onfido.com 'Onfido'
-      metadata { source 'https://www.entrust.com' }
+    onfido = actor 'Onfido Ltd' {
+      summary 'Trades as Onfido. Owned by Entrust.'
+      link https://find-and-update.company-information.service.gov.uk/company/07479524 'Companies House'
+      metadata { tradingName 'Onfido'; companyNumber '07479524'; source 'https://find-and-update.company-information.service.gov.uk/company/07479524/more' }
     }
 
-    yoti = actor 'Yoti' {
-      link https://www.yoti.com 'Yoti'
-      metadata { source 'https://www.yoti.com' }
+    yoti = actor 'Yoti Ltd' {
+      summary 'Trades as Yoti.'
+      link https://find-and-update.company-information.service.gov.uk/company/08998951 'Companies House'
+      metadata { tradingName 'Yoti'; companyNumber '08998951'; source 'https://find-and-update.company-information.service.gov.uk/company/08998951' }
     }
   }
 

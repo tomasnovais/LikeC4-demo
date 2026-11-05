@@ -106,8 +106,10 @@ specification {
   // Structural relationships are plain solid grey lines. Information flows between
   // datasets are always dotted and coloured by mechanism, so manual re-keying stands
   // out in every view. Power and money are solid and coloured, and only appear in
-  // their own lenses. Figures and schemas go in the label or description, because
-  // the app and the query tools do not show relationship metadata (ADR 0005).
+  // their own lenses. Labels carry no figures: those go in metadata and in `technology`,
+  // because the app and the query tools do not show relationship metadata (ADR 0005).
+  // A relationship's own `technology` replaces its kind's, so a flow must repeat its
+  // mechanism, as in 'API: 4 million payments a week'. Schemas go in descriptions.
   // ---------------------------------------------------------------------------
 
   // actor or actor group -> system or software product

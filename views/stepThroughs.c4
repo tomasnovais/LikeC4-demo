@@ -78,7 +78,7 @@ views "Step-throughs" {
       notes '''**Work.** The courier depends on the platform for jobs. See the power lens.'''
     }
     deliveryPlatformSystem.courierDispatch -> couriers.samRivers 'pays per drop-off, weekly' {
-      notes '''**Get paid.** About £4 per drop-off (illustrative).'''
+      notes '''**Get paid.** Paid per drop-off, once a week. See the money lens for the figures.'''
     }
     couriers.samRivers -> deliveryPlatformSystem.courierDispatch 'closes the account' {
       notes '''**Leave.** The verification result has to be kept for a period, even after the courier has gone.'''

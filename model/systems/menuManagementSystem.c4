@@ -41,6 +41,7 @@ model {
   menuManagementSystem.menus -[conformsTo]-> fourteenAllergens
 
   menuManagementSystem.menus -[rekeying]-> deliveryPlatformSystem.restaurantPortal.menus 'menu typed into each platform' {
+    technology 'Manual re-keying: about 10 updates a week per restaurant'
     description '''
       Each platform has its own screens, so the same menu is typed in once per platform, and a price change means doing it all again.
 
@@ -52,13 +53,12 @@ model {
       | name | string | As customers see it |
       | price | money | Can differ by platform |
       | allergens | list | From the 14 allergens |
-
-      **Volume:** about 10 updates a week per restaurant, for each platform (illustrative).
     '''
-    metadata { frequency 'on change'; transactionVolume '10 updates a week per restaurant'; schemaName 'Menu update'; source 'Illustrative' }
+    metadata { frequency 'on change'; transactionVolume '10'; transactionUnit 'updates per restaurant'; transactionPeriod 'week'; schemaName 'Menu update'; source 'Illustrative' }
   }
 
   menuManagementSystem.menus -[fileTransfer]-> orderIntegrationHub.menus 'menu exported to the hub' {
+    technology 'File transfer: about 3 files a month per chain'
     description '''
       **Example schema: menu file**
 
@@ -69,7 +69,7 @@ model {
       | basePrice | money | The hub applies each platform's uplift |
       | allergens | list | Separated by semicolons |
     '''
-    metadata { frequency 'on change'; transactionVolume 'A few files a month per chain'; schemaName 'Menu file'; source 'Illustrative' }
+    metadata { frequency 'on change'; transactionVolume '3'; transactionUnit 'files per chain'; transactionPeriod 'month'; schemaName 'Menu file'; source 'Illustrative' }
   }
 }
 

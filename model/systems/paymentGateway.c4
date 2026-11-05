@@ -25,18 +25,15 @@ model {
   }
 
   paymentCompanies -[operates]-> paymentGateway {
-    description '''
-      | Measure | Illustrative value |
-      | --- | --- |
-      | Payments a week | 4 million |
-    '''
-    metadata { transactionVolume '4 million payments a week'; source 'Invented' }
+    technology '4 million payments a week'
+    metadata { transactionVolume '4000000'; transactionUnit 'payments'; transactionPeriod 'week'; source 'Invented' }
   }
   paymentCompanies.stripe -[operates]-> paymentGateway.stripeGateway
   paymentCompanies.adyen -[operates]-> paymentGateway.adyenGateway
 
-  foodDeliveryPlatforms -[uses]-> paymentGateway 'takes card payments, 4 million a week' {
-    metadata { transactionVolume '4 million payments a week'; source 'Invented' }
+  foodDeliveryPlatforms -[uses]-> paymentGateway 'takes card payments' {
+    technology '4 million payments a week'
+    metadata { transactionVolume '4000000'; transactionUnit 'payments'; transactionPeriod 'week'; source 'Invented' }
   }
 
   paymentGateway -[supports]-> takeCardPayment
@@ -44,6 +41,7 @@ model {
   paymentGateway.payments -[conformsTo]-> pciDss
 
   paymentGateway.payments -[api]-> deliveryPlatformSystem.restaurantPortal.payouts 'settled payments feed payouts' {
+    technology 'API: 4 million payments a week, reported daily'
     description '''
       **Example schema: settlement report**
 
@@ -53,10 +51,8 @@ model {
       | orderId | string | Links to the order |
       | grossAmount | money | What the customer paid |
       | processingFee | money | What the gateway kept |
-
-      **Volume:** 4 million payments a week, reported daily (illustrative).
     '''
-    metadata { frequency 'daily'; standards ['pciDss']; transactionVolume '4 million payments a week'; schemaName 'Settlement report'; source 'Illustrative' }
+    metadata { frequency 'daily'; standards ['pciDss']; transactionVolume '4000000'; transactionUnit 'payments'; transactionPeriod 'week'; schemaName 'Settlement report'; source 'Illustrative' }
   }
 }
 

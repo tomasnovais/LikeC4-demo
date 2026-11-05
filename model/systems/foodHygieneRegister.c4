@@ -21,12 +21,8 @@ model {
   }
 
   foodRegulators -[operates]-> foodHygieneRegister {
-    description '''
-      | Measure | Illustrative value |
-      | --- | --- |
-      | Businesses rated | 500,000 |
-    '''
-    metadata { transactionVolume '500,000 businesses rated'; source 'Invented' }
+    technology '500,000 businesses rated'
+    metadata { transactionVolume '500000'; transactionUnit 'businesses rated'; source 'Invented' }
   }
   foodRegulators.foodStandardsAgency -[operates]-> foodHygieneRegister.foodHygieneRatingScheme
 
@@ -35,6 +31,7 @@ model {
   foodHygieneRegister.hygieneRatings -[conformsTo]-> fhrsApi
 
   foodHygieneRegister.hygieneRatings -[api]-> deliveryPlatformSystem.restaurantPortal.hygieneRatings 'rating shown on the platform' {
+    technology 'API: refreshed daily'
     description '''
       **Example schema: establishment rating**
 
@@ -45,10 +42,8 @@ model {
       | ratingValue | number | 0 to 5 |
       | ratingDate | date | The last inspection |
       | localAuthority | string | Who inspected it |
-
-      **Volume:** the register is refreshed daily (illustrative).
     '''
-    metadata { frequency 'daily'; standards ['fhrsApi']; transactionVolume 'Refreshed daily'; schemaName 'Establishment rating'; source 'Illustrative' }
+    metadata { frequency 'daily'; standards ['fhrsApi']; schemaName 'Establishment rating'; source 'Illustrative' }
   }
 }
 
